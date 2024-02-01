@@ -19,6 +19,7 @@ controller_projects:
 - name: Windows Mgmt
   scm_url: https://github.com/zjleblanc/ansible-windows-mgmt.git
   organization: Autodotes
+  default_environment: Windows EE
   scm_branch: master
   scm_clean: 'no'
   scm_delete_on_update: 'no'
