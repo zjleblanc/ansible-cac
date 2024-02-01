@@ -1,0 +1,13 @@
+controller_organizations:
+  - name: Autodotes
+    description: Default organization for Autodotes containerized AAP instance
+    max_hosts: 0
+    custom_virtualenv:
+    galaxy_credentials:
+      - Red Hat Automation Hub [Certified]
+      - Ansible Galaxy
+    related:
+      notification_templates_started: []
+      notification_templates_success: []
+      notification_templates_error: []
+      notification_templates_approvals: []
