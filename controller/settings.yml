@@ -1,0 +1,3 @@
+controller_settings:
+  - name: SESSION_COOKIE_AGE
+    value: 3600
