@@ -1,0 +1,6 @@
+---
+controller_execution_environments:
+  - name: Autodotes Default EE
+    image: quay.io/zleblanc/ee-default
+  - name: Windows EE
+    image: quay.io/zleblanc/ee-windows
