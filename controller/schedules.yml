@@ -1,0 +1,6 @@
+---
+controller_schedules:
+  - name: Refresh Automation Hub Token Monthly
+    description: Refresh the automation hub token once a month to avoid expiration
+    unified_job_template: AAP // Refresh Automation Hub Token
+    rrule: "DTSTART;TZID=America/Chicago:20240201T170000 RRULE:INTERVAL=25;FREQ=DAILY"

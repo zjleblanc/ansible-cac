@@ -1,0 +1,10 @@
+---
+controller_templates:
+  - name: AAP // Refresh Automation Hub Token
+    job_type: run
+    inventory: Demo Inventory
+    project: Cloud Mgmt
+    playbook: playbooks/aap/refresh_rh_token.yml
+    execution_environment: Autodotes Default EE
+    credentials:
+      - Red Hat Automation Hub Token [Personal]
