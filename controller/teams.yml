@@ -1,0 +1,8 @@
+---
+controller_teams:
+  - name: Astros
+    description: Houston Astros baseball club
+    organization: Autodotes
+  - name: Pitching Staff
+    description: Houston Astros pitching staff
+    organization: Autodotes

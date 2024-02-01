@@ -1,0 +1,19 @@
+controller_roles:
+  - role: member
+    target_team: Astros
+    users:
+      - altuve
+      - verlander
+      - pressly
+      - tucker
+      - biggio
+  - role: member
+    target_team: Pitching Staff
+    users:
+      - verlander
+      - pressly
+  - roles:
+      - execute
+      - read
+    organization: Autodotes
+    team: Astros

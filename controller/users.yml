@@ -1,0 +1,25 @@
+---
+controller_user_accounts:
+  - username: altuve
+    first_name: Jose
+    last_name: Altuve
+    is_superuser: true
+    password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=8)"
+  - username: verlander
+    first_name: Justin
+    last_name: Verlander
+    is_superuser: true
+    password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=8)"
+  - username: pressly
+    first_name: Ryan
+    last_name: Pressly
+    password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=8)"
+  - username: tucker
+    first_name: Kyle
+    last_name: Tucker
+    password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=8)"
+  - username: biggio
+    first_name: Craig
+    last_name: Biggio
+    is_system_auditor: true
+    password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=8)"
