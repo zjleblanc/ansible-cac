@@ -1,0 +1,9 @@
+controller_labels:
+  - name: Main
+    organization: Autodotes
+  - name: Lab
+    organization: Autodotes
+  - name: Demo
+    organization: Autodotes
+  - name: OOTB
+    organization: Default
