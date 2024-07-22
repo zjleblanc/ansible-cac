@@ -1,0 +1,9 @@
+---
+ah_roles:
+  - name: coach
+    description: manage the astros (aka users)
+    perms:
+      - add_user
+      - change_user
+      - delete_user
+      - view_user

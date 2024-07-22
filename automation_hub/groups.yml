@@ -1,0 +1,6 @@
+---
+ah_groups:
+  - name: astros
+    state: present
+  - name: pitching_staff
+    state: present

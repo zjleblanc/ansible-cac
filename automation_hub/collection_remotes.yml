@@ -1,0 +1,37 @@
+---
+ah_collection_remotes:
+  - name: post_install
+    url: https://galaxy.ansible.com/api/
+    requirements:
+      - name: awx.awx
+        version: ">=22.7.0"
+      - name: chocolatey.chocolatey
+        version: ">=1.4.0"
+      - name: community.aws
+        version: ">=8.0.0"
+      - name: community.general
+        version: ">=6.5.0"
+      - name: community.windows
+        version: ">=1.9.0"
+      - name: community.network
+        version: ">=5.0.0"
+      - name: containers.podman
+        version: ">=1.11.0"
+      - name: theforeman.foreman
+        version: ">=3.14.0"
+      - name: fedora.linux_system_roles
+        version: ">=1.0.0"
+      - name: community.windows
+        version: ">=1.9.0"
+      - name: community.vmware
+        version: ">=4.2.0"
+      - name: cloin.eda
+        version: ">=2.1.16"
+      - name: cloin.datadog
+        version: ">=1.0.5"
+      - name: cloin.prometheus
+        version: ">=0.1.0"
+      - name: zjleblanc.reporting
+        version: ">=1.0.0"
+      - name: zjleblanc.utils
+        version: ">=1.0.0"

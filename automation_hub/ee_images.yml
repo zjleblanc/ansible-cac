@@ -1,0 +1,8 @@
+---
+ah_ee_images:
+  - name: quay.io/zleblanc/ee-default
+    state: present
+    append: false
+    tags:
+      - "latest"
+      - "98890880"
