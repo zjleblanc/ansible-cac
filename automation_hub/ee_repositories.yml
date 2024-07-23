@@ -1,0 +1,5 @@
+---
+ah_ee_repositories:
+  - name: ee-default
+    description: My default execution environment with all the automation stuff
+    readme: "# zleblanc default execution environment"
