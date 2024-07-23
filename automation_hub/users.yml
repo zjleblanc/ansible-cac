@@ -1,8 +1,8 @@
 ---
 ah_users:
   - username: altuve
-    groups:
-      - astros
+    # groups:
+    #   - astros
     append: true
     first_name: Jose
     last_name: Altuve
@@ -10,8 +10,8 @@ ah_users:
     is_superuser: true
     password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=8) }}"
   - username: biggio
-    groups:
-      - astros
+    # groups:
+    #   - astros
     append: true
     first_name: Craig
     last_name: Biggio
@@ -19,9 +19,9 @@ ah_users:
     is_superuser: false
     password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=8) }}"
   - username: verlander
-    groups:
-      - astros
-      - pitching_staff
+    # groups:
+    #   - astros
+    #   - pitching_staff
     append: true
     first_name: Justin
     last_name: Verlander
