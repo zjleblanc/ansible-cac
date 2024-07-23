@@ -3,7 +3,7 @@ ah_users:
   - username: altuve
     # groups:
     #   - astros
-    append: true
+    # append: true
     first_name: Jose
     last_name: Altuve
     email: altuve@astros.com
@@ -12,7 +12,7 @@ ah_users:
   - username: biggio
     # groups:
     #   - astros
-    append: true
+    # append: true
     first_name: Craig
     last_name: Biggio
     email: biggio@astros.com
@@ -22,7 +22,7 @@ ah_users:
     # groups:
     #   - astros
     #   - pitching_staff
-    append: true
+    # append: true
     first_name: Justin
     last_name: Verlander
     email: verlander@astros.com
