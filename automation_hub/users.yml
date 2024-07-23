@@ -1,30 +1,30 @@
 ---
 ah_users:
   - username: altuve
-    # groups:
-    #   - astros
-    # append: true
+    groups:
+      - astros
+    append: true
     first_name: Jose
     last_name: Altuve
     email: altuve@astros.com
     is_superuser: true
-    password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=8) }}"
+    password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=10) }}"
   - username: biggio
-    # groups:
-    #   - astros
-    # append: true
+    groups:
+      - astros
+    append: true
     first_name: Craig
     last_name: Biggio
     email: biggio@astros.com
     is_superuser: false
-    password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=8) }}"
+    password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=10) }}"
   - username: verlander
-    # groups:
-    #   - astros
-    #   - pitching_staff
-    # append: true
+    groups:
+      - astros
+      - pitching_staff
+    append: true
     first_name: Justin
     last_name: Verlander
     email: verlander@astros.com
     is_superuser: false
-    password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=8) }}"
+    password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=10) }}"
