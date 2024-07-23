@@ -1,4 +1,6 @@
 ---
 ah_ee_registries:
   - name: quay_zleblanc
-    url: https://quay.io/zleblanc
+    url: https://quay.io
+    username: zleblanc
+    password: "{{ quay_password }}"

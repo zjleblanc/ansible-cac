@@ -1,5 +1,7 @@
 ---
 ah_ee_repositories:
   - name: ee-default
+    registry: quay_zleblanc
+    upstream_name: zleblanc/ee-default
     description: My default execution environment with all the automation stuff
     readme: "# zleblanc default execution environment"
