@@ -45,7 +45,7 @@
     - name: Parse credentials
       tags: credentials
       ansible.builtin.copy:
-        content: "{{ controller_assets.credentials | parse_credentials | to_nice_yaml(indent=2, explicit_start=True, explicit_end=True) }}"
+        content: "{{ controller_assets.credentials | parse_credentials | to_nice_yaml(indent=2, explicit_start=True, explicit_end=True, sort_keys=False) }}"
         dest: "{{ playbook_dir }}/staging/controller_credentials.staging.yml"
 
     - name: Parse credential types

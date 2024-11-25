@@ -26,17 +26,27 @@ class FilterModule(object):
         return assets
     
     def do_parse_credentials(self, credentials):
+      ordered_keys = []
       for cred in credentials:
         cred.pop('natural_key', None)
         cred.pop('user', None)
         cred.pop('team', None)
+        self.__get_name_or_pop(cred, 'credential_type')
+        self.__get_name_or_pop(cred, 'organization')
         if not cred.get('organization', None):
           cred['organization'] = 'Autodotes'
         for input in cred.get('inputs', {}).keys():
           if cred['inputs'][input] == '$encrypted$':
             cred['inputs'][input] = 'REPLACE_ME'
+        ordered_keys.append({
+          "name": cred['name'],
+          "description": cred['description'],
+          "organization": cred['organization'],
+          "credential_type": cred['credential_type'],
+          "inputs": cred['inputs'],
+        })
 
-      return {"controller_credentials": credentials}
+      return {"controller_credentials": ordered_keys}
     
     def do_parse_inventories(self, inventories):
       for inv in inventories:

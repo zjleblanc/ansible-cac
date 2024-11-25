@@ -1,6 +1,7 @@
 .vscode
 .ansible
 staging/
+vars/secrets.yml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
