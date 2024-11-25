@@ -4,6 +4,9 @@
   gather_facts: false
   become: false
 
+  vars_files:
+    - vars/secrets.yml
+
   tasks:
     - name: Include Controller configuration files
       tags: always
