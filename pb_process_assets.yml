@@ -1,0 +1,15 @@
+---
+- name: Process the exported assets
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+    - name: Load the raw assets
+      ansible.builtin.set_fact:
+        assets_raw: "{{ lookup('file', 'configs/old_controller_assets_raw.yml') | from_yaml }}"
+
+    - name: Write config to file
+      ansible.builtin.copy:
+        content: "{{ assets_raw | process_assets | to_nice_yaml(indent=2) }}"
+        dest: "{{ playbook_dir }}/configs/old_controller_assets.yml"

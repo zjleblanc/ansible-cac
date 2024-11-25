@@ -1,0 +1,21 @@
+---
+- name: Apply Platform Configuration-as-code
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  vars:
+    gateway_hostname: "{{ lookup('env', 'CONTROLLER_HOST') }}"
+    gateway_token: "{{ lookup('env', 'CONTROLLER_OAUTH_TOKEN') }}"
+
+  tasks:
+    - name: Include Controller configuration files
+      ansible.builtin.include_vars:
+        dir: platform
+
+    - name: Create platform organizations
+      loop: "{{ aap_organizations }}"
+      ansible.platform.organization:
+        name: "{{ item.name }}"
+        description: "{{ item.description }}"
+        galaxy_credentials: "{{ item.galaxy_credentials }}"

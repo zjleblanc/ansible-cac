@@ -1,0 +1,235 @@
+---
+controller_inventory_sources:
+- credential: Autodotes AD LDAP Credential
+  description: ''
+  enabled_value: ''
+  enabled_var: ''
+  execution_environment: null
+  host_filter: ''
+  inventory: AD LDAP Demo Inventory
+  limit: ''
+  name: microsoft.ad.ldap plugin source
+  overwrite: false
+  overwrite_vars: false
+  scm_branch: ''
+  source: scm
+  source_path: inventories/microsoft.ad.ldap.yml
+  source_project: Windows Mgmt
+  source_vars:
+    search_base: OU=Computers,OU=lab,DC=autodotes,DC=local
+  timeout: 0
+  update_cache_timeout: 0
+  update_on_launch: true
+  verbosity: 1
+- credential: null
+  description: ansible-autodotes > inventories > autodotes-lab
+  enabled_value: ''
+  enabled_var: ''
+  execution_environment: ee-default
+  host_filter: ''
+  inventory: Autodotes Lab
+  limit: ''
+  name: Autodotes Lab Machines
+  overwrite: false
+  overwrite_vars: false
+  scm_branch: ''
+  source: scm
+  source_path: ./inventories/autodotes-lab
+  source_project: Autodotes
+  source_vars: null
+  timeout: 0
+  update_cache_timeout: 0
+  update_on_launch: false
+  verbosity: 1
+- credential: Ansible Service Account (Minimal Sub)
+  description: ''
+  enabled_value: ''
+  enabled_var: ''
+  execution_environment: null
+  host_filter: ''
+  inventory: Azure Inventory
+  limit: ''
+  name: Minimal Sub
+  overwrite: false
+  overwrite_vars: false
+  scm_branch: ''
+  source: azure_rm
+  source_path: ''
+  source_project: null
+  source_vars: null
+  timeout: 0
+  update_cache_timeout: 0
+  update_on_launch: false
+  verbosity: 1
+- credential: AWS Sandbox Credential
+  description: ''
+  enabled_value: ''
+  enabled_var: ''
+  execution_environment: ee-default
+  host_filter: ''
+  inventory: Cloud Inventory
+  limit: ''
+  name: AWS EC2 Instances
+  overwrite: true
+  overwrite_vars: false
+  scm_branch: ''
+  source: ec2
+  source_path: ''
+  source_project: null
+  source_vars:
+    aws_region: us-east-2
+    compose:
+      ansible_host: public_ip_address
+      ansible_platform: platform
+      ansible_user: ec2-user
+      distro: ansible_distribution
+    groups:
+      linux: '''windows'' not in platform_details.lower()'
+      windows: '''windows'' in platform_details.lower()'
+    hostnames:
+    - tag:Name
+    keyed_groups:
+    - key: platform
+      prefix: platform
+  timeout: 0
+  update_cache_timeout: 0
+  update_on_launch: false
+  verbosity: 1
+- credential: VMWare (gf7fr)
+  description: ''
+  enabled_value: ''
+  enabled_var: ''
+  execution_environment: ee-default
+  host_filter: ''
+  inventory: Cloud Inventory
+  limit: ''
+  name: VMWare Sandbox Hosts
+  overwrite: true
+  overwrite_vars: true
+  scm_branch: ''
+  source: vmware
+  source_path: ''
+  source_project: null
+  source_vars:
+    compose:
+      ansible_host: public_ip | default(guest.ipAddress)
+    groups:
+      vmware: true
+    hostnames:
+    - config.name
+    resources:
+    - datacenter:
+      - SDDC-Datacenter
+      resources:
+      - folder:
+        - sandbox-w7gqh
+    skip_keys: declaredalarmstate,disabledmethod,dynamicproperty,dynamictype,environmentbrowser,managedby,childtype,resourceconfig
+  timeout: 0
+  update_cache_timeout: 0
+  update_on_launch: false
+  verbosity: 1
+- credential: AWS Sandbox Credential
+  description: ''
+  enabled_value: ''
+  enabled_var: ''
+  execution_environment: ee-default
+  host_filter: ''
+  inventory: Palo Alto Demo Inventory
+  limit: ''
+  name: EC2 Inventory Source
+  overwrite: false
+  overwrite_vars: false
+  scm_branch: ''
+  source: ec2
+  source_path: ''
+  source_project: null
+  source_vars:
+    aws_region: us-east-2
+    compose:
+      ansible_host: public_ip_address | default(private_ip_address)
+      ansible_user: ec2-user
+    hostnames:
+    - tag:Name
+    keyed_groups:
+    - key: tags['role']
+      prefix: role
+  timeout: 0
+  update_cache_timeout: 0
+  update_on_launch: false
+  verbosity: 1
+- credential: Satellite (Autodotes)
+  description: ''
+  enabled_value: ''
+  enabled_var: ''
+  execution_environment: ee-default
+  host_filter: ''
+  inventory: Satellite Inventory
+  limit: ''
+  name: Satellite (Autodotes)
+  overwrite: true
+  overwrite_vars: true
+  scm_branch: ''
+  source: satellite6
+  source_path: ''
+  source_project: null
+  source_vars:
+    compose:
+      ansible_host: foreman_ipv4
+  timeout: 0
+  update_cache_timeout: 0
+  update_on_launch: true
+  verbosity: 1
+- credential: West ServiceNow (ven05433)
+  description: ''
+  enabled_value: ''
+  enabled_var: ''
+  execution_environment: ee-default
+  host_filter: ''
+  inventory: Service Now Inventory
+  limit: ''
+  name: servicenow.itsm.now
+  overwrite: false
+  overwrite_vars: false
+  scm_branch: ''
+  source: scm
+  source_path: inventories/snow/now.yml
+  source_project: Cloud Mgmt
+  source_vars:
+    target_env: test
+  timeout: 0
+  update_cache_timeout: 0
+  update_on_launch: false
+  verbosity: 1
+- credential: AWS Sandbox Credential
+  description: ''
+  enabled_value: ''
+  enabled_var: ''
+  execution_environment: ee-default
+  host_filter: ''
+  inventory: Windows Inventory
+  limit: ''
+  name: Windows EC2 Instances
+  overwrite: true
+  overwrite_vars: true
+  scm_branch: ''
+  source: ec2
+  source_path: ''
+  source_project: null
+  source_vars:
+    aws_region: us-east-2
+    compose:
+      ansible_platform: platform
+    filters:
+      tag:role:
+      - domain_controller
+      - domain_computer
+    hostnames:
+    - tag:Name
+    keyed_groups:
+    - key: tags['role']
+      prefix: role
+  timeout: 0
+  update_cache_timeout: 0
+  update_on_launch: false
+  verbosity: 1
+...

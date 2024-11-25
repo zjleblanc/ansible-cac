@@ -1,0 +1,16 @@
+---
+- name: Apply Controller Configuration-as-code
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+    - name: Include Controller configuration files
+      tags: always
+      ansible.builtin.include_vars:
+        dir: controller
+
+    - name: Call dispatch role for Controller configuration
+      tags: always
+      ansible.builtin.include_role:
+        name: infra.controller_configuration.dispatch
