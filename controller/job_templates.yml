@@ -1,10 +1,2122 @@
 ---
 controller_templates:
-  - name: AAP // Refresh Automation Hub Token
-    job_type: run
-    inventory: Demo Inventory
-    project: Cloud Mgmt
-    playbook: playbooks/aap/refresh_rh_token.yml
-    execution_environment: Autodotes Default EE
-    credentials:
-      - Red Hat Automation Hub Token [Personal]
+- credentials:
+  - AAP (id_rsa)
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: AAP // Backup Platform
+  playbook: playbooks/aap/backup_platform.yml
+  project: Cloud Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: manager
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: Target host
+      required: true
+      type: text
+      variable: _host
+    - choices: ''
+      default: /home/zach/ansible-automation-platform-setup-2.4-7
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: Installation directory
+      required: true
+      type: text
+      variable: ansible_installation_dir
+    - choices: ''
+      default: /home/zach/aap-backups
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Backup Directory
+      required: true
+      type: text
+      variable: ansible_backups_dir
+    - choices: ''
+      default: us-east-2
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: AWS Region
+      required: true
+      type: text
+      variable: aws_region
+    - choices: ''
+      default: autodotes-app-backups
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: AWS S3 Bucket
+      required: true
+      type: text
+      variable: aws_s3_bucket
+    - choices:
+      - 'true'
+      - 'false'
+      default: 'true'
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Cleanup existing backups?
+      required: true
+      type: multiplechoice
+      variable: cleanup_backups_dir
+    - choices:
+      - 'true'
+      - 'false'
+      default: 'false'
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Skip Backup?
+      required: true
+      type: multiplechoice
+      variable: skip_backup
+    - choices:
+      - 'true'
+      - 'false'
+      default: 'true'
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Upload to S3?
+      required: true
+      type: multiplechoice
+      variable: upload_backup_to_s3
+- ask_skip_tags_on_launch: true
+  credentials:
+  - AAP (id_rsa)
+  - 'EE Utilities (Destination: Quay)'
+  - Red Hat Automation Hub
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: AAP // Build EE for Offline
+  playbook: ansible/build-ee.yml
+  project: Execution Environment Builds [Legacy]
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: fedora
+      max: 100
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: Specify the build host
+      required: false
+      type: text
+      variable: build_host
+    - choices: ''
+      default: ''
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: should match the folder containing an execution environment
+        definition file
+      question_name: Specify the EE name
+      required: true
+      type: text
+      variable: ee_name
+    - choices: ''
+      default: ''
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: What version of the repository to check out. This can
+        be the literal string HEAD, a branch name, a tag name. It can also be a SHA-1
+        hash, in which case refspec needs to be specified if the given revision is
+        not already available.
+      question_name: Specify the version to pull
+      required: false
+      type: text
+      variable: commit_hash
+    - choices: ''
+      default: raspi
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Specify the artfacts host
+      required: false
+      type: text
+      variable: artifacts_host
+    - choices: ''
+      default: /var/www/artifacts.autodotes.com/ansible-execution-environments
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: Specify the artifact destination directory
+      required: false
+      type: text
+      variable: artifacts_dir
+- ask_variables_on_launch: true
+  ask_verbosity_on_launch: true
+  credentials:
+  - AAP (id_rsa)
+  - Controller Credential
+  - 'EE Utilities (Destination: Quay)'
+  - Private Automation Hub [builder]
+  execution_environment: ee-default
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: AAP // EE Builder
+  playbook: pb_build_ees.yml
+  project: Execution Environment Builder
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: builder
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: Must match name in Inventory
+      question_name: Specify the build host
+      required: false
+      type: text
+      variable: build_host
+    - choices: ''
+      default: OVERRIDE_ME
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: Recommended to use the commit hash
+      question_name: Specify the Execution Environment(s) version
+      required: true
+      type: text
+      variable: ee_tag
+    - choices:
+      - '0'
+      - '1'
+      - '2'
+      - '3'
+      default: '0'
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: Specify verbosity
+      required: false
+      type: multiplechoice
+      variable: ee_verbosity
+    - choices:
+      - 'true'
+      - 'false'
+      default: 'true'
+      max: 5
+      min: 4
+      new_question: true
+      question_description: ''
+      question_name: Clean up build directory?
+      required: false
+      type: multiplechoice
+      variable: ee_builder_dir_clean
+- credentials:
+  - AAP (id_rsa)
+  - Controller Credential
+  execution_environment: Control Plane Execution Environment
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: AAP // Health Check
+  playbook: playbooks/aap_health_check.yml
+  project: Linux Mgmt
+- credentials:
+  - AAP (id_rsa)
+  - Controller Credential
+  execution_environment: ee-default
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: AAP // Publish Org Host Metrics Report
+  playbook: playbooks/reports/org_host_metrics.yml
+  project: Autodotes
+- credentials:
+  - Red Hat Automation Hub
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: AAP // Refresh AH Token
+  playbook: playbooks/aap/refresh_rh_token.yml
+  project: Cloud Mgmt
+- execution_environment: ee-default
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: AAP // Test Lookup Plugin(s)
+  playbook: playbooks/aap/test_lookup_plugin.yml
+  project: Cloud Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: ''
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Azure Key Vault URL
+      required: false
+      type: text
+      variable: az_vault_url
+    - choices: ''
+      default: ''
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Azure Key Vault Secret Name
+      required: false
+      type: text
+      variable: az_kv_secret_name
+    - choices: ''
+      default: ''
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: AZ_TENANT_ID
+      required: false
+      type: text
+      variable: az_tenant_id
+    - choices: ''
+      default: ''
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: AZ_CLIENT_ID
+      required: false
+      type: text
+      variable: az_client_id
+    - choices: ''
+      default: ''
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: AZ_CLIENT_SECRET
+      required: false
+      type: password
+      variable: az_client_secret
+  verbosity: 3
+- ask_tags_on_launch: true
+  ask_verbosity_on_launch: true
+  credentials:
+  - AAP (id_rsa)
+  description: copy certs from reverse proxy to dest on aap nodes
+  execution_environment: ee-default
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_tags: controller,hub,eda
+  job_type: run
+  name: AAP // Update AAP Certs
+  playbook: playbooks/acme/update_aap_certs.yml
+  project: Autodotes
+- execution_environment: ee-default
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: AAP // Update PAH Local User
+  playbook: playbooks/aap/ah_update_local_user_pw.yml
+  project: Cloud Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: ''
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: The user name to receive password update
+      question_name: User name
+      required: true
+      type: text
+      variable: pah_username
+    - choices: ''
+      default: ''
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: User's password as a clear string. The password must contain
+        at least 9 characters with numbers or special characters.
+      question_name: New password for user
+      required: true
+      type: password
+      variable: pah_new_password
+- ask_variables_on_launch: true
+  extra_vars:
+    _domains:
+    - name: example.autodotes.com
+    _hosts: raspi
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Autodotes // Create Site with SSL
+  playbook: playbooks/configure_nginx_site_ssl.yml
+  project: Linux Mgmt
+- ask_credential_on_launch: true
+  ask_variables_on_launch: true
+  credentials:
+  - AAP (zach)
+  description: renew certs on non-AAP sites
+  execution_environment: ee-default
+  extra_vars:
+    sites:
+    - code.autodotes.com
+    - artifacts.autodotes.com
+    - reports.autodotes.com
+    - docs.autodotes.com
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Autodotes // Renew Certs
+  playbook: playbooks/acme/renew_certs.yml
+  project: Autodotes
+- credentials:
+  - Ansible Service Account (Minimal Sub)
+  execution_environment: ee-default
+  inventory: Azure Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Azure // Create Disks
+  playbook: playbooks/azure/snapshot_mgmt/create_disks.yml
+  project: Cloud Mgmt
+- description: delete snapshots in azure based on tagged retention date
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Azure // Delete Snapshots
+  playbook: playbooks/azure/snapshot_mgmt/delete_snapshots.yml
+  project: Cloud Mgmt
+- credentials:
+  - Satellite (Autodotes)
+  - Satellite Provisioner
+  execution_environment: Default execution environment
+  host_config_key: 83bf9d5a-9b32-45a2-86d3-89a5db968f36
+  inventory: Satellite Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Azure // Provisioning Callback
+  playbook: playbooks/azure_vm_setup.yml
+  project: Linux Mgmt
+  use_fact_cache: true
+- credentials:
+  - Ansible Service Account (Minimal Sub)
+  - Gmail SMTP
+  description: scan snapshots in azure based on tagged retention date
+  execution_environment: ee-default
+  inventory: Cloud Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Azure // Scan Snapshots
+  playbook: playbooks/azure/snapshot_mgmt/scan_snapshots.yml
+  project: Cloud Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: 45
+      max: 100000
+      min: 0
+      new_question: true
+      question_description: Used to demonstrate notifications that would arise in
+        the future
+      question_name: Set the desired scan offset (days)
+      required: true
+      type: integer
+      variable: scan_offset_days
+- credentials:
+  - Ansible Service Account (Minimal Sub)
+  execution_environment: ee-default
+  inventory: Azure Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Azure // Snapshot Disks
+  playbook: playbooks/azure/snapshot_mgmt/snapshot_disks.yml
+  project: Cloud Mgmt
+- ask_verbosity_on_launch: true
+  credentials:
+  - AWS (ec2-user)
+  execution_environment: ee-default
+  inventory: Cloud Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Cloud // EC2 Process Report
+  playbook: playbooks/aws/ec2_process_report.yml
+  project: Cloud Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: raspi
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: What is the destination report server?
+      required: true
+      type: text
+      variable: autodotes_report_server
+    - choices: ''
+      default: ''
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: What is the target report server hostname/ip?
+      required: false
+      type: password
+      variable: autodotes_report_server_host
+    - choices: ''
+      default: zach
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: What is the target report server user?
+      required: true
+      type: text
+      variable: autodotes_report_server_user
+- ask_variables_on_launch: true
+  credentials:
+  - AWS (ec2-user)
+  execution_environment: ee-windows
+  inventory: Cloud Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Cloud // Patch EC2
+  playbook: playbooks/aws/patch_vm.yml
+  project: Cloud Mgmt
+- ask_variables_on_launch: true
+  credentials:
+  - AWS (ec2-user)
+  - AWS Sandbox Credential
+  inventory: Cloud Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Cloud // Restore EC2
+  playbook: playbooks/aws/restore_from_snapshot.yml
+  project: Cloud Mgmt
+- ask_variables_on_launch: true
+  credentials:
+  - AWS (ec2-user)
+  - AWS Sandbox Credential
+  inventory: Cloud Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Cloud // Snapshot EC2
+  playbook: playbooks/aws/snapshot_vm.yml
+  project: Cloud Mgmt
+- credentials:
+  - CyberArk Conjur Secret - Ansible
+  description: Use CyberArk Conjur lookup and print out secret for demo purposes only.
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: CyberArk // Demo Credential
+  playbook: playbooks/demo/demo_conjur_secret.yml
+  project: Autodotes
+- credentials:
+  - AAP (zach)
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: CyberArk // Install Conjur
+  playbook: conjur-install-config.yml
+  project: CyberArk-Conjur Demo
+- ask_variables_on_launch: true
+  credentials:
+  - CyberArk Conjur Client (Controller)
+  execution_environment: ee-default
+  extra_vars:
+    _hosts: linux
+    cyberark_no_log: true
+    method: sshkey
+  inventory: Cloud Inventory
+  job_slice_count: 1
+  job_type: run
+  name: CyberArk // Per-host Credential Lookup
+  playbook: demos/cyberark_per_host.yml
+  project: Cloud Mgmt
+  survey_enabled: true
+  verbosity: 3
+- ask_variables_on_launch: true
+  execution_environment: ee-default
+  extra_vars:
+    _hosts: localhost
+    _msg: ran from aap
+  inventory: Proxmox Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Demo Ansible Butler Clone
+  playbook: playbooks/no_op.yml
+  project: Windows Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: ''
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Specify target host(s)
+      required: true
+      type: text
+      variable: _host
+- credentials:
+  - Vault Demo Credential
+  execution_environment: ee-default
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Demo // Using ansible-vault
+  playbook: demos/vault_demo.yml
+  project: Linux Mgmt
+- ask_variables_on_launch: true
+  credentials:
+  - AWS (ec2-user)
+  - Dynatrace Demo Credential
+  - West ServiceNow (ven05433)
+  execution_environment: ee-default
+  inventory: Cloud Inventory
+  job_slice_count: 1
+  job_type: run
+  name: EDA // Dynatrace Problems
+  playbook: playbooks/resolve_problem.yml
+  project: Event-Driven Demos
+  use_fact_cache: true
+- ask_variables_on_launch: true
+  credentials:
+  - AAP (id_rsa)
+  - Controller Credential
+  - West ServiceNow (ven05433)
+  execution_environment: ee-default
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: EDA // Linux Remediation
+  playbook: demos/remediate_linux.yml
+  project: Linux Mgmt
+- credentials:
+  - AAP (id_rsa)
+  execution_environment: ee-default
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: EDA // Linux Remediation Setup
+  playbook: demos/remediate_setup.yml
+  project: Linux Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: rhel8
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: inventory name of the target host (must be in Autodotes
+        Lab Inventory)
+      question_name: Specify target host(s)
+      required: true
+      type: text
+      variable: _hosts
+- ask_variables_on_launch: true
+  credentials:
+  - Windows Server Credential
+  execution_environment: ee-default
+  extra_vars:
+    _hosts: localhost
+    _msg: ran from aap
+  inventory: Proxmox Inventory
+  job_slice_count: 1
+  job_type: run
+  name: EDA // No-Op
+  playbook: playbooks/no_op.yml
+  project: Windows Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: ''
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: Specify target host(s)
+      required: false
+      type: text
+      variable: _hosts
+- ask_variables_on_launch: true
+  credentials:
+  - AWS (ec2-user)
+  - AWS Sandbox Credential
+  - West ServiceNow (ven05433)
+  execution_environment: ee-default
+  inventory: Cloud Inventory
+  job_slice_count: 1
+  job_type: run
+  name: EDA // OneAgent Restart
+  playbook: playbooks/remediate_onagent.yml
+  project: Event-Driven Demos
+- ask_variables_on_launch: true
+  credentials:
+  - VMWare (ansible)
+  - VMWare (gf7fr)
+  - West ServiceNow (ven05433)
+  execution_environment: ee-default
+  extra_vars:
+    kill_allowlist:
+    - tail
+    - cat
+    - less
+    threshold: 70
+  inventory: Cloud Inventory
+  job_slice_count: 1
+  job_type: run
+  name: EDA // Remediate High Memory Usage Processes
+  playbook: playbooks/remediate_memory_usage.yml
+  project: Event-Driven Demos
+- ask_skip_tags_on_launch: true
+  ask_variables_on_launch: true
+  credentials:
+  - AWS (ec2-user)
+  - AWS Sandbox Credential
+  - West ServiceNow (ven05433)
+  execution_environment: ee-default
+  inventory: Cloud Inventory
+  job_slice_count: 1
+  job_type: run
+  name: EDA // Resize EBS Volume
+  playbook: playbooks/aws/add_disk_space.yml
+  project: Cloud Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: 120
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Max wait for reboot to complete (seconds)
+      required: false
+      type: integer
+      variable: reboot_timeout
+- ask_variables_on_launch: true
+  credentials:
+  - AAP (id_rsa)
+  - Controller Credential
+  - West ServiceNow (ven05433)
+  execution_environment: ee-default
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: EDA // Rollback Demo Site Changes
+  playbook: playbooks/rollback_nginx_site.yml
+  project: Event-Driven Demos
+- credentials:
+  - AAP (awx)
+  - Execution Environment Builds
+  extra_vars:
+    _host: controller
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: EE // Build
+  playbook: builder.yml
+  project: EE Builds
+- ask_verbosity_on_launch: true
+  credentials:
+  - AAP (zach)
+  execution_environment: ee-default
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Kasa // Discover Smart Devices
+  playbook: playbooks/kasa/discover.yml
+  project: Autodotes
+- credentials:
+  - AAP (zach)
+  execution_environment: ee-default
+  extra_vars:
+    desired_state: disabled
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Kasa // Turn Off Daytime Air Wicks
+  playbook: playbooks/kasa/daytime.yml
+  project: Autodotes
+- credentials:
+  - AAP (zach)
+  execution_environment: ee-default
+  extra_vars:
+    desired_state: disabled
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Kasa // Turn Off Outdoor Lights
+  playbook: playbooks/kasa/outdoor.yml
+  project: Autodotes
+- credentials:
+  - AAP (zach)
+  execution_environment: ee-default
+  extra_vars:
+    desired_state: enabled
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Kasa // Turn On Daytime Air Wicks
+  playbook: playbooks/kasa/daytime.yml
+  project: Autodotes
+- credentials:
+  - AAP (zach)
+  execution_environment: ee-default
+  extra_vars:
+    desired_state: enabled
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Kasa // Turn On Outdoor Lights
+  playbook: playbooks/kasa/outdoor.yml
+  project: Autodotes
+- inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Legacy // Hashi
+  playbook: playbooks/legacy_hashi.yml
+  project: Linux Mgmt
+- ask_execution_environment_on_launch: true
+  credentials:
+  - AAP (zach)
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  limit: localhost
+  name: Linux // Debug
+  playbook: playbooks/debug.yml
+  project: Linux Mgmt
+  use_fact_cache: true
+  verbosity: 4
+- credentials:
+  - AAP (id_rsa)
+  extra_vars:
+    _hosts: rhel8
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Linux // Gather Package Facts
+  playbook: playbooks/r4e_blueprint.yml
+  project: Linux Mgmt
+- execution_environment: ee-windows
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  limit: localhost
+  name: Linux // Powershell Test
+  playbook: playbooks/pwsh.yml
+  project: Windows Mgmt
+- credentials:
+  - AAP (id_rsa)
+  - Camper Vault
+  execution_environment: ee-default
+  extra_vars:
+    last_records_max: 500
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  limit: camp:fedora
+  name: Linux // User Login (Random)
+  playbook: playbooks/user_login_random.yml
+  project: Linux Mgmt
+- credentials:
+  - AAP (id_rsa)
+  execution_environment: ee-default
+  extra_vars:
+    _hosts:
+    - camp
+    - fedora
+    last_records_max: 500
+    report_desc: Report based on last output with relevant home directory information
+    report_dest: /var/www/reports.autodotes.com/roles/table_per_host.last_login.html
+    report_server: raspi
+    report_title: Last Login Report
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Linux // User Login Report
+  playbook: playbooks/user_login_report.yml
+  project: Linux Mgmt
+- ask_limit_on_launch: true
+  credentials:
+  - AAP (id_rsa)
+  execution_environment: ee-default
+  extra_vars:
+    rhel8cis_rule_6_1_15: false
+    rhel8cis_rule_6_2_11: false
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: check
+  limit: rhel8
+  name: Lockdown // RHEL 8 CIS
+  playbook: site.yml
+  project: Lockdown RHEL8 CIS
+- credentials:
+  - AAP (zach)
+  inventory: Cisco Lab
+  job_slice_count: 1
+  job_type: run
+  name: Networking // Cisco Compliance
+  playbook: workshop-addons/cisco_compliance.yml
+  project: Network Mgmt
+- credentials:
+  - AAP (zach)
+  execution_environment: ee-networking
+  inventory: Cisco Lab
+  job_slice_count: 1
+  job_type: run
+  name: Networking // Cisco EOX Lifecycle
+  playbook: workshop-addons/cisco_lifecycle.yml
+  project: Network Mgmt
+- ask_limit_on_launch: true
+  credentials:
+  - Eve-NG (admin)
+  execution_environment: Control Plane Execution Environment
+  inventory: Cisco Lab
+  job_slice_count: 1
+  job_type: run
+  limit: router_two
+  name: Networking // Cisco Upgrade (ios)
+  playbook: workshop-addons/cisco_upgrade.yml
+  project: Network Mgmt
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: ios
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Specify target hosts
+      required: true
+      type: text
+      variable: _hosts
+  verbosity: 3
+- execution_environment: ee-networking
+  inventory: Cisco Lab
+  job_slice_count: 1
+  job_type: run
+  name: Networking // Cisco VLAN ACLs
+  playbook: workshop-addons/cisco_vlan_acls.yml
+  project: Network Mgmt
+- ask_variables_on_launch: true
+  credentials:
+  - West ServiceNow (ven05433)
+  execution_environment: Default execution environment
+  extra_vars:
+    record_limit: 5
+  inventory: Proxmox Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Networking // Dynatrace -> ServiceNow CMDB
+  playbook: playbooks/dynatrace_snow_cmdb.yml
+  project: Network Mgmt
+- execution_environment: ee-networking
+  inventory: Cisco Lab
+  job_slice_count: 1
+  job_type: run
+  name: Networking // Golden Configs
+  playbook: playbooks/network_config.yml
+  project: Network Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: ios-sbox
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Specify target hosts
+      required: true
+      type: text
+      variable: _hosts
+- execution_environment: ee-networking
+  inventory: Cisco Lab
+  job_slice_count: 1
+  job_type: run
+  name: Networking // Label CDP Neighbors
+  playbook: playbooks/label_cdp_neighbors.yml
+  project: Network Mgmt
+- execution_environment: ee-networking
+  inventory: Cisco Lab
+  job_slice_count: 1
+  job_type: run
+  name: Networking // MS O365 ACLs
+  playbook: playbooks/o365_acls.yml
+  project: Network Mgmt
+- credentials:
+  - Private Automation Hub [automator]
+  execution_environment: ee-default
+  extra_vars:
+    ah_collection_repositories:
+    - name: rh-certified
+      wait: false
+    - name: validated
+      wait: false
+    - name: community
+      wait: false
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: PAH // Sync Repositories
+  playbook: playbooks/aap/pah_sync_repositories.yml
+  project: Cloud Mgmt
+- ask_variables_on_launch: true
+  credentials:
+  - Palo Alto Demo Vault
+  - Palo Alto Firewall (admin)
+  execution_environment: ee-default
+  inventory: Palo Alto Demo Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Palo Alto // Configure Firewall
+  playbook: demos/panos/pb_firewall_configure.yml
+  project: Network Mgmt
+- ask_variables_on_launch: true
+  credentials:
+  - Palo Alto Firewall (admin)
+  - West ServiceNow (ven05433)
+  execution_environment: ee-default
+  extra_vars:
+    panos_commit: false
+  inventory: Palo Alto Demo Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Palo Alto // Firewall Security Rule
+  playbook: demos/panos/pb_panos_security_rule.yml
+  project: Network Mgmt
+- credentials:
+  - AWS Sandbox Credential
+  - Controller Credential
+  - Palo Alto Bastion
+  - Palo Alto Demo Vault
+  - West ServiceNow (ven05433)
+  execution_environment: ee-default
+  inventory: Palo Alto Demo Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Palo Alto // Setup Infrastructure
+  playbook: demos/panos/pb_infra_setup.yml
+  project: Network Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: us-east-2
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: AWS region
+      required: true
+      type: text
+      variable: aws_region
+    - choices:
+      - 'true'
+      - 'false'
+      default: 'false'
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Skip admin user setup?
+      required: true
+      type: multiplechoice
+      variable: skip_fw_password
+- credentials:
+  - AWS Sandbox Credential
+  execution_environment: ee-default
+  extra_vars:
+    aws_region: us-east-2
+  inventory: Palo Alto Demo Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Palo Alto // Tear Down Infrastructure
+  playbook: demos/panos/pb_infra_teardown.yml
+  project: Network Mgmt
+- ask_variables_on_launch: true
+  credentials:
+  - Palo Alto Bastion
+  execution_environment: ee-default
+  inventory: Palo Alto Demo Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Palo Alto // Web Server Setup
+  playbook: demos/panos/pb_webserver_setup.yml
+  project: Network Mgmt
+- ask_variables_on_launch: true
+  credentials:
+  - West ServiceNow (ven05433)
+  - Windows Kerberos Credential
+  execution_environment: ee-windows
+  extra_vars:
+    kvm_name: hcl-guest-1
+    sys_id: undef
+  inventory: Workshop Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Proxmox // Decomm VM
+  playbook: demos/decomm_kvm.yml
+  project: Windows Mgmt
+  skip_tags: dns_delete,kvm_delete,ad_delete
+- ask_variables_on_launch: true
+  credentials:
+  - Proxmox API
+  execution_environment: ee-default
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Proxmox // Manage Instance State
+  playbook: playbooks/proxmox_vm_state.yml
+  project: Linux Mgmt
+- ask_skip_tags_on_launch: true
+  ask_variables_on_launch: true
+  credentials:
+  - Autodotes[local] Admin
+  - West ServiceNow (ven05433)
+  - Windows Kerberos Credential
+  execution_environment: ee-windows
+  inventory: Proxmox Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Proxmox // Prep VM for Decomm
+  playbook: demos/decomm_kvm_prep.yml
+  project: Windows Mgmt
+  skip_tags: kvm_snapshot,ad_disable,kvm_stop
+- ask_variables_on_launch: true
+  credentials:
+  - AAP (root)
+  description: Create a proxmox kvm guest
+  execution_environment: ee-default
+  extra_vars:
+    proxmox_vm_configs:
+    - cores: 2
+      cpu: host
+      description: KVM guest created from template
+      ide:
+        ide2: none,media=cdrom
+      kvm: !unsafe '{{ qcows.rhel7 }}'
+      memory: 8192
+      name: rhel-guest-1
+      net:
+        net0: virtio,bridge=vmbr0,firewall=1
+      node: pve
+      onboot: true
+      ostype: l26
+      scsihw: virtio-scsi-single
+      sockets: 2
+      tags:
+      - demo
+      - rhel
+      - linux
+      timeout: 120
+      virtio:
+        virtio0: local:32,format=qcow2
+    qcows:
+      rhel7: rhel-server-7.9-x86_64-kvm.qcow2
+      rhel8: rhel-8.7-x86_64-kvm.qcow2
+      rhel9: rhel-baseos-9.1-x86_64-kvm.qcow2
+  inventory: Proxmox Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Proxmox // Provision KVM Guest
+  playbook: demos/proxmox_kvm_guest.yml
+  project: Linux Mgmt
+- ask_variables_on_launch: true
+  credentials:
+  - Controller Credential
+  - Proxmox Windows Default Credential
+  description: Provision a VM in Proxmox VE
+  execution_environment: ee-windows
+  extra_vars:
+    proxmox_ve_configs:
+    - agent: true
+      clone: win11-admin-server-template
+      full: false
+      name: win11-guest-1
+      nameservers:
+      - 8.8.8.8
+      node: pve
+      tags:
+      - ansible
+      - windows
+      - yaml-config
+  inventory: Proxmox Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Proxmox // Provision Windows VM
+  playbook: demos/proxmox_kvm_clone.yml
+  project: Windows Mgmt
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: ''
+      max: 100
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: What is the VM name? (for proxmox UI)
+      required: true
+      type: text
+      variable: pve_survey_name
+    - choices:
+      - win11-server-template
+      default: win11-server-template
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: What template are you cloning?
+      required: true
+      type: multiplechoice
+      variable: pve_survey_clone
+    - choices:
+      - pve
+      default: pve
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: What proxmox node?
+      required: true
+      type: multiplechoice
+      variable: pve_survey_node
+    - choices: ''
+      default: ansible-created,windows
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: Provide VM tags (comma separated)
+      required: false
+      type: text
+      variable: pve_survey_tags
+    - choices:
+      - 1.1.1.1
+      - 8.8.8.8
+      - 192.168.1.1
+      default: 8.8.8.8
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: Select your nameservers
+      required: false
+      type: multiselect
+      variable: pve_survey_nameservers
+    - choices:
+      - 'yes'
+      - 'no'
+      default: 'no'
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: Are you doing a full clone?
+      required: false
+      type: multiplechoice
+      variable: pve_survey_full
+    - choices:
+      - '2'
+      - '4'
+      - '8'
+      default: '2'
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: How many cores?
+      required: false
+      type: multiplechoice
+      variable: pve_survey_cores
+    - choices: ''
+      default: 4096
+      max: 8192
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: How much memory? (in MB)
+      required: false
+      type: integer
+      variable: pve_survey_memory
+    - choices: ''
+      default: 1200
+      max: 3600
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: Set provisioning timeout (in seconds)
+      required: false
+      type: integer
+      variable: pve_survey_timeout
+  verbosity: 3
+- credentials:
+  - Controller Credential
+  - Proxmox Windows Default Credential
+  execution_environment: ee-windows
+  inventory: Proxmox Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Proxmox // Setup WinRM
+  playbook: demos/setup_winrm.yml
+  project: Windows Mgmt
+- ask_limit_on_launch: true
+  credentials:
+  - AAP (cloud-user)
+  description: Install SQL Server on a RHEL box
+  extra_vars:
+    mssql_version: 2019
+    sql_sa_password: r3dh4t123!
+  inventory: Proxmox Inventory
+  job_slice_count: 1
+  job_type: run
+  limit: '*.rhel-guest'
+  name: RHEL // Install SQL Server
+  playbook: demos/sqlserver-rhel.yml
+  project: Linux Mgmt
+- ask_limit_on_launch: true
+  credentials:
+  - AAP (cloud-user)
+  - RHSM (zleblanc@redhat)
+  description: Register server using subscription-manager
+  extra_vars:
+    rhsm_repos:
+    - !unsafe rhel-{{ ansible_distribution_major_version }}-server-optional-rpms
+  inventory: Proxmox Inventory
+  job_slice_count: 1
+  job_type: run
+  limit: '*.rhel-guest'
+  name: RHEL // Register
+  playbook: demos/rhsm.yml
+  project: Linux Mgmt
+- ask_variables_on_launch: true
+  execution_environment: ee-default
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Sandbox // Consumer
+  playbook: playbooks/consumer.yml
+  project: Linux Mgmt
+- execution_environment: ee-default
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Sandbox // Producer
+  playbook: playbooks/producer.yml
+  project: Linux Mgmt
+- credentials:
+  - West ServiceNow (ven05433)
+  execution_environment: ee-default
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Service Now // Create Incident
+  playbook: playbooks/snow/create_incident.yml
+  project: Cloud Mgmt
+- ask_variables_on_launch: true
+  credentials:
+  - West ServiceNow (ven05433)
+  execution_environment: ee-windows
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Service Now // Mock Decomm VM
+  playbook: demos/snow_no_op.yml
+  project: Windows Mgmt
+- credentials:
+  - West ServiceNow (ven05433)
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Service Now // Update Incident
+  playbook: playbooks/snow/update_incident.yml
+  project: Cloud Mgmt
+- ask_variables_on_launch: true
+  credentials:
+  - Git Role Credential
+  execution_environment: ee-networking
+  inventory: Cisco Lab
+  job_slice_count: 1
+  job_type: run
+  name: Summit Connect // Apply Network CaC
+  playbook: summit-connect/playbooks/network_apply_cac.yml
+  project: Network Mgmt
+- ask_limit_on_launch: true
+  ask_variables_on_launch: true
+  execution_environment: ee-networking
+  extra_vars:
+    network_configs:
+      interfaces:
+      - description: Mgmt INTERFACE - DON'T TOUCH ME
+        enabled: true
+        name: GigabitEthernet1
+      - description: Port to Fabric (edit 2 -> ansible)
+        enabled: true
+        name: GigabitEthernet2
+  inventory: Cisco Lab
+  job_slice_count: 1
+  job_type: run
+  limit: sandbox-iosxe-latest-1.cisco.com
+  name: Summit Connect //  Network Apply Configs
+  playbook: summit-connect/playbooks/network_apply_config.yml
+  project: Network Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: sandbox-iosxe-latest-1.cisco.com
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Specify target hosts
+      required: true
+      type: text
+      variable: _hosts
+- ask_variables_on_launch: true
+  credentials:
+  - Controller Credential
+  - Git Role Credential
+  extra_vars:
+    config_repo_name: ansible-network-configs
+  inventory: Cisco Lab
+  job_slice_count: 1
+  job_type: run
+  name: Summit Connect // Network Backup
+  playbook: summit-connect/playbooks/network_backup.yml
+  project: Network Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: backup_demo
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: Specify target host(s)
+      required: true
+      type: text
+      variable: _hosts
+- ask_variables_on_launch: true
+  credentials:
+  - Controller Credential
+  - Git Role Credential
+  execution_environment: ee-networking
+  extra_vars:
+    config_repo_name: ansible-network-configs
+  inventory: Cisco Lab
+  job_slice_count: 1
+  job_type: run
+  name: Summit Connect // Network Restore
+  playbook: summit-connect/playbooks/network_restore.yml
+  project: Network Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: Prompt user for restore point based on backup configs available in
+      git
+    name: Network Restore Survey
+    spec:
+    - default: sandbox-iosxe-latest-1.cisco.com
+      question_name: Specify target hosts
+      required: true
+      type: text
+      variable: _hosts
+    - choices:
+      - 2024.10.23.19.26.18
+      - 2024.10.23.14.58.54
+      - 2024.10.22.20.03.49
+      - 2024.09.24.15.56.18
+      - 2024.09.16.21.49.39
+      - 2024.07.09.19.40.18
+      - 2024.07.09.16.21.45
+      - 2024.07.09.16.12.57
+      - 2024.06.25.15.50.40
+      - 2024.06.24.18.21.33
+      - 2023.10.13.14.49.27
+      - 2023.10.11.21.32.00
+      - 2023.10.11.15.21.11
+      - 2023.10.03.17.20.31
+      - 2023.10.03.16.32.37
+      - 2023.10.03.13.33.52
+      - 2023.10.03.13.26.03
+      - 2023.10.03.12.57.55
+      - 2023.10.03.12.32.47
+      - 2023.10.02.20.31.15
+      - 2023.10.02.08.10.32
+      - 2023.09.30.00.02.05
+      - 2023.09.29.19.20.27
+      - 2023.09.29.13.33.33
+      - 2023.09.29.08.54.44
+      - 2023.09.29.08.52.53
+      - 2023.09.29.08.50.30
+      - 2023.09.29.08.47.15
+      - 2023.09.29.08.45.02
+      - 2023.09.28.21.58.40
+      - 2023.09.28.21.51.18
+      - 2023.09.28.21.32.55
+      - 2023.09.28.21.29.11
+      - 2023.09.28.21.25.10
+      - 2023.09.28.21.04.52
+      - 2023.09.28.15.43.41
+      - 2023.09.28.15.07.44
+      - 2023.09.28.14.59.25
+      - 2023.09.27.22.15.47
+      - 2023.09.27.22.13.00
+      - 2023.09.27.22.03.38
+      - 2023.09.27.21.52.22
+      default: 2024.10.23.19.26.18
+      question_description: Each backup commit is tagged with the time it was created
+      question_name: Choose your restore point (git tag)
+      required: true
+      type: multiplechoice
+      variable: backup_config_tag
+- ask_variables_on_launch: true
+  credentials:
+  - Controller Credential
+  execution_environment: ee-networking
+  extra_vars:
+    input_slack_token: REPLACE_ME
+  inventory: Cisco Lab
+  job_slice_count: 1
+  job_type: run
+  name: Summit Connect // Setup
+  playbook: summit-connect/setup.yml
+  project: Network Mgmt
+- ask_variables_on_launch: true
+  credentials:
+  - Personal Slack Token
+  inventory: Cisco Lab
+  job_slice_count: 1
+  job_type: run
+  name: Summit Connect // Slack Notification
+  playbook: summit-connect/playbooks/slack_notification.yml
+  project: Network Mgmt
+- ask_variables_on_launch: true
+  ask_verbosity_on_launch: true
+  credentials:
+  - Terraform (zleblanc@redhat)
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Terraform // Start Run
+  playbook: ansible/start_run.yml
+  project: Terraform Mgmt
+- credentials:
+  - AWS (ec2-user)
+  - AWS Sandbox Credential
+  - Daily Demo [Autodotes]
+  - Daily Demo Vault Password
+  - Gmail SMTP
+  - RHSM (zleblanc@redhat)
+  extra_vars:
+    alwaysup: false
+    ansible_python_interpreter: /usr/bin/python3
+    assign_public_ip: true
+    bccto:
+    - Zach LeBlanc <zleblanc@redhat.com>
+    controller_url: controller.autodotes.com
+    controller_user: admin
+    count: 1
+    deleteby: hercules
+    image: ami-068ee501b16366120
+    instance_type: m5.xlarge
+    mailfrom: zjleblanc3@gmail.com (Zach LeBlanc)
+    mailto:
+    - Zach LeBlanc <zleblanc@redhat.com>
+    managed_inventory_name: Daily Demo Inventory
+    my_ssh_key: zleblanc-redhat-mac
+    region: us-east-2
+    user_list_vault: zleblanc_user_list_vault.yml
+    user_name: zleblanc
+    vpc_cidr: 172.16.1.0/24
+    vpc_name: linux-dailydemo
+  inventory: Daily Demo Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Test // Linux Daily Demo
+  playbook: playbooks/site_create.yml
+  project: '[Ext] aap.dailydemos.linux'
+  use_fact_cache: true
+- credentials:
+  - AAP (id_rsa)
+  execution_environment: ee-default
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: Vault // Install
+  playbook: playbooks/vault/install_vault.yml
+  project: Cloud Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: vault.autodotes.com
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Vault FQDN
+      required: true
+      type: text
+      variable: vault_fqdn
+    - choices: ''
+      default: 2083
+      max: 10000
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Vault Port
+      required: true
+      type: integer
+      variable: vault_port
+    - choices:
+      - 'true'
+      - 'false'
+      default: 'true'
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: TLS?
+      required: true
+      type: multiplechoice
+      variable: vault_tls
+    - choices:
+      - 'true'
+      - 'false'
+      default: 'true'
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: Secure Logging?
+      required: true
+      type: multiplechoice
+      variable: vault_secure_log
+- credentials:
+  - HashiCorp Vault Lookup Plugin (root)
+  execution_environment: ee-default
+  extra_vars:
+    _hosts: linux
+  inventory: Cloud Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Vault // Per-host Credential Lookup
+  playbook: demos/vault_per_host.yml
+  project: Cloud Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: cubbyhole/ansible
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Secrets Container
+      required: true
+      type: text
+      variable: secret_container
+    - choices:
+      - password
+      - sshkey
+      default: sshkey
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Authentication Method
+      required: true
+      type: multiplechoice
+      variable: method
+    - choices:
+      - 'true'
+      - 'false'
+      default: 'true'
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: Secure Logging?
+      required: true
+      type: multiplechoice
+      variable: vault_secure_logging
+- ask_limit_on_launch: true
+  credentials:
+  - VMWare (ansible)
+  - VMWare Bastion (gf7fr)
+  execution_environment: ee-default
+  inventory: Cloud Inventory
+  job_slice_count: 1
+  job_type: run
+  limit: new_guest
+  name: VMWare // Gather Facts
+  playbook: playbooks/vmware/no_op.yml
+  project: Cloud Mgmt
+  verbosity: 4
+- credentials:
+  - VMWare (gf7fr)
+  execution_environment: ee-default
+  inventory: Cloud Inventory
+  job_slice_count: 1
+  job_type: run
+  name: VMWare // Gather Info
+  playbook: playbooks/vmware/info.yml
+  project: Cloud Mgmt
+- credentials:
+  - VMWare (gf7fr)
+  execution_environment: ee-default
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: VMWare // Power State
+  playbook: playbooks/vmware/power.yml
+  project: Cloud Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: vmware-demo-1
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: What is the name of the vm?
+      required: true
+      type: text
+      variable: vm_name
+    - choices:
+      - powered-on
+      - powered-off
+      - reboot-guest
+      - shutdown-guest
+      - suspended
+      default: powered-on
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Choose the power state
+      required: true
+      type: multiplechoice
+      variable: vm_desired_state
+- ask_variables_on_launch: true
+  ask_verbosity_on_launch: true
+  credentials:
+  - VMWare (ansible)
+  - VMWare Bastion (gf7fr)
+  - VMWare (gf7fr)
+  - West ServiceNow (ven05433)
+  execution_environment: ee-default
+  inventory: Cloud Inventory
+  job_slice_count: 1
+  job_type: run
+  name: VMWare // Provision Guest
+  playbook: playbooks/vmware/deploy.yml
+  project: Cloud Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: ''
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Guest name
+      required: true
+      type: text
+      variable: vmware_guest_name
+    - choices:
+      - SDDC-Datacenter
+      default: SDDC-Datacenter
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Datacenter
+      required: true
+      type: multiplechoice
+      variable: vmware_datacenter
+    - choices:
+      - Cluster-1
+      default: Cluster-1
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: Cluster
+      required: false
+      type: multiplechoice
+      variable: vmware_cluster_name
+    - choices: ''
+      default: /Workloads/sandbox-w7gqh
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Folder
+      required: true
+      type: text
+      variable: vmware_folder
+    - choices:
+      - rhel9
+      - rhel8
+      - win_2016
+      - fedora_32
+      default: rhel9
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: Choose desired OS
+      required: true
+      type: multiplechoice
+      variable: vmware_os
+    - choices: ''
+      default: ''
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: SSH Public Key
+      required: false
+      type: textarea
+      variable: vmware_public_key
+  verbosity: 4
+- ask_variables_on_launch: true
+  credentials:
+  - VMWare (gf7fr)
+  execution_environment: ee-default
+  inventory: Autodotes Lab
+  job_slice_count: 1
+  job_type: run
+  name: VMWare // Snapshot
+  playbook: playbooks/vmware/snapshot.yml
+  project: Cloud Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: 30
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: Enter 0 to always create a new snapshot
+      question_name: Create if last snapshot is older than (days)
+      required: false
+      type: integer
+      variable: snapshot_ttl_days
+- credentials:
+  - Autodotes[local] Admin
+  execution_environment: ee-windows
+  inventory: Proxmox Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Windows // Bulk Add Users to Group
+  playbook: demos/bulk_add_users_to_group.yml
+  project: Windows Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: DC=autodotes,DC=local
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Enter a subtree to search
+      required: true
+      type: text
+      variable: search_root
+    - choices: ''
+      default: Austin
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Enter your target group name
+      required: true
+      type: text
+      variable: target_group
+    - choices: ''
+      default: 'example_user1
+
+        example_user2'
+      max: 102400
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Paste in your list of user accounts
+      required: true
+      type: textarea
+      variable: user_accounts
+- credentials:
+  - Ansible Windows Vault
+  execution_environment: ee-windows
+  inventory: Windows Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Windows // EC2 Domain Configure
+  playbook: demos/ad_domain/pb_domain_config.yml
+  project: Windows Mgmt
+- credentials:
+  - Ansible Windows Vault
+  - AWS Sandbox Credential
+  execution_environment: ee-windows
+  inventory: Windows Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Windows // EC2 Domain Infra Deploy
+  playbook: demos/ad_domain/pb_aws_infra.yml
+  project: Windows Mgmt
+- credentials:
+  - Ansible Windows Vault
+  execution_environment: ee-windows
+  inventory: Windows Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Windows // EC2 Domain Join
+  playbook: demos/ad_domain/pb_domain_join.yml
+  project: Windows Mgmt
+- credentials:
+  - Ansible Windows Vault
+  - AWS Sandbox Credential
+  execution_environment: ee-windows
+  inventory: Windows Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Windows // EC2 Domain Setup [Monolith]
+  playbook: demos/ad_domain/setup.yml
+  project: Windows Mgmt
+- ask_verbosity_on_launch: true
+  credentials:
+  - Windows Kerberos Credential
+  execution_environment: ee-windows
+  inventory: Windows Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Windows // EC2 Kerberos Check
+  playbook: demos/ad_domain/pb_check_krb.yml
+  project: Windows Mgmt
+- ask_credential_on_launch: true
+  ask_inventory_on_launch: true
+  ask_limit_on_launch: true
+  ask_variables_on_launch: true
+  credentials:
+  - Windows Server Credential
+  execution_environment: ee-windows
+  inventory: Proxmox Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Windows // Gather Facts
+  playbook: playbooks/win_facts.yml
+  project: Windows Mgmt
+  use_fact_cache: true
+- ask_variables_on_launch: true
+  credentials:
+  - Windows Kerberos Credential
+  execution_environment: ee-windows
+  extra_vars:
+    domain_controller: dc01.autodotes.com
+    servers: 'winston
+
+      winthrop'
+  inventory: Windows Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Windows // Get Folder Stats
+  playbook: playbooks/get_folder_stats.yml
+  project: Windows Mgmt
+- ask_limit_on_launch: true
+  credentials:
+  - Autodotes[local] Admin
+  - Controller Credential
+  - Windows Server Credential
+  execution_environment: ee-windows
+  extra_vars:
+    join_domain: true
+  inventory: Proxmox Inventory
+  job_slice_count: 1
+  job_type: run
+  limit: windows
+  name: Windows // Join Domain
+  playbook: demos/join_domain.yml
+  project: Windows Mgmt
+- ask_limit_on_launch: true
+  credentials:
+  - Autodotes[local] Admin
+  - Controller Credential
+  - Windows Server Credential
+  execution_environment: ee-windows
+  inventory: Proxmox Inventory
+  job_slice_count: 1
+  job_type: run
+  name: Windows // Leave Domain
+  playbook: demos/leave_domain.yml
+  project: Windows Mgmt
+- ask_variables_on_launch: true
+  credentials:
+  - Windows Kerberos Credential
+  execution_environment: ee-windows
+  extra_vars:
+    _hosts: win11-guest-2.autodotes.local
+  inventory: Proxmox Inventory
+  job_slice_count: 1
+  job_tags: delete
+  job_type: run
+  name: Windows // Long paths - Delete
+  playbook: demos/delete_folder_long_path.yml
+  project: Windows Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: '\\win11-guest-1\c$\Users\Administrator\superlongfolder
+
+        \\win11-guest-1\c$\Users\Administrator\anotherlongone
+
+        \\win11-guest-1\c$\Users\Administrator\whyarethesenamessolong'
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: 'Example: \\win11-guest-1\c$\Users\Administrator\superlongpath'
+      question_name: Enter list of paths to delete
+      required: true
+      type: textarea
+      variable: root_folders
+- credentials:
+  - Windows Kerberos Credential
+  execution_environment: ee-windows
+  extra_vars:
+    _hosts: win11-guest-1.autodotes.local
+  inventory: Proxmox Inventory
+  job_slice_count: 1
+  job_tags: setup
+  job_type: run
+  name: Windows // Long Paths - Setup
+  playbook: demos/delete_folder_long_path.yml
+  project: Windows Mgmt
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: 'C:\Users\Administrator\superlongfolder
+
+        C:\Users\Administrator\anotherlongone
+
+        C:\Users\Administrator\whyarethesenamessolong'
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: C:\Users\Administrator\superlongpath
+      question_name: Enter list of absolute paths to create
+      required: true
+      type: textarea
+      variable: root_folders
+- ask_credential_on_launch: true
+  ask_limit_on_launch: true
+  ask_tags_on_launch: true
+  credentials:
+  - Autodotes[local] Admin
+  - Demo SQL Service Account Credentials
+  - Windows Server Credential
+  description: Install a SQL Server instance using DSC
+  inventory: Proxmox Inventory
+  job_slice_count: 1
+  job_type: run
+  limit: win11-guest-1
+  name: Windows // MSSQL Role
+  playbook: demos/install_mssql_dsc.yml
+  project: Windows Mgmt
+- credentials:
+  - Red Hat Automation Hub
+  execution_environment: ee-default
+  inventory: Cloud Inventory
+  job_slice_count: 1
+  job_type: run
+  limit: win-demo-1
+  name: Windows // Powershell
+  playbook: playbooks/pwsh.yml
+  project: Windows Mgmt
+...

@@ -1,0 +1,85 @@
+---
+- name: Export configs from 2.4
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  vars:
+    _export: "{{ export | default(true) | bool }}"
+
+  tasks:
+    - name: Ensure dest dir exists
+      ansible.builtin.file:
+        name: "{{ playbook_dir }}/staging"
+        state: directory
+        mode: "755"
+
+    - name: Export all configuration
+      when: _export
+      tags: always
+      register: r_awx_export
+      ansible.controller.export:
+        all: true
+        controller_host: "{{ lookup('ansible.builtin.env', 'OLD_CONTROLLER_HOST') }}"
+        controller_oauthtoken: "{{ lookup('ansible.builtin.env', 'OLD_CONTROLLER_OAUTH_TOKEN') }}"
+
+    - name: Write config to file
+      when: _export
+      tags: always
+      ansible.builtin.copy:
+        content: "{{ r_awx_export.assets | to_nice_yaml(indent=2) }}"
+        dest: "{{ playbook_dir }}/staging/controller_assets.staging.yml"
+
+    - name: Define asset fact
+      when: _export
+      tags: always
+      ansible.builtin.set_fact:
+        controller_assets: "{{ r_awx_export.assets }}"
+
+    - name: Read config from file
+      when: not _export
+      tags: always
+      ansible.builtin.set_fact:
+        controller_assets: "{{ lookup('ansible.builtin.file', playbook_dir + '/staging/controller_assets.staging.yml') | from_yaml }}"
+
+    - name: Parse credentials
+      tags: credentials
+      ansible.builtin.copy:
+        content: "{{ controller_assets.credentials | parse_credentials | to_nice_yaml(indent=2, explicit_start=True, explicit_end=True) }}"
+        dest: "{{ playbook_dir }}/staging/controller_credentials.staging.yml"
+
+    - name: Parse credential types
+      tags: credential_types
+      ansible.builtin.copy:
+        content: "{{ controller_assets.credential_types | to_nice_yaml(indent=2, explicit_start=True, explicit_end=True) }}"
+        dest: "{{ playbook_dir }}/staging/old_controller_credential_types.staging.yml"
+
+    - name: Parse inventories
+      tags: inventories
+      ansible.builtin.copy:
+        content: "{{ controller_assets.inventory | parse_inventories |  to_nice_yaml(indent=2, explicit_start=True, explicit_end=True) }}"
+        dest: "{{ playbook_dir }}/staging/controller_inventories.staging.yml"
+
+    - name: Parse inventory sources
+      tags: inventory_sources
+      ansible.builtin.copy:
+        content: "{{ controller_assets.inventory_sources | parse_inventory_sources | to_nice_yaml(indent=2, explicit_start=True, explicit_end=True) }}"
+        dest: "{{ playbook_dir }}/staging/controller_inventory_sources.staging.yml"
+
+    - name: Parse projects
+      tags: projects
+      ansible.builtin.copy:
+        content: "{{ controller_assets.projects | parse_projects | to_nice_yaml(indent=2, explicit_start=True, explicit_end=True) }}"
+        dest: "{{ playbook_dir }}/staging/controller_projects.staging.yml"
+
+    - name: Parse job templates
+      tags: job_templates
+      ansible.builtin.copy:
+        content: "{{ controller_assets.job_templates | parse_job_templates | to_nice_yaml(indent=2, explicit_start=True, explicit_end=True) }}"
+        dest: "{{ playbook_dir }}/staging/controller_job_templates.staging.yml"
+
+    - name: Parse workflow job templates
+      tags: workflow_job_templates
+      ansible.builtin.copy:
+        content: "{{ controller_assets.workflow_job_templates | parse_workflow_job_templates | to_nice_yaml(indent=2, explicit_start=True, explicit_end=True) }}"
+        dest: "{{ playbook_dir }}/staging/controller_workflow_job_templates.staging.yml"

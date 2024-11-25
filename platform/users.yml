@@ -1,0 +1,8 @@
+---
+aap_user_accounts:
+  - username: bquist
+    first_name: Bret
+    last_name: Quist
+    organization: Red Hat
+    is_superuser: false
+    password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=8) }}"

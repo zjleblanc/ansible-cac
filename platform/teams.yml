@@ -1,5 +1,5 @@
 ---
-controller_teams:
+aap_teams:
   - name: Astros
     description: Houston Astros baseball club
     organization: Autodotes

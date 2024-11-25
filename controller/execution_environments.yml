@@ -1,6 +1,11 @@
 ---
 controller_execution_environments:
-  - name: Autodotes Default EE
-    image: quay.io/zleblanc/ee-default
-  - name: Windows EE
-    image: quay.io/zleblanc/ee-windows
+  - name: ee-default
+    description: my default execution environment with all the collections and libraries \
+    image: quay.io/zleblanc/ee-default:87a71cbb
+  - name: ee-windows
+    description: my windows execution environment including kerberos conf
+    image: quay.io/zleblanc/ee-windows:8f5cb8c00edcb1c2d7b74c1c59aaf0d787a098bf
+  - name: ee-networking
+    description: my networking execution environment
+    image: quay.io/zleblanc/ee-networking:7311e0e

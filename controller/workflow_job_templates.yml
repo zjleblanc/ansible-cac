@@ -1,0 +1,810 @@
+---
+controller_workflows:
+- inventory: Autodotes Lab
+  name: AAP // Renew & Update AAP certs
+  organization: Autodotes
+  webhook_service: gitlab
+  workflow_nodes:
+  - identifier: Sync Project
+    related:
+      success_nodes:
+      - identifier: Sync Inventory
+    unified_job_template:
+      name: Autodotes
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: Sync Inventory
+    related:
+      success_nodes:
+      - identifier: 2cf3060c-1b43-47e3-856c-4bfdd70f7f54
+    unified_job_template:
+      inventory:
+        name: Autodotes Lab
+        organization:
+          name: Autodotes
+          type: organization
+        type: inventory
+      name: Autodotes Lab Machines
+      type: inventory_source
+  - identifier: 0ad47cdf-81e2-40a3-bd90-fd4130f17ec4
+    unified_job_template:
+      name: AAP // Update AAP Certs
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: 2cf3060c-1b43-47e3-856c-4bfdd70f7f54
+    related:
+      success_nodes:
+      - identifier: 0ad47cdf-81e2-40a3-bd90-fd4130f17ec4
+    unified_job_template:
+      name: Autodotes // Renew Certs
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+- inventory: Cloud Inventory
+  name: Cloud // Patch Workflow
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - choices: ''
+      default: all
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: Specify target hosts
+      required: true
+      type: text
+      variable: _hosts
+    - choices:
+      - us-east-2
+      default: us-east-2
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: ''
+      question_name: Choose your AWS region
+      required: true
+      type: multiplechoice
+      variable: aws_region
+  workflow_nodes:
+  - identifier: a511b6f2-b779-4e9e-90b6-ceffc363deca
+    related:
+      success_nodes:
+      - identifier: a01fba54-ae60-4a7a-9bc1-7dfbaecc0b4d
+    unified_job_template:
+      name: Cloud Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: fbde8f01-bda4-4571-9710-6a3c34be044a
+    related:
+      failure_nodes:
+      - identifier: 92b5e060-faeb-4e62-9df3-bab84fa93d6f
+    unified_job_template:
+      name: Cloud // Patch EC2
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: a01fba54-ae60-4a7a-9bc1-7dfbaecc0b4d
+    related:
+      success_nodes:
+      - identifier: fbde8f01-bda4-4571-9710-6a3c34be044a
+    unified_job_template:
+      name: Cloud // Snapshot EC2
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: 92b5e060-faeb-4e62-9df3-bab84fa93d6f
+    unified_job_template:
+      name: Cloud // Restore EC2
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+- ask_variables_on_launch: true
+  name: EDA // Remediation Workflow // Disk Space
+  organization: Autodotes
+  workflow_nodes:
+  - identifier: 9954c450-ec30-451a-be4a-d1d71b922a96
+    related:
+      success_nodes:
+      - identifier: ac35ffa6-f471-4ee7-8e20-0d9f0a209627
+    unified_job_template:
+      name: Cloud Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: ac35ffa6-f471-4ee7-8e20-0d9f0a209627
+    related:
+      success_nodes:
+      - identifier: 5837efba-9fd0-43f3-8ef9-fbc321d688c5
+    unified_job_template:
+      name: Service Now // Create Incident
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: 97d33c76-b766-4b01-9c5a-b2766951341b
+    unified_job_template:
+      name: Service Now // Update Incident
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: 5837efba-9fd0-43f3-8ef9-fbc321d688c5
+    related:
+      always_nodes:
+      - identifier: 97d33c76-b766-4b01-9c5a-b2766951341b
+    unified_job_template:
+      name: EDA // Resize EBS Volume
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: 50d77c41-efdd-4a41-945e-a9a7ff8e02f3
+    related:
+      success_nodes:
+      - identifier: ac35ffa6-f471-4ee7-8e20-0d9f0a209627
+    unified_job_template:
+      inventory:
+        name: Cloud Inventory
+        organization:
+          name: Autodotes
+          type: organization
+        type: inventory
+      name: AWS EC2 Instances
+      type: inventory_source
+- ask_variables_on_launch: true
+  inventory: Cloud Inventory
+  name: EDA // Remediation Workflow // High Memory Usage
+  organization: Autodotes
+  workflow_nodes:
+  - identifier: 78e2549e-0834-4def-aa33-85a5ba1259d4
+    related:
+      success_nodes:
+      - identifier: fc552f02-3086-4f1b-8a2a-3d8a8d40dba3
+    unified_job_template:
+      name: Cloud Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: fc552f02-3086-4f1b-8a2a-3d8a8d40dba3
+    related:
+      success_nodes:
+      - identifier: e8eb2480-7d6c-4c5d-8900-5f92d2eab793
+    unified_job_template:
+      name: Service Now // Create Incident
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: 1a8b816b-e907-429b-a4a1-39cd9b418e0d
+    unified_job_template:
+      name: Service Now // Update Incident
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: 5e3a4fb0-9d67-4d02-81cf-a7ba5a4d281a
+    related:
+      success_nodes:
+      - identifier: fc552f02-3086-4f1b-8a2a-3d8a8d40dba3
+    unified_job_template:
+      name: Event-Driven Demos
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: bd6a4b1b-bc6f-4f50-a19b-77263c4552e2
+    related:
+      always_nodes:
+      - identifier: 1a8b816b-e907-429b-a4a1-39cd9b418e0d
+    unified_job_template:
+      name: EDA // Remediate High Memory Usage Processes
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: e8eb2480-7d6c-4c5d-8900-5f92d2eab793
+    related:
+      success_nodes:
+      - identifier: bd6a4b1b-bc6f-4f50-a19b-77263c4552e2
+    unified_job_template:
+      name: VMWare // Snapshot
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+- ask_variables_on_launch: true
+  name: EDA // Remediation Workflow // OneAgent
+  organization: Autodotes
+  workflow_nodes:
+  - identifier: cf69755d-be79-4432-b67d-1aad633a9576
+    related:
+      success_nodes:
+      - identifier: 75ba8539-4f6c-4d40-adbf-a67c3ad73fc6
+    unified_job_template:
+      name: Event-Driven Demos
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: 75ba8539-4f6c-4d40-adbf-a67c3ad73fc6
+    related:
+      success_nodes:
+      - identifier: 9b177574-fc1d-4208-8cb1-b84b4406d16d
+    unified_job_template:
+      name: Service Now // Create Incident
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: 9b177574-fc1d-4208-8cb1-b84b4406d16d
+    related:
+      always_nodes:
+      - identifier: 6ef1755a-e29f-49d0-8e58-360ae3aae10b
+    unified_job_template:
+      name: EDA // OneAgent Restart
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: 6ef1755a-e29f-49d0-8e58-360ae3aae10b
+    unified_job_template:
+      name: Service Now // Update Incident
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+- inventory: Autodotes Lab
+  name: Linux // Debug Workflow
+  workflow_nodes:
+  - identifier: Debug Variables
+    unified_job_template:
+      name: Linux // Debug
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+- name: Linux // User Login (Random) Workflow
+  organization: Autodotes
+  workflow_nodes:
+  - identifier: 1b683727-d675-4448-b5f8-687fd1216a6e
+    related:
+      failure_nodes:
+      - identifier: 5e19c25b-a5f1-4bf1-998b-64dce7a0b9d7
+      success_nodes:
+      - identifier: 066ed547-d3d7-4521-ae0b-ce948c353d0e
+    unified_job_template:
+      name: Proxmox // Manage Instance State
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: 5e19c25b-a5f1-4bf1-998b-64dce7a0b9d7
+    unified_job_template:
+      name: Proxmox // Manage Instance State
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: a1a91e10-4cfc-4585-8bc4-934ab4b57cac
+    related:
+      success_nodes:
+      - identifier: 1b683727-d675-4448-b5f8-687fd1216a6e
+    unified_job_template:
+      name: Linux Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: 066ed547-d3d7-4521-ae0b-ce948c353d0e
+    related:
+      always_nodes:
+      - identifier: 39b2cc03-2ea8-42ad-a824-e427a1cbfa7a
+    unified_job_template:
+      name: Linux // User Login (Random)
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: 39b2cc03-2ea8-42ad-a824-e427a1cbfa7a
+    unified_job_template:
+      name: Proxmox // Manage Instance State
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+- name: Linux // User Login Report Workflow
+  organization: Autodotes
+  workflow_nodes:
+  - identifier: 65e3790a-de13-4bf6-ac26-757f43bb69b8
+    related:
+      success_nodes:
+      - identifier: 7e06707f-228d-4936-9b6d-1a315cb84bfe
+    unified_job_template:
+      name: Linux Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: 7e06707f-228d-4936-9b6d-1a315cb84bfe
+    related:
+      failure_nodes:
+      - identifier: b9c5998d-f954-466f-8bf4-a05feb4ef3c5
+      success_nodes:
+      - identifier: 01152cb5-b27e-4fc1-a7ef-160fcb2e66dc
+    unified_job_template:
+      name: Proxmox // Manage Instance State
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: b9c5998d-f954-466f-8bf4-a05feb4ef3c5
+    unified_job_template:
+      name: Proxmox // Manage Instance State
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: 32999b88-89c2-4cf0-afed-f6cf663211d6
+    unified_job_template:
+      name: Proxmox // Manage Instance State
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: 01152cb5-b27e-4fc1-a7ef-160fcb2e66dc
+    related:
+      always_nodes:
+      - identifier: 32999b88-89c2-4cf0-afed-f6cf663211d6
+    unified_job_template:
+      name: Linux // User Login Report
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+- inventory: Palo Alto Demo Inventory
+  name: Palo Alto // Provision Firewall Demo Workflow
+  organization: Autodotes
+  workflow_nodes:
+  - identifier: Setup Infrastructure
+    related:
+      success_nodes:
+      - identifier: Sync Palo Alto Demo Inventory
+      - identifier: Configure Firewall
+    unified_job_template:
+      name: Palo Alto // Setup Infrastructure
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: 028a3414-4fa9-47c4-ae50-bbf06916bfc3
+    related:
+      success_nodes:
+      - identifier: Setup Infrastructure
+    unified_job_template:
+      name: Network Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - all_parents_must_converge: true
+    identifier: Setup Web Server
+    unified_job_template:
+      name: Palo Alto // Web Server Setup
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Sync Palo Alto Demo Inventory
+    related:
+      success_nodes:
+      - identifier: Setup Web Server
+    unified_job_template:
+      inventory:
+        name: Palo Alto Demo Inventory
+        organization:
+          name: Autodotes
+          type: organization
+        type: inventory
+      name: EC2 Inventory Source
+      type: inventory_source
+  - identifier: Configure Firewall
+    related:
+      success_nodes:
+      - identifier: Setup Web Server
+    unified_job_template:
+      name: Palo Alto // Configure Firewall
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+- ask_variables_on_launch: true
+  description: provision a windows vm and setup winrm
+  extra_vars:
+    proxmox_ve_configs:
+    - agent: true
+      clone: win11-admin-server-template
+      full: false
+      name: win11-guest-1
+      node: pve
+      tags:
+      - ansible
+      - windows
+      - yaml-config
+  inventory: Proxmox Inventory
+  name: Proxmox // Setup Windows VM
+  organization: Autodotes
+  workflow_nodes:
+  - identifier: 0ed93bf5-0e96-4ac1-bd6e-3416623ba509
+    related:
+      success_nodes:
+      - identifier: WinRM // Facts
+    unified_job_template:
+      name: Proxmox // Setup WinRM
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: 4381ec4d-b087-4839-852b-dcc55c1ae395
+    related:
+      success_nodes:
+      - identifier: 2dfe2737-6cdb-44ba-bc2f-2b22cb410ea2
+    unified_job_template:
+      name: Windows Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: 2dfe2737-6cdb-44ba-bc2f-2b22cb410ea2
+    related:
+      success_nodes:
+      - identifier: 0ed93bf5-0e96-4ac1-bd6e-3416623ba509
+    unified_job_template:
+      name: Proxmox // Provision Windows VM
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: WinRM // Facts
+    inventory: Proxmox Inventory
+    limit: windows
+    related:
+      success_nodes:
+      - identifier: 3192d55c-4744-4cfb-a585-7eea328589b9
+    unified_job_template:
+      name: Windows // Gather Facts
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: 3192d55c-4744-4cfb-a585-7eea328589b9
+    limit: windows
+    related:
+      success_nodes:
+      - identifier: Kerberos // Facts
+    unified_job_template:
+      name: Windows // Join Domain
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Kerberos // Facts
+    inventory: Proxmox Inventory
+    limit: windows
+    unified_job_template:
+      name: Windows // Gather Facts
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+- description: Provision a guest in proxmox, register with subscription-manager, and
+    install sql server
+  inventory: Proxmox Inventory
+  limit: '*.rhel-guest'
+  name: RHEL // Provision RHEL SQL Server Host
+  organization: Autodotes
+  workflow_nodes:
+  - identifier: 4cfd736f-cc84-4a0c-90b6-7e7e83c6dea8
+    related:
+      success_nodes:
+      - identifier: Provision Guest Host
+    unified_job_template:
+      name: Linux Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: Provision Guest Host
+    related:
+      success_nodes:
+      - identifier: Register RHEL Guest
+    unified_job_template:
+      name: Proxmox // Provision KVM Guest
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Install SQL Server
+    limit: '*.rhel-guest'
+    unified_job_template:
+      name: RHEL // Install SQL Server
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Register RHEL Guest
+    limit: '*.rhel-guest'
+    related:
+      success_nodes:
+      - identifier: Install SQL Server
+    unified_job_template:
+      name: RHEL // Register
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  # - identifier: 7f279466-ecb6-49a9-9e48-d7ba049c3c22
+  #   related:
+  #     create_approval_template:
+  #       description: Wait for an administrator to confirm the rhel guest was provisioned
+  #         and added to the inventory.
+  #       name: Confirm Provisioning Process
+  #       timeout: 900
+  #     success_nodes:
+  #     - identifier: Register RHEL Guest
+- name: Sandbox // Produce & Consume
+  workflow_nodes:
+  - identifier: 6cac0b40-ab3e-400f-89a7-6d4d8d7f001b
+    related:
+      success_nodes:
+      - identifier: 422c0149-0b02-4530-a7e1-30bd920de72d
+    unified_job_template:
+      name: Linux Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: 2bf53359-45fb-4620-b989-ba753f33c103
+    unified_job_template:
+      name: Sandbox // Consumer
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: 422c0149-0b02-4530-a7e1-30bd920de72d
+    related:
+      success_nodes:
+      - identifier: 2bf53359-45fb-4620-b989-ba753f33c103
+    unified_job_template:
+      name: Sandbox // Producer
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+- description: Demo workflow for configuring network devices and notifying users of
+    changes via Slack
+  inventory: Cisco Lab
+  name: Summit Connect // Network Configuration Workflow
+  organization: Autodotes
+  survey_enabled: true
+  survey_spec:
+    description: VLAN configuration based on ansible networking data model
+    name: VLAN config survey
+    spec:
+    - choices: ''
+      default: sandbox-iosxe-latest-1.cisco.com
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: Specify target hosts
+      required: true
+      type: text
+      variable: _hosts
+    - choices: ''
+      default: ansible-network-configs
+      max: 1024
+      min: 0
+      new_question: true
+      question_description: ''
+      question_name: What is the name of your config repository?
+      required: true
+      type: text
+      variable: config_repo_name
+    - choices: ''
+      default: "interfaces:\n  - description: MANAGEMENT INTERFACE - DON'T TOUCH ME\n
+        \   enabled: true\n    name: GigabitEthernet1\n  - description: Port to Fabric
+        (edit 2 -> ansible)\n    enabled: true\n    name: GigabitEthernet2"
+      max: 1024
+      min: 0
+      new_question: false
+      question_description: Network configs to apply
+      question_name: What configs do you want to apply? (represent with YAML)
+      required: true
+      type: textarea
+      variable: network_configs
+  workflow_nodes:
+  - identifier: Project Sync
+    related:
+      success_nodes:
+      - identifier: Network Backup
+    unified_job_template:
+      name: Network Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: Network Backup
+    related:
+      success_nodes:
+      - identifier: Apply Configs
+    unified_job_template:
+      name: Summit Connect // Network Backup
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Apply Configs
+    related:
+      failure_nodes:
+      - identifier: Network Restore
+      success_nodes:
+      - identifier: Slack Notification
+    unified_job_template:
+      name: Summit Connect //  Network Apply Configs
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Slack Notification
+    unified_job_template:
+      name: Summit Connect // Slack Notification
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Network Restore
+    unified_job_template:
+      name: Summit Connect // Network Restore
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+- inventory: Windows Inventory
+  name: Windows // EC2 Domain Setup [Workflow]
+  organization: Autodotes
+  workflow_nodes:
+  - identifier: Domain Config
+    related:
+      success_nodes:
+      - identifier: Domain Join
+    unified_job_template:
+      name: Windows // EC2 Domain Configure
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Domain Join
+    related:
+      success_nodes:
+      - identifier: Check Kerberos
+    unified_job_template:
+      name: Windows // EC2 Domain Join
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: c0fd2c48-3387-448e-b39b-38c7f8746ebe
+    related:
+      success_nodes:
+      - identifier: Deploy Infra
+    unified_job_template:
+      name: Windows Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: Deploy Infra
+    related:
+      success_nodes:
+      - identifier: 9ea2f3cb-4a72-4ff0-baf4-d2931f5b37ed
+    unified_job_template:
+      name: Windows // EC2 Domain Infra Deploy
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: 9ea2f3cb-4a72-4ff0-baf4-d2931f5b37ed
+    related:
+      success_nodes:
+      - identifier: Domain Config
+    unified_job_template:
+      inventory:
+        name: Windows Inventory
+        organization:
+          name: Autodotes
+          type: organization
+        type: inventory
+      name: Windows EC2 Instances
+      type: inventory_source
+  - identifier: Check Kerberos
+    unified_job_template:
+      name: Windows // EC2 Kerberos Check
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+    verbosity: 5
+- ask_limit_on_launch: true
+  description: Complete installation of microsoft sql server
+  inventory: Proxmox Inventory
+  limit: win11-guest-1
+  name: Windows // Install SQL Server (E2E)
+  organization: Autodotes
+  workflow_nodes:
+  - identifier: 0ddf88cf-cb2e-4098-98f1-2fb144d02cac
+    related:
+      success_nodes:
+      - identifier: Complete Prereqs
+    unified_job_template:
+      name: Windows Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: Complete Prereqs
+    job_tags: prereqs,service_account,fetch_media
+    related:
+      success_nodes:
+      - identifier: Install SQL Server
+    unified_job_template:
+      name: Windows // MSSQL Role
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Install SQL Server
+    job_tags: install
+    related:
+      success_nodes:
+      - identifier: Configure Host
+    unified_job_template:
+      name: Windows // MSSQL Role
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Smoke Test
+    job_tags: test
+    unified_job_template:
+      name: Windows // MSSQL Role
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Configure Host
+    job_tags: configure
+    related:
+      success_nodes:
+      - identifier: Smoke Test
+    unified_job_template:
+      name: Windows // MSSQL Role
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+...
