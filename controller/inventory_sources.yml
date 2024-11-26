@@ -147,7 +147,7 @@ controller_inventory_sources:
     aws_region: us-east-2
     compose:
       ansible_host: public_ip_address | default(private_ip_address)
-      ansible_user: ec2-user
+      ansible_user: "'ec2-user'"
     hostnames:
     - tag:Name
     keyed_groups:
