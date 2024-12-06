@@ -1,8 +1,47 @@
 ---
 aap_user_accounts:
+  - username: admin
+    password: encrypted
+    email: zleblanc@redhat.com
+    is_superuser: true
+    update_secrets: false
   - username: bquist
+    password: encrypted
+    email: bquist@redhat.com
     first_name: Bret
     last_name: Quist
-    organization: Red Hat
+    organizations: [Autodotes]
     is_superuser: false
-    password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=8) }}"
+    update_secrets: false
+  - username: builder
+    password: encrypted
+    email: zleblanc@redhat.com
+    first_name: EE
+    last_name: Builder
+    organizations: [Autodotes]
+    is_superuser: false
+    update_secrets: false
+  - username: eda
+    password: encrypted
+    email: zleblanc@redhat.com
+    first_name: EDA
+    last_name: Admin
+    organizations: [Autodotes]
+    is_superuser: false
+    update_secrets: false
+  - username: hubber
+    password: encrypted
+    email: zleblanc@redhat.com
+    first_name: Hub
+    last_name: Admin
+    organizations: [Autodotes]
+    is_superuser: false
+    update_secrets: false
+  - username: zach
+    password: encrypted
+    email: zleblanc@redhat.com
+    organizations: 
+      - Autodotes
+      - Red Hat
+    is_superuser: true
+    update_secrets: false

@@ -1,0 +1,7 @@
+---
+eda_event_streams:
+  - name: Dynatrace Event Stream
+    credential_name: Dynatrace Credential
+    organization: Autodotes
+    forward_events: true
+...

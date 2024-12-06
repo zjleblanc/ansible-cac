@@ -1,0 +1,18 @@
+---
+eda_rulebook_activations:
+  - name: Dynatrace Events
+    description: Rulebook that processes various events sourced from Dynatrace problems
+    organization: Autodotes
+    project: EDA Demos
+    rulebook: dynatrace_event_stream.yml
+    decision_environment: Default Decision Environment
+    event_streams: 
+      - event_stream: Dynatrace Event Stream
+        source_name: Dynatrace Event Source
+    eda_credentials:
+      - Autodotes Controller
+    extra_vars:
+      DT_PROBLEM_VIEW: "{{ eda_dt_problem_view }}"
+    enabled: false
+    log_level: debug
+    restart_policy: never

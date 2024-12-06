@@ -1,19 +1,20 @@
 ---
-- name: Apply Controller Configuration-as-code
+- name: Apply EDA Configuration-as-code
   hosts: localhost
   gather_facts: false
   become: false
 
   vars_files:
-    - vars/controller_secrets.yml
+    - vars/eda_secrets.yml
 
   tasks:
-    - name: Include Controller configuration files
+    - name: Include EDA configuration files
       tags: always
       ansible.builtin.include_vars:
-        dir: controller
+        dir: eda
 
-    - name: Call dispatch role for Controller configuration
+    - name: Call dispatch role for EDA configuration
       tags: always
       ansible.builtin.include_role:
         name: infra.aap_configuration.dispatch
+...
