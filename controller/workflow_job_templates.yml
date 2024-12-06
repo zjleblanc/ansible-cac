@@ -281,101 +281,125 @@ controller_workflows:
 - name: Linux // User Login (Random) Workflow
   organization: Autodotes
   workflow_nodes:
-  - identifier: 1b683727-d675-4448-b5f8-687fd1216a6e
-    related:
-      failure_nodes:
-      - identifier: 5e19c25b-a5f1-4bf1-998b-64dce7a0b9d7
-      success_nodes:
-      - identifier: 066ed547-d3d7-4521-ae0b-ce948c353d0e
-    unified_job_template:
-      name: Proxmox // Manage Instance State
-      organization:
-        name: Autodotes
-        type: organization
-      type: job_template
-  - identifier: 5e19c25b-a5f1-4bf1-998b-64dce7a0b9d7
-    unified_job_template:
-      name: Proxmox // Manage Instance State
-      organization:
-        name: Autodotes
-        type: organization
-      type: job_template
-  - identifier: a1a91e10-4cfc-4585-8bc4-934ab4b57cac
+  - identifier: Sync Project
     related:
       success_nodes:
-      - identifier: 1b683727-d675-4448-b5f8-687fd1216a6e
+      - identifier: Start VMs
     unified_job_template:
       name: Linux Mgmt
       organization:
         name: Autodotes
         type: organization
       type: project
-  - identifier: 066ed547-d3d7-4521-ae0b-ce948c353d0e
+  - identifier: Start VMs
+    related:
+      failure_nodes:
+      - identifier: Stop VMs
+      success_nodes:
+      - identifier: User Login
+    unified_job_template:
+      name: Proxmox // Manage Instance State
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+    extra_data:
+      proxmox_kvms:
+        - node: nuc
+          name: camp
+          state: started
+        - node: fedora-master
+          name: fedora
+          state: started
+  - identifier: Stop VMs
+    unified_job_template:
+      name: Proxmox // Manage Instance State
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+    extra_data:
+      proxmox_kvms:
+        - node: nuc
+          name: camp
+          state: stopped
+  - identifier: User Login
     related:
       always_nodes:
-      - identifier: 39b2cc03-2ea8-42ad-a824-e427a1cbfa7a
+      - identifier: Restore VM State
     unified_job_template:
       name: Linux // User Login (Random)
       organization:
         name: Autodotes
         type: organization
       type: job_template
-  - identifier: 39b2cc03-2ea8-42ad-a824-e427a1cbfa7a
+  - identifier: Restore VM State
     unified_job_template:
       name: Proxmox // Manage Instance State
       organization:
         name: Autodotes
         type: organization
       type: job_template
+    extra_data:
+      proxmox_kvms:
+        - node: nuc
+          name: camp
+          state: stopped
 - name: Linux // User Login Report Workflow
   organization: Autodotes
   workflow_nodes:
-  - identifier: 65e3790a-de13-4bf6-ac26-757f43bb69b8
+  - identifier: Project Sync
     related:
       success_nodes:
-      - identifier: 7e06707f-228d-4936-9b6d-1a315cb84bfe
+      - identifier: Start VMs
     unified_job_template:
       name: Linux Mgmt
       organization:
         name: Autodotes
         type: organization
       type: project
-  - identifier: 7e06707f-228d-4936-9b6d-1a315cb84bfe
+  - identifier: Start VMs
     related:
       failure_nodes:
-      - identifier: b9c5998d-f954-466f-8bf4-a05feb4ef3c5
+      - identifier: Stop VMs
       success_nodes:
-      - identifier: 01152cb5-b27e-4fc1-a7ef-160fcb2e66dc
+      - identifier: Generate Report
     unified_job_template:
       name: Proxmox // Manage Instance State
       organization:
         name: Autodotes
         type: organization
       type: job_template
-  - identifier: b9c5998d-f954-466f-8bf4-a05feb4ef3c5
-    unified_job_template:
-      name: Proxmox // Manage Instance State
-      organization:
-        name: Autodotes
-        type: organization
-      type: job_template
-  - identifier: 32999b88-89c2-4cf0-afed-f6cf663211d6
-    unified_job_template:
-      name: Proxmox // Manage Instance State
-      organization:
-        name: Autodotes
-        type: organization
-      type: job_template
-  - identifier: 01152cb5-b27e-4fc1-a7ef-160fcb2e66dc
+    extra_data:
+      proxmox_kvms:
+        - node: nuc
+          name: camp
+          state: started
+        - node: fedora-master
+          name: fedora
+          state: started
+  - identifier: Generate Report
     related:
       always_nodes:
-      - identifier: 32999b88-89c2-4cf0-afed-f6cf663211d6
+      - identifier: Stop VMs
     unified_job_template:
       name: Linux // User Login Report
       organization:
         name: Autodotes
         type: organization
       type: job_template
+  - identifier: Stop VMs
+    unified_job_template:
+      name: Proxmox // Manage Instance State
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+    extra_data:
+      proxmox_kvms:
+        - node: nuc
+          name: camp
+          state: stopped
 - inventory: Palo Alto Demo Inventory
   name: Palo Alto // Provision Firewall Demo Workflow
   organization: Autodotes

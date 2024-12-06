@@ -1000,7 +1000,7 @@ controller_templates:
   playbook: playbooks/o365_acls.yml
   project: Network Mgmt
 - credentials:
-  - Private Automation Hub [automator]
+  - Private Automation Hub [hubber]
   execution_environment: ee-default
   extra_vars:
     ah_collection_repositories:
@@ -2119,4 +2119,12 @@ controller_templates:
   name: Windows // Powershell
   playbook: playbooks/pwsh.yml
   project: Windows Mgmt
+- name: Kasa // Manage Device State
+  project: Autodotes
+  playbook: playbooks/kasa/manage_device_state.yml
+  inventory: Autodotes Lab
+  execution_environment: ee-default
+  credentials:
+    - AAP (id_rsa)
+  ask_variables_on_launch: true
 ...

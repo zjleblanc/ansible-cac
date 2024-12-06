@@ -5,7 +5,7 @@
   become: false
 
   vars_files:
-    - vars/secrets.yml
+    - vars/controller_secrets.yml
 
   tasks:
     - name: Include Controller configuration files
@@ -16,4 +16,4 @@
     - name: Call dispatch role for Controller configuration
       tags: always
       ansible.builtin.include_role:
-        name: infra.controller_configuration.dispatch
+        name: infra.aap_configuration.dispatch
