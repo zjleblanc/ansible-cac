@@ -16,3 +16,19 @@ eda_rulebook_activations:
     enabled: false
     log_level: debug
     restart_policy: never
+  - name: Demo Webhook Events
+    description: Rulebook that demonstrates how to use the basic webhook source
+    organization: Autodotes
+    project: EDA Demos
+    rulebook: demo_webhook.yml
+    decision_environment: Default Decision Environment
+    event_streams: 
+      - event_stream: Demo Webhook Event Stream
+        source_name: Demo Webhook Event Source
+    eda_credentials:
+      - Autodotes Controller
+    extra_vars:
+      search_term: "alert"
+    enabled: false
+    log_level: debug
+    restart_policy: never

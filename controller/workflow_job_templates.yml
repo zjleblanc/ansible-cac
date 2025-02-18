@@ -1,5 +1,73 @@
 ---
 controller_workflows:
+- name: Terraform // Deploy and Configure Workflow
+  organization: Autodotes
+  survey_enabled: true
+  survey_spec:
+    name: workflow survey
+    description: SSH public key passthrough
+    spec:
+    - question_name: SSH Public Key
+      question_description: SSH public key which will enable configuration after provisioning
+      max: 1024
+      min: 0
+      required: true
+      type: password
+      variable: az_ssh_pubkey
+  workflow_nodes:
+  - identifier: Sync Project
+    related:
+      success_nodes:
+      - identifier: Terraform Create
+    unified_job_template:
+      name: Terraform Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: Terraform Create
+    related:
+      failure_nodes:
+      - identifier: Terraform Destroy
+      success_nodes:
+      - identifier: Sync Terraform Inventory
+    unified_job_template:
+      name: Terraform // Web Demo Deploy
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Sync Terraform Inventory
+    related:
+      success_nodes:
+      - identifier: Configure Web Servers
+    unified_job_template:
+      inventory:
+        name: Ansible-Terraform Inventory
+        organization:
+          name: Autodotes
+          type: organization
+        type: inventory
+      name: openenv-jmdmt
+      type: inventory_source
+  - identifier: Configure Web Servers
+    related:
+      failure_nodes:
+      - identifier: Terraform Destroy
+    unified_job_template:
+      name: Terraform // Web Demo Configure
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Terraform Destroy
+    job_tags: remove
+    unified_job_template:
+      name: Terraform // Web Demo Deploy
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
 - inventory: Autodotes Lab
   name: AAP // Renew & Update AAP certs
   organization: Autodotes

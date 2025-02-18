@@ -42,6 +42,14 @@ controller_projects:
   scm_delete_on_update: 'no'
   scm_type: git
   scm_update_on_launch: 'no'
+- name: Terraform Mgmt
+  scm_url: https://github.com/zjleblanc/ansible-terraform.git
+  organization: Autodotes
+  scm_branch: master
+  scm_clean: 'no'
+  scm_delete_on_update: 'no'
+  scm_type: git
+  scm_update_on_launch: 'no'
 - name: EE Builds
   organization: Autodotes
   scm_type: git
@@ -52,12 +60,6 @@ controller_projects:
   organization: Autodotes
   scm_type: git
   scm_url: https://github.com/ansible-lockdown/RHEL8-CIS.git
-- credential: BitBucket (zleblancssa)
-  name: Terraform Mgmt
-  organization: Autodotes
-  scm_type: git
-  scm_update_on_launch: true
-  scm_url: git@bitbucket.org:ansible-demos/ansible-tf-demos.git
 - default_environment: ee-default
   name: Execution Environment Builds [Legacy]
   organization: Autodotes

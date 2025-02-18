@@ -28,6 +28,8 @@ controller_schedules:
           state: enabled
         - name: TV Garland
           state: enabled
+        - name: Outdoor Lights
+          state: enabled
   - name: Turn off Christmas Lights @ 9:30 Every Morning
     description: Manage Christmas light state (turn off at sunrise)
     unified_job_template: Kasa // Manage Device State
@@ -39,4 +41,6 @@ controller_schedules:
         - name: Mantle Garland
           state: disabled
         - name: TV Garland
+          state: disabled
+        - name: Outdoor Lights
           state: disabled

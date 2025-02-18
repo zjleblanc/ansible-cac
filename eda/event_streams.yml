@@ -4,4 +4,8 @@ eda_event_streams:
     credential_name: Dynatrace Credential
     organization: Autodotes
     forward_events: true
+  - name: Demo Webhook Event Stream
+    credential_name: Demo Webhook Token
+    organization: Autodotes
+    forward_events: true
 ...
