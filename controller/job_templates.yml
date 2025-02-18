@@ -1555,16 +1555,7 @@ controller_templates:
   name: Summit Connect // Slack Notification
   playbook: summit-connect/playbooks/slack_notification.yml
   project: Network Mgmt
-- ask_variables_on_launch: true
-  ask_verbosity_on_launch: true
-  credentials:
-  - Terraform (zleblanc@redhat)
-  inventory: Autodotes Lab
-  job_slice_count: 1
-  job_type: run
-  name: Terraform // Start Run
-  playbook: ansible/start_run.yml
-  project: Terraform Mgmt
+
 - credentials:
   - AWS (ec2-user)
   - AWS Sandbox Credential
@@ -2127,4 +2118,39 @@ controller_templates:
   credentials:
     - AAP (id_rsa)
   ask_variables_on_launch: true
+- name: Terraform // Web Demo Deploy
+  description: Deploy web demo to Azure using terraform modules
+  labels:
+    - Demo
+  project: Terraform Mgmt
+  organization: Autodotes
+  inventory: Ansible-Terraform Inventory
+  playbook: azure_create_web_demo/ansible/tf_ops.yml
+  execution_environment: ee-cloud
+  credentials:
+    - Azure RM [openenv-jmdmt]
+    - openenv-jmdmt/zjltfstatemgmtsa/tfstate
+  ask_tags_on_launch: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - question_name: SSH Public Key
+      question_description: SSH public key which will enable configuration after provisioning
+      max: 1024
+      min: 0
+      required: true
+      type: password
+      variable: az_ssh_pubkey
+- name: Terraform // Web Demo Configure
+  description: Configure webservers provisioned by Terraform
+  labels:
+    - Demo
+  project: Terraform Mgmt
+  organization: Autodotes
+  inventory: Ansible-Terraform Inventory
+  playbook: azure_create_web_demo/ansible/configure_web.yml
+  execution_environment: ee-default
+  credentials:
+    - AAP (id_rsa)
 ...
