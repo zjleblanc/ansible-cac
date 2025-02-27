@@ -1,0 +1,946 @@
+dn: dc=autodotes,dc=com
+objectClass: top
+objectClass: domain
+dc: autodotes
+aci: (target=ldap:///dc=autodotes,dc=com)(targetattr=*)(version 3.0; acl "Self Write"; allow(write) userdn = "ldap:///self";)
+aci: (target=ldap:///dc=autodotes,dc=com)(targetattr=*)(version 3.0; acl "Directory Admin Group"; allow(write) groupdn = "ldap:///cn=Directory Administrators,ou=Groups,dc=autodotes,dc=com";)
+aci: (target=ldap:///dc=autodotes,dc=com)(targetattr=*)(version 3.0; acl "Anonymous Access"; allow(read, search, compare) userdn = "ldap:///anyone";)
+
+dn: ou=networking,dc=autodotes,dc=com
+objectClass: top
+objectClass: organizationalUnit
+ou: networking
+
+dn: ou=platform,dc=autodotes,dc=com
+objectClass: top
+objectClass: organizationalUnit
+ou: platform
+
+dn: ou=cloud,dc=autodotes,dc=com
+objectClass: top
+objectClass: organizationalUnit
+ou: cloud
+
+dn: ou=linux,dc=autodotes,dc=com
+objectClass: top
+objectClass: organizationalUnit
+ou: linux
+
+dn: ou=windows,dc=autodotes,dc=com
+objectClass: top
+objectClass: organizationalUnit
+ou: windows
+
+dn: uid=user01,ou=networking,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user01
+sn: de Grace
+uid: user01
+givenName: Jacinda
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Jacinda de Grace's description.
+userPassword: user01
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: J. d
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: Windsor
+ou: networking
+mail: user01@autodotes.com
+mail: 1@autodotes.com
+uidNumber: 1
+gidNumber: 1
+homeDirectory: /home/user01
+postalAddress: 518, Dept #851, Room#networking
+title: Elite Visionary
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user02,ou=networking,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user02
+sn: Sepe
+uid: user02
+givenName: Stephan
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Stephan Sepe's description.
+userPassword: user02
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: S. S
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: Santa Clara
+ou: people
+mail: user02@autodotes.com
+mail: 2@autodotes.com
+uidNumber: 2
+gidNumber: 2
+homeDirectory: /home/user02
+postalAddress: 518, Dept #851, Room#people
+title: Senior Manager
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user03,ou=networking,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user03
+sn: Ecker
+uid: user03
+givenName: Ailyn
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Ailyn Ecker's description.
+userPassword: user03
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: A. E
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: Armonk
+ou: product development
+mail: user03@autodotes.com
+mail: 3@autodotes.com
+uidNumber: 3
+gidNumber: 3
+homeDirectory: /home/user03
+postalAddress: 518, Dept #851, Room#product development
+title: Elite Architect
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user04,ou=networking,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user04
+sn: Plotter
+uid: user04
+givenName: Melicent
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Melicent Plotter's description.
+userPassword: user04
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: M. P
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: Boston
+ou: product testing
+mail: user04@autodotes.com
+mail: 4@autodotes.com
+uidNumber: 4
+gidNumber: 4
+homeDirectory: /home/user04
+postalAddress: 518, Dept #851, Room#product testing
+title: Principal Grunt
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user05,ou=platform,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user05
+sn: Stroemer
+uid: user05
+givenName: Charmaine
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Charmaine Stroemer's description.
+userPassword: user05
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: C. S
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: New York
+ou: platform
+mail: user05@autodotes.com
+mail: 5@autodotes.com
+uidNumber: 5
+gidNumber: 5
+homeDirectory: /home/user05
+postalAddress: 518, Dept #851, Room#platform
+title: Elite Manager
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user06,ou=platform,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user06
+sn: Cleary
+uid: user06
+givenName: Alameda
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Alameda Cleary's description.
+userPassword: user06
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: A. C
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: Cupertino
+ou: platform
+mail: user06@autodotes.com
+mail: 6@autodotes.com
+uidNumber: 6
+gidNumber: 6
+homeDirectory: /home/user06
+postalAddress: 518, Dept #851, Room#platform
+title: Senior Czar
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user07,ou=platform,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user07
+sn: Ludviksen
+uid: user07
+givenName: Sibylla
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Sibylla Ludviksen's description.
+userPassword: user07
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: S. L
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: San Jose
+ou: platform
+mail: user07@autodotes.com
+mail: 7@autodotes.com
+uidNumber: 7
+gidNumber: 7
+homeDirectory: /home/user07
+postalAddress: 518, Dept #851, Room#platform
+title: Senior Manager
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user08,ou=platform,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user08
+sn: Delong
+uid: user08
+givenName: Becka
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Becka Delong's description.
+userPassword: user08
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: B. D
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: Mountain View
+ou: platform
+mail: user08@autodotes.com
+mail: 8@autodotes.com
+uidNumber: 8
+gidNumber: 8
+homeDirectory: /home/user08
+postalAddress: 518, Dept #851, Room#platform
+title: Principal Guru
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user09,ou=cloud,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user09
+sn: Sugarbroad
+uid: user09
+givenName: Bulent
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Bulent Sugarbroad's description.
+userPassword: user09
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: B. S
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: Palo Alto
+ou: cloud
+mail: user09@autodotes.com
+mail: 9@autodotes.com
+uidNumber: 9
+gidNumber: 9
+homeDirectory: /home/user09
+postalAddress: 518, Dept #851, Room#cloud
+title: Principal Consultant
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user10,ou=cloud,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user10
+sn: Clifford
+uid: user10
+givenName: Jai
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Jai Clifford's description.
+userPassword: user10
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: J. C
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: Brisbane
+ou: cloud
+mail: user10@autodotes.com
+mail: 10@autodotes.com
+uidNumber: 10
+gidNumber: 10
+homeDirectory: /home/user10
+postalAddress: 518, Dept #851, Room#cloud
+title: Junior Engineer
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user11,ou=cloud,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user11
+sn: Schittl
+uid: user11
+givenName: Tiphanie
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Tiphanie Schittl's description.
+userPassword: user11
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: T. S
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: Sunnyvale
+ou: cloud
+mail: user11@autodotes.com
+mail: 11@autodotes.com
+uidNumber: 11
+gidNumber: 11
+homeDirectory: /home/user11
+postalAddress: 518, Dept #851, Room#cloud
+title: Principal Visionary
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user12,ou=cloud,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user12
+sn: Mohideen
+uid: user12
+givenName: Hadria
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Hadria Mohideen's description.
+userPassword: user12
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: H. M
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: Orem
+ou: cloud
+mail: user12@autodotes.com
+mail: 12@autodotes.com
+uidNumber: 12
+gidNumber: 12
+homeDirectory: /home/user12
+postalAddress: 518, Dept #851, Room#cloud
+title: Associate Vice President
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user13,ou=linux,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user13
+sn: Chai
+uid: user13
+givenName: Vmcord
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Vmcord Chai's description.
+userPassword: user13
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: V. C
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: Mountain View
+ou: linux
+mail: user13@autodotes.com
+mail: 13@autodotes.com
+uidNumber: 13
+gidNumber: 13
+homeDirectory: /home/user13
+postalAddress: 518, Dept #851, Room#linux
+title: Senior Yahoo
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user14,ou=linux,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user14
+sn: Godfrey
+uid: user14
+givenName: Harmi
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Harmi Godfrey's description.
+userPassword: user14
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: H. G
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: Cambridge
+ou: linux
+mail: user14@autodotes.com
+mail: 14@autodotes.com
+uidNumber: 14
+gidNumber: 14
+homeDirectory: /home/user14
+postalAddress: 518, Dept #851, Room#linux
+title: Elite Engineer
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user15,ou=linux,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user15
+sn: Attarchi
+uid: user15
+givenName: Djenana
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Djenana Attarchi's description.
+userPassword: user15
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: D. A
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: Palo Alto
+ou: linux
+mail: user15@autodotes.com
+mail: 15@autodotes.com
+uidNumber: 15
+gidNumber: 15
+homeDirectory: /home/user15
+postalAddress: 518, Dept #851, Room#linux
+title: Junior Dictator
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user16,ou=linux,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user16
+sn: Currier
+uid: user16
+givenName: Jamison
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Jamison Currier's description.
+userPassword: user16
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: J. C
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: Redmond
+ou: linux
+mail: user16@autodotes.com
+mail: 16@autodotes.com
+uidNumber: 16
+gidNumber: 16
+homeDirectory: /home/user16
+postalAddress: 518, Dept #851, Room#linux
+title: Junior Janitor
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user17,ou=windows,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user17
+sn: Pascas
+uid: user17
+givenName: Myriam
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Myriam Pascas's description.
+userPassword: user17
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: M. P
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: Redmond
+ou: windows
+mail: user17@autodotes.com
+mail: 17@autodotes.com
+uidNumber: 17
+gidNumber: 17
+homeDirectory: /home/user17
+postalAddress: 518, Dept #851, Room#windows
+title: Junior Janitor
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user18,ou=windows,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user18
+sn: Wilke
+uid: user18
+givenName: Gennie
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Gennie Wilke's description.
+userPassword: user18
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: G. W
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: Cambridge
+ou: windows
+mail: user18@autodotes.com
+mail: 18@autodotes.com
+uidNumber: 18
+gidNumber: 18
+homeDirectory: /home/user18
+postalAddress: 518, Dept #851, Room#windows
+title: Principal Dreamer
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user19,ou=windows,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user19
+sn: Batson
+uid: user19
+givenName: Hall
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Hall Batson's description.
+userPassword: user19
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: H. B
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: Redmond
+ou: windows
+mail: user19@autodotes.com
+mail: 19@autodotes.com
+uidNumber: 19
+gidNumber: 19
+homeDirectory: /home/user19
+postalAddress: 518, Dept #851, Room#windows
+title: Chief Pinhead
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+dn: uid=user20,ou=windows,dc=autodotes,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectclass: inetUser
+objectclass: posixAccount
+cn: user20
+sn: Stercyk
+uid: user20
+givenName: Kana
+description: 2;7613;CN=Red Hat CS 71GA Demo,O=Red Hat CS 71GA Demo,C=US;CN=RHCS Agent - admin01,UID=admin01,O=redhat,C=US [1] This is Kana Stercyk's description.
+userPassword: user20
+departmentNumber: 1230
+employeeType: Manager
+homePhone: +1 303 937-6482
+initials: K. S
+telephoneNumber: +1 303 573-9570
+facsimileTelephoneNumber: +1 415 408-8176
+mobile: +1 818 618-1671
+pager: +1 804 339-6298
+roomNumber: 5164
+carLicense: 21SJJAG
+l: Redmond
+ou: windows
+mail: user20@autodotes.com
+mail: 20@autodotes.com
+uidNumber: 20
+gidNumber: 20
+homeDirectory: /home/user20
+postalAddress: 518, Dept #851, Room#windows
+title: Senior Assistant
+usercertificate;binary:: MIIBvjCCASegAwIBAgIBAjANBgkqhkiG9w0BAQQFADAnMQ8wDQYD
+ VQQDEwZjb25maWcxFDASBgNVBAMTC01NUiBDQSBDZXJ0MB4XDTAxMDQwNTE1NTEwNloXDTExMDcw
+ NTE1NTEwNlowIzELMAkGA1UEChMCZnIxFDASBgNVBAMTC01NUiBTMSBDZXJ0MIGfMA0GCSqGSIb3
+ DQEBAQUAA4GNADCBiQKBgQDNlmsKEaPD+o3mAUwmW4E40MPs7aiui1YhorST3KzVngMqe5PbObUH
+ MeJN7CLbq9SjXvdB3y2AoVl/s5UkgGz8krmJ8ELfUCU95AQls321RwBdLRjioiQ3MGJiFjxwYRIV
+ j1CUTuX1y8dC7BWvZ1/EB0yv0QDtp2oVMUeoK9/9sQIDAQABMA0GCSqGSIb3DQEBBAUAA4GBADev
+ hxY6QyDMK3Mnr7vLGe/HWEZCObF+qEo2zWScGH0Q+dAmhkCCkNeHJoqGN4NWjTdnBcGaAr5Y85k1
+ o/vOAMBsZePbYx4SrywL0b/OkOmQX+mQwieC2IQzvaBRyaNMh309vrF4w5kExReKfjR/gXpHiWQz
+ GSxC5LeQG4k3IP34
+
+
+dn: cn=networkingAdmins,ou=networking,dc=autodotes,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: networkingAdmins
+uniqueMember: uid=user01,ou=networking,dc=autodotes,dc=com
+uniqueMember: uid=user02,ou=networking,dc=autodotes,dc=com
+
+dn: cn=networkingAnsible,ou=networking,dc=autodotes,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: networkingAnsible
+uniqueMember: uid=user01,ou=networking,dc=autodotes,dc=com
+uniqueMember: uid=user02,ou=networking,dc=autodotes,dc=com
+uniqueMember: uid=user03,ou=networking,dc=autodotes,dc=com
+uniqueMember: uid=user04,ou=networking,dc=autodotes,dc=com
+
+dn: cn=platformAdmins,ou=platform,dc=autodotes,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: platformAdmins
+uniqueMember: uid=user05,ou=platform,dc=autodotes,dc=com
+uniqueMember: uid=user06,ou=platform,dc=autodotes,dc=com
+
+dn: cn=platformAnsible,ou=platform,dc=autodotes,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: platformAnsible
+uniqueMember: uid=user05,ou=platform,dc=autodotes,dc=com
+uniqueMember: uid=user06,ou=platform,dc=autodotes,dc=com
+uniqueMember: uid=user07,ou=platform,dc=autodotes,dc=com
+uniqueMember: uid=user08,ou=platform,dc=autodotes,dc=com
+
+dn: cn=cloudAdmins,ou=cloud,dc=autodotes,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: cloudAdmins
+uniqueMember: uid=user09,ou=cloud,dc=autodotes,dc=com
+uniqueMember: uid=user10,ou=cloud,dc=autodotes,dc=com
+
+dn: cn=cloudAnsible,ou=cloud,dc=autodotes,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: cloudAnsible
+uniqueMember: uid=user09,ou=cloud,dc=autodotes,dc=com
+uniqueMember: uid=user10,ou=cloud,dc=autodotes,dc=com
+
+dn: cn=linuxAdmins,ou=linux,dc=autodotes,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: linuxAdmins
+uniqueMember: uid=user13,ou=linux,dc=autodotes,dc=com
+
+dn: cn=linuxAnsible,ou=linux,dc=autodotes,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: linuxAnsible
+uniqueMember: uid=user13,ou=linux,dc=autodotes,dc=com
+uniqueMember: uid=user14,ou=linux,dc=autodotes,dc=com
+
+dn: cn=windowsAdmins,ou=windows,dc=autodotes,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: windowsAdmins
+uniqueMember: uid=user17,ou=windows,dc=autodotes,dc=com
+
+dn: cn=windowsAnsible,ou=windows,dc=autodotes,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: windowsAnsible
+uniqueMember: uid=user17,ou=windows,dc=autodotes,dc=com
+uniqueMember: uid=user18,ou=windows,dc=autodotes,dc=com
+uniqueMember: uid=user19,ou=windows,dc=autodotes,dc=com

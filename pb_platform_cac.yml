@@ -4,18 +4,17 @@
   gather_facts: false
   become: false
 
-  vars:
-    gateway_hostname: "{{ lookup('env', 'CONTROLLER_HOST') }}"
-    gateway_token: "{{ lookup('env', 'CONTROLLER_OAUTH_TOKEN') }}"
+  vars_files:
+    - vars/platform_secrets.yml
 
   tasks:
-    - name: Include Controller configuration files
+    - name: Include Platform (Gateway) configuration files
+      tags: always
       ansible.builtin.include_vars:
         dir: platform
 
-    - name: Create platform organizations
-      loop: "{{ aap_organizations }}"
-      ansible.platform.organization:
-        name: "{{ item.name }}"
-        description: "{{ item.description }}"
-        galaxy_credentials: "{{ item.galaxy_credentials }}"
+    - name: Call dispatch role for Platform configuration
+      tags: always
+      ansible.builtin.include_role:
+        name: infra.aap_configuration.dispatch
+...

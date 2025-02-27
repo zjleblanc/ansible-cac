@@ -1,0 +1,32 @@
+# ansible-playbook pb_platform_cac.yml --tags authenticators   
+---
+gateway_authenticators:
+  - name: Autodotes LDAP
+    type: ansible_base.authentication.authenticator_plugins.ldap
+    slug: ansible_base-authentication-authenticator_plugins-ldap__autodotes-ldap
+    order: 3
+    enabled: true
+    create_objects: true
+    remove_users: true
+    configuration:
+      BIND_DN: cn=Directory Manager
+      BIND_PASSWORD: "{{ gateway_auth_ldap_bind_password }}"
+      CONNECTION_OPTIONS: {}
+      GROUP_SEARCH:
+        - dc=autodotes,dc=com
+        - SCOPE_SUBTREE
+        - "(objectClass=groupOfUniqueNames)"
+      GROUP_TYPE: GroupOfUniqueNamesType
+      GROUP_TYPE_PARAMS:
+        name_attr: cn
+      SERVER_URI:
+        - ldap://ldap.autodotes.com:389
+      START_TLS: false
+      USER_ATTR_MAP:
+        email: mail
+        last_name: sn
+        first_name: givenName
+      USER_SEARCH:
+        - dc=autodotes,dc=com
+        - SCOPE_SUBTREE
+        - "(uid=%(user)s)"

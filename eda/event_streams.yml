@@ -1,11 +1,12 @@
+# ansible-playbook pb_eda_cac.yml --tags event_stream
 ---
 eda_event_streams:
   - name: Dynatrace Event Stream
     credential_name: Dynatrace Credential
     organization: Autodotes
     forward_events: true
-  - name: Demo Webhook Event Stream
-    credential_name: Demo Webhook Token
+  - name: Demo OAuth2 Event Stream
+    credential_name: OAuth2 Event Stream Client
     organization: Autodotes
     forward_events: true
 ...
