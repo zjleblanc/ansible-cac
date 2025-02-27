@@ -1,3 +1,4 @@
+# ansible-playbook pb_eda_cac.yml --tags rulebook_activation
 ---
 eda_rulebook_activations:
   - name: Dynatrace Events
@@ -23,7 +24,7 @@ eda_rulebook_activations:
     rulebook: demo_webhook.yml
     decision_environment: Default Decision Environment
     event_streams: 
-      - event_stream: Demo Webhook Event Stream
+      - event_stream: Demo OAuth2 Event Stream
         source_name: Demo Webhook Event Source
     eda_credentials:
       - Autodotes Controller

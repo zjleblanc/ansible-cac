@@ -390,7 +390,6 @@ controller_templates:
   execution_environment: ee-default
   extra_vars:
     sites:
-    - code.autodotes.com
     - artifacts.autodotes.com
     - reports.autodotes.com
     - docs.autodotes.com

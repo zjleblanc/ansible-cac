@@ -1,0 +1,108 @@
+# ansible-playbook pb_platform_cac.yml --tags authenticator_maps  
+---
+gateway_authenticator_maps:
+- authenticator: Autodotes LDAP
+  map_type: allow
+  name: Allow Login
+  order: 1
+  organization: Ldappers
+  revoke: true
+  triggers:
+    groups:
+      has_or:
+      - cn=networkingansible,ou=networking,dc=autodotes,dc=com
+      - cn=platformansible,ou=platform,dc=autodotes,dc=com
+      - cn=cloudansible,ou=cloud,dc=autodotes,dc=com
+      - cn=linuxansible,ou=linux,dc=autodotes,dc=com
+      - cn=windowsansible,ou=windows,dc=autodotes,dc=com
+- authenticator: Autodotes LDAP
+  map_type: organization
+  name: Organizational Membership
+  order: 2
+  organization: Ldappers
+  revoke: true
+  role: Organization Member
+  triggers:
+    groups:
+      has_or:
+      - cn=networkingansible,ou=networking,dc=autodotes,dc=com
+      - cn=platformansible,ou=platform,dc=autodotes,dc=com
+      - cn=cloudansible,ou=cloud,dc=autodotes,dc=com
+      - cn=linuxansible,ou=linux,dc=autodotes,dc=com
+      - cn=windowsansible,ou=windows,dc=autodotes,dc=com
+- authenticator: Autodotes LDAP
+  map_type: team
+  name: Network Ldappers Membership
+  order: 3
+  organization: Ldappers
+  revoke: true
+  role: Team Member
+  team: Network Ldappers
+  triggers:
+    groups:
+      has_and:
+      - cn=networkingansible,ou=networking,dc=autodotes,dc=com
+- authenticator: Autodotes LDAP
+  map_type: team
+  name: Network Ldappers Administration
+  order: 4
+  organization: Ldappers
+  revoke: true
+  role: Team Admin
+  team: Network Ldappers
+  triggers:
+    groups:
+      has_and:
+      - cn=networkingadmins,ou=networking,dc=autodotes,dc=com
+- authenticator: Autodotes LDAP
+  map_type: team
+  name: CP Ldappers Membership
+  order: 5
+  organization: Ldappers
+  revoke: true
+  role: Team Member
+  team: Cloud Platform Ldappers
+  triggers:
+    groups:
+      has_or:
+      - cn=cloudansible,ou=cloud,dc=autodotes,dc=com
+      - cn=platformansible,ou=platform,dc=autodotes,dc=com
+- authenticator: Autodotes LDAP
+  map_type: team
+  name: CP Ldappers Administration
+  order: 6
+  organization: Ldappers
+  revoke: true
+  role: Team Admin
+  team: Cloud Platform Ldappers
+  triggers:
+    groups:
+      has_or:
+      - cn=platformadmins,ou=platform,dc=autodotes,dc=com
+      - cn=cloudadmins,ou=cloud,dc=autodotes,dc=com
+- authenticator: Autodotes LDAP
+  map_type: team
+  name: OS Ldappers Membership
+  order: 7
+  organization: Ldappers
+  revoke: true
+  role: Team Member
+  team: OS Ldappers
+  triggers:
+    groups:
+      has_or:
+      - cn=linuxansible,ou=linux,dc=autodotes,dc=com
+      - cn=windowsansible,ou=windows,dc=autodotes,dc=com
+- authenticator: Autodotes LDAP
+  map_type: team
+  name: OS Ldappers Administration
+  order: 8
+  organization: Ldappers
+  revoke: true
+  role: Team Admin
+  team: OS Ldappers
+  triggers:
+    groups:
+      has_or:
+      - cn=linuxadmins,ou=linux,dc=autodotes,dc=com
+      - cn=windowsadmins,ou=windows,dc=autodotes,dc=com
