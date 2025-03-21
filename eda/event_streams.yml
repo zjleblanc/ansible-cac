@@ -9,4 +9,8 @@ eda_event_streams:
     credential_name: OAuth2 Event Stream Client
     organization: Autodotes
     forward_events: true
+  - name: ServiceNow Event Stream
+    credential_name: ServiceNow Webhook Token
+    organization: Autodotes
+    forward_events: true
 ...

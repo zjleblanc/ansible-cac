@@ -1,9 +1,6 @@
+# ansible-playbook pb_controller_cac.yml --tags schedules
 ---
 controller_schedules:
-  - name: Refresh Automation Hub Token Monthly
-    description: Refresh the automation hub token once a month to avoid expiration
-    unified_job_template: AAP // Refresh Automation Hub Token
-    rrule: DTSTART;TZID=America/Chicago:20240201T170000 RRULE:INTERVAL=25;FREQ=DAILY
   - name: Sync Automation Hub Repositories Every Sunday @ 0100 CST
     description: Sync automation hub repositories to update available content
     unified_job_template: PAH // Sync Repositories
@@ -16,6 +13,10 @@ controller_schedules:
     description: Generate user login report and publish to reports.autodotes.com
     unified_job_template: Linux // User Login Report Workflow
     rrule: DTSTART;TZID=America/Chicago:20241123T010000 RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=SU
+  - name: Dynamic DNS Updates [15m]
+    description: Update DNS records based on WAN IP changes every 15m
+    unified_job_template: Lab // Dynamic DNS
+    rrule: DTSTART;TZID=America/Chicago:20250317T094500 RRULE:FREQ=MINUTELY;INTERVAL=15
   - name: Turn on Christmas Lights @ 5:30 Every Night
     description: Manage Christmas light state (turn on at sunset)
     unified_job_template: Kasa // Manage Device State

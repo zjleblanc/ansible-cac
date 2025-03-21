@@ -1,3 +1,5 @@
+# ansible-playbook pb_controller_cac.yml --tags organizations
+---
 controller_organizations:
   - name: Red Hat
     # description: Shared organization for Red Hat collaborators 

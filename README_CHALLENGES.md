@@ -24,3 +24,5 @@ The ansible.eda collection does not support oauth, so you will have to provide o
 
 - `controller_username, controller_password` ansible variables
 - `CONTROLLER_USERNAME, CONTROLLER_PASSWORD` environment variables
+
+For whatever reason, doesn't like the admin user credentials. Creating a local eda user account with superuser privileges works. I would prefer to make eda account Automation Decisions Administrator, but it needs "Use" permissions on Organization. Do not see a way to grant "Use" on an Organization in the GUI-RBAC setup. Will have to investigate CaC options in the future.

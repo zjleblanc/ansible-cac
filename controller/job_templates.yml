@@ -1,3 +1,4 @@
+# ansible-playbook pb_controller_cac.yml --tags job_templates
 ---
 controller_templates:
 - credentials:
@@ -262,6 +263,15 @@ controller_templates:
   name: AAP // Refresh AH Token
   playbook: playbooks/aap/refresh_rh_token.yml
   project: Cloud Mgmt
+- name: Lab // Dynamic DNS
+  playbook: playbooks/homelab/dynamic_dns.yml
+  project: Autodotes
+  execution_environment: ee-default
+  credentials:
+  - Router
+  - Controller Credential
+  - Cloudflare DNS
+  inventory: Autodotes Lab
 - execution_environment: ee-default
   inventory: Autodotes Lab
   job_slice_count: 1
@@ -610,7 +620,7 @@ controller_templates:
   credentials:
   - AWS (ec2-user)
   - Dynatrace Demo Credential
-  - West ServiceNow (ven05433)
+  - West ServiceNow (ven07621)
   execution_environment: ee-default
   inventory: Cloud Inventory
   job_slice_count: 1
@@ -623,7 +633,7 @@ controller_templates:
   credentials:
   - AAP (id_rsa)
   - Controller Credential
-  - West ServiceNow (ven05433)
+  - West ServiceNow (ven07621)
   execution_environment: ee-default
   inventory: Autodotes Lab
   job_slice_count: 1
@@ -688,7 +698,7 @@ controller_templates:
   credentials:
   - AWS (ec2-user)
   - AWS Sandbox Credential
-  - West ServiceNow (ven05433)
+  - West ServiceNow (ven07621)
   execution_environment: ee-default
   inventory: Cloud Inventory
   job_slice_count: 1
@@ -700,7 +710,7 @@ controller_templates:
   credentials:
   - VMWare (ansible)
   - VMWare (gf7fr)
-  - West ServiceNow (ven05433)
+  - West ServiceNow (ven07621)
   execution_environment: ee-default
   extra_vars:
     kill_allowlist:
@@ -719,7 +729,7 @@ controller_templates:
   credentials:
   - AWS (ec2-user)
   - AWS Sandbox Credential
-  - West ServiceNow (ven05433)
+  - West ServiceNow (ven07621)
   execution_environment: ee-default
   inventory: Cloud Inventory
   job_slice_count: 1
@@ -746,7 +756,7 @@ controller_templates:
   credentials:
   - AAP (id_rsa)
   - Controller Credential
-  - West ServiceNow (ven05433)
+  - West ServiceNow (ven07621)
   execution_environment: ee-default
   inventory: Autodotes Lab
   job_slice_count: 1
@@ -952,7 +962,7 @@ controller_templates:
   project: Network Mgmt
 - ask_variables_on_launch: true
   credentials:
-  - West ServiceNow (ven05433)
+  - West ServiceNow (ven07621)
   execution_environment: Default execution environment
   extra_vars:
     record_limit: 5
@@ -1029,7 +1039,7 @@ controller_templates:
 - ask_variables_on_launch: true
   credentials:
   - Palo Alto Firewall (admin)
-  - West ServiceNow (ven05433)
+  - West ServiceNow (ven07621)
   execution_environment: ee-default
   extra_vars:
     panos_commit: false
@@ -1044,7 +1054,7 @@ controller_templates:
   - Controller Credential
   - Palo Alto Bastion
   - Palo Alto Demo Vault
-  - West ServiceNow (ven05433)
+  - West ServiceNow (ven07621)
   execution_environment: ee-default
   inventory: Palo Alto Demo Inventory
   job_slice_count: 1
@@ -1102,7 +1112,7 @@ controller_templates:
   project: Network Mgmt
 - ask_variables_on_launch: true
   credentials:
-  - West ServiceNow (ven05433)
+  - West ServiceNow (ven07621)
   - Windows Kerberos Credential
   execution_environment: ee-windows
   extra_vars:
@@ -1129,7 +1139,7 @@ controller_templates:
   ask_variables_on_launch: true
   credentials:
   - Autodotes[local] Admin
-  - West ServiceNow (ven05433)
+  - West ServiceNow (ven07621)
   - Windows Kerberos Credential
   execution_environment: ee-windows
   inventory: Proxmox Inventory
@@ -1335,7 +1345,7 @@ controller_templates:
 - ask_limit_on_launch: true
   credentials:
   - AAP (cloud-user)
-  - RHSM (zleblanc@redhat)
+  - RHSM (zachleblanc)
   description: Register server using subscription-manager
   extra_vars:
     rhsm_repos:
@@ -1363,7 +1373,7 @@ controller_templates:
   playbook: playbooks/producer.yml
   project: Linux Mgmt
 - credentials:
-  - West ServiceNow (ven05433)
+  - West ServiceNow (ven07621)
   execution_environment: ee-default
   inventory: Autodotes Lab
   job_slice_count: 1
@@ -1373,7 +1383,7 @@ controller_templates:
   project: Cloud Mgmt
 - ask_variables_on_launch: true
   credentials:
-  - West ServiceNow (ven05433)
+  - West ServiceNow (ven07621)
   execution_environment: ee-windows
   inventory: Autodotes Lab
   job_slice_count: 1
@@ -1382,7 +1392,7 @@ controller_templates:
   playbook: demos/snow_no_op.yml
   project: Windows Mgmt
 - credentials:
-  - West ServiceNow (ven05433)
+  - West ServiceNow (ven07621)
   inventory: Autodotes Lab
   job_slice_count: 1
   job_type: run
@@ -1554,43 +1564,6 @@ controller_templates:
   name: Summit Connect // Slack Notification
   playbook: summit-connect/playbooks/slack_notification.yml
   project: Network Mgmt
-
-- credentials:
-  - AWS (ec2-user)
-  - AWS Sandbox Credential
-  - Daily Demo [Autodotes]
-  - Daily Demo Vault Password
-  - Gmail SMTP
-  - RHSM (zleblanc@redhat)
-  extra_vars:
-    alwaysup: false
-    ansible_python_interpreter: /usr/bin/python3
-    assign_public_ip: true
-    bccto:
-    - Zach LeBlanc <zleblanc@redhat.com>
-    controller_url: controller.autodotes.com
-    controller_user: admin
-    count: 1
-    deleteby: hercules
-    image: ami-068ee501b16366120
-    instance_type: m5.xlarge
-    mailfrom: zjleblanc3@gmail.com (Zach LeBlanc)
-    mailto:
-    - Zach LeBlanc <zleblanc@redhat.com>
-    managed_inventory_name: Daily Demo Inventory
-    my_ssh_key: zleblanc-redhat-mac
-    region: us-east-2
-    user_list_vault: zleblanc_user_list_vault.yml
-    user_name: zleblanc
-    vpc_cidr: 172.16.1.0/24
-    vpc_name: linux-dailydemo
-  inventory: Daily Demo Inventory
-  job_slice_count: 1
-  job_type: run
-  name: Test // Linux Daily Demo
-  playbook: playbooks/site_create.yml
-  project: '[Ext] aap.dailydemos.linux'
-  use_fact_cache: true
 - credentials:
   - AAP (id_rsa)
   execution_environment: ee-default
@@ -1766,7 +1739,7 @@ controller_templates:
   - VMWare (ansible)
   - VMWare Bastion (gf7fr)
   - VMWare (gf7fr)
-  - West ServiceNow (ven05433)
+  - West ServiceNow (ven07621)
   execution_environment: ee-default
   inventory: Cloud Inventory
   job_slice_count: 1
@@ -1918,7 +1891,7 @@ controller_templates:
       type: textarea
       variable: user_accounts
 - credentials:
-  - Ansible Windows Vault
+  - Ansible Vault
   execution_environment: ee-windows
   inventory: Windows Inventory
   job_slice_count: 1
@@ -1927,7 +1900,7 @@ controller_templates:
   playbook: demos/ad_domain/pb_domain_config.yml
   project: Windows Mgmt
 - credentials:
-  - Ansible Windows Vault
+  - Ansible Vault
   - AWS Sandbox Credential
   execution_environment: ee-windows
   inventory: Windows Inventory
@@ -1937,7 +1910,7 @@ controller_templates:
   playbook: demos/ad_domain/pb_aws_infra.yml
   project: Windows Mgmt
 - credentials:
-  - Ansible Windows Vault
+  - Ansible Vault
   execution_environment: ee-windows
   inventory: Windows Inventory
   job_slice_count: 1
@@ -1946,7 +1919,7 @@ controller_templates:
   playbook: demos/ad_domain/pb_domain_join.yml
   project: Windows Mgmt
 - credentials:
-  - Ansible Windows Vault
+  - Ansible Vault
   - AWS Sandbox Credential
   execution_environment: ee-windows
   inventory: Windows Inventory
@@ -2130,6 +2103,8 @@ controller_templates:
     - Azure RM [openenv-jmdmt]
     - openenv-jmdmt/zjltfstatemgmtsa/tfstate
   ask_tags_on_launch: true
+  ask_variables_on_launch: true
+  survey_enabled: true
   survey_spec:
     description: ''
     name: ''
@@ -2152,4 +2127,40 @@ controller_templates:
   execution_environment: ee-default
   credentials:
     - AAP (id_rsa)
+# - credentials:
+#   - AWS (ec2-user)
+#   - AWS Sandbox Credential
+#   - Daily Demo [Autodotes]
+#   - Daily Demo Vault Password
+#   - Gmail SMTP
+#   - RHSM (zachleblanc)
+#   extra_vars:
+#     alwaysup: false
+#     ansible_python_interpreter: /usr/bin/python3
+#     assign_public_ip: true
+#     bccto:
+#     - Zach LeBlanc <zleblanc@redhat.com>
+#     controller_url: controller.autodotes.com
+#     controller_user: admin
+#     count: 1
+#     deleteby: hercules
+#     image: ami-068ee501b16366120
+#     instance_type: m5.xlarge
+#     mailfrom: zjleblanc3@gmail.com (Zach LeBlanc)
+#     mailto:
+#     - Zach LeBlanc <zleblanc@redhat.com>
+#     managed_inventory_name: Daily Demo Inventory
+#     my_ssh_key: zleblanc-redhat-mac
+#     region: us-east-2
+#     user_list_vault: zleblanc_user_list_vault.yml
+#     user_name: zleblanc
+#     vpc_cidr: 172.16.1.0/24
+#     vpc_name: linux-dailydemo
+#   inventory: Daily Demo Inventory
+#   job_slice_count: 1
+#   job_type: run
+#   name: Test // Linux Daily Demo
+#   playbook: playbooks/site_create.yml
+#   project: '[Ext] aap.dailydemos.linux'
+#   use_fact_cache: true
 ...

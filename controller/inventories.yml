@@ -1,3 +1,4 @@
+# ansible-playbook pb_controller_cac.yml --tags inventories
 ---
 controller_inventories:
 - name: AD LDAP Demo Inventory
@@ -9,6 +10,9 @@ controller_inventories:
 - name: Azure Inventory
   organization: Autodotes
   description: Demo using ARM inventory plugin
+- name: Ansible-Terraform Inventory
+  organization: Autodotes
+  description: Demo using Ansible and Terraform
 - name: Cisco Lab
   organization: Autodotes 
   description: Static inventory representing Cisco always-on sandbox devices

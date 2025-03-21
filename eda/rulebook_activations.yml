@@ -33,3 +33,17 @@ eda_rulebook_activations:
     enabled: false
     log_level: debug
     restart_policy: never
+  - name: Service Now Requested Items
+    description: Rulebook that ingests Service Now Requested Items based on Business Rules
+    organization: Autodotes
+    project: EDA Demos
+    rulebook: sc_req_items.yml
+    decision_environment: Default Decision Environment
+    event_streams: 
+      - event_stream: ServiceNow Event Stream
+        source_name: Service Now Event Source
+    eda_credentials:
+      - Autodotes Controller
+    enabled: false
+    log_level: debug
+    restart_policy: never
