@@ -429,7 +429,7 @@ controller_templates:
   - Satellite (Autodotes)
   - Satellite Provisioner
   execution_environment: Default execution environment
-  host_config_key: 83bf9d5a-9b32-45a2-86d3-89a5db968f36
+  host_config_key: "{{ controller_credential_callback_host_config_key }}"
   inventory: Satellite Inventory
   job_slice_count: 1
   job_type: run
