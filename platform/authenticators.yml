@@ -4,7 +4,7 @@ gateway_authenticators:
   - name: Autodotes LDAP
     type: ansible_base.authentication.authenticator_plugins.ldap
     slug: ansible_base-authentication-authenticator_plugins-ldap__autodotes-ldap
-    order: 3
+    order: 2
     enabled: true
     create_objects: true
     remove_users: true
@@ -30,3 +30,42 @@ gateway_authenticators:
         - dc=autodotes,dc=com
         - SCOPE_SUBTREE
         - "(uid=%(user)s)"
+  - name: Okta
+    type: ansible_base.authentication.authenticator_plugins.saml
+    slug: ansible_base-authentication-authenticator_plugins-saml__okta
+    order: 3
+    create_objects: true
+    enabled: true
+    remove_users: false
+    configuration:
+      ADDITIONAL_UNVERIFIED_ARGS:
+        GET_ALL_EXTRA_DATA: true
+      CALLBACK_URL: https://ansible.autodotes.com/api/gateway/social/complete/ansible_base-authentication-authenticator_plugins-saml__okta/
+      EXTRA_DATA: []
+      IDP_ATTR_EMAIL: email
+      IDP_ATTR_FIRST_NAME: firstName
+      IDP_ATTR_LAST_NAME: lastName
+      IDP_ATTR_USERNAME: login
+      IDP_ATTR_USER_PERMANENT_ID: login
+      IDP_ENTITY_ID: http://www.okta.com/exkngenkpsieIyCJ65d7
+      IDP_GROUPS: member-of
+      IDP_URL: https://dev-82479199.okta.com/app/dev-82479199_aap25_1/exkngenkpsieIyCJ65d7/sso/saml
+      IDP_X509_CERT: "{{ gateway_authenticator_okta_idp_x509_cert }}"
+      ORG_INFO:
+        en-US:
+          displayname: Autodotes-2.5-Cluster
+          name: Ansible Automation Platform
+          url: https://ansible.autodotes.com
+      SECURITY_CONFIG:
+        requestedAuthnContext: false
+      SP_ENTITY_ID: https://ansible.autodotes.com
+      SP_EXTRA:
+        requestedAuthnContext: false
+      SP_PRIVATE_KEY: "{{ gateway_authenticator_okta_priv_key }}"
+      SP_PUBLIC_CERT: "{{ gateway_authenticator_okta_cert }}"
+      SUPPORT_CONTACT:
+        emailAddress: zleblanc@redhat.com
+        givenName: Zach LeBlanc
+      TECHNICAL_CONTACT:
+        emailAddress: zleblanc@redhat.com
+        givenName: Zach LeBlanc
