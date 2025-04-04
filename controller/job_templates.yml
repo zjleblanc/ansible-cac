@@ -1902,7 +1902,7 @@ controller_templates:
 - credentials:
   - Ansible Vault
   - AWS Sandbox Credential
-  execution_environment: ee-windows
+  execution_environment: ee-default
   inventory: Windows Inventory
   job_slice_count: 1
   job_type: run

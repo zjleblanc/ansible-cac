@@ -12,3 +12,7 @@ controller_execution_environments:
   - name: ee-cloud
     description: Scott Harwell's Cloud EE hosted in quay
     image: quay.io/scottharwell/cloud-ee
+  - name: product-demos-ee
+    description: Ansible Product Demos EE
+    image: quay.io/acme_corp/product-demos-ee:be37a30ae707621916178f87512be6b3306a94d4
+
