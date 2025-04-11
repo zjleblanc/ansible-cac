@@ -17,10 +17,31 @@ controller_schedules:
     description: Update DNS records based on WAN IP changes every 15m
     unified_job_template: Lab // Dynamic DNS
     rrule: DTSTART;TZID=America/Chicago:20250317T094500 RRULE:FREQ=MINUTELY;INTERVAL=15
+  - name: Turn on Outdoor Lights @ 6:30 Every Night
+    description: Manage Outdoor light state (turn on early evening)
+    unified_job_template: Kasa // Manage Device State
+    rrule: DTSTART;TZID=America/Chicago:20241206T100000 RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20250111T120000Z;BYHOUR=18;BYMINUTE=30
+    extra_data:
+      kasa_devices:
+        - name: Front Porch Lights
+          state: enabled
+        - name: Patio Lights
+          state: enabled
+  - name: Turn off Outdoor Lights @ 5:00 Every Morning
+    description: Manage Outdoor light state (turn off early morning)
+    unified_job_template: Kasa // Manage Device State
+    rrule: DTSTART;TZID=America/Chicago:20241206T100000 RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20250111T120000Z;BYHOUR=5;BYMINUTE=0
+    extra_data:
+      kasa_devices:
+        - name: Front Porch Lights
+          state: disabled
+        - name: Patio Lights
+          state: disabled
   - name: Turn on Christmas Lights @ 5:30 Every Night
     description: Manage Christmas light state (turn on at sunset)
     unified_job_template: Kasa // Manage Device State
     rrule: DTSTART;TZID=America/Chicago:20241206T100000 RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20250111T120000Z;BYHOUR=17;BYMINUTE=30
+    disabled: true
     extra_data:
       kasa_devices:
         - name: Christmas Tree
@@ -35,6 +56,7 @@ controller_schedules:
     description: Manage Christmas light state (turn off at sunrise)
     unified_job_template: Kasa // Manage Device State
     rrule: DTSTART;TZID=America/Chicago:20241206T100000 RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20250111T120000Z;BYHOUR=9;BYMINUTE=30
+    disabled: true
     extra_data:
       kasa_devices:
         - name: Christmas Tree
