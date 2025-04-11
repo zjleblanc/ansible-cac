@@ -1,6 +1,254 @@
 # ansible-playbook pb_controller_cac.yml --tags workflow_job_templates
 ---
 controller_workflows:
+- name: Linux // Patching // rhel9_5
+  organization: Autodotes
+  ask_variables_on_launch: true
+  workflow_nodes:
+  - identifier: Sync Project
+    related:
+      success_nodes:
+      - identifier: Create CR Task
+    unified_job_template:
+      name: Linux Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: Sync Inventory
+    related:
+      success_nodes:
+      - identifier: Create CR Task
+    unified_job_template:
+      inventory:
+        name: Cloud Inventory
+        organization:
+          name: Autodotes
+          type: organization
+        type: inventory
+      name: AWS EC2 Instances
+      type: inventory_source
+  - identifier: Create CR Task
+    all_parents_must_converge: true
+    related:
+      success_nodes: 
+        - identifier: Create Snapshot
+    unified_job_template:
+      name: Linux // Patching // No-Op
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+    extra_data:
+      task_purpose: Create a task in ServiceNow tied to the CR
+      task_output:
+        action: create_ctask
+        ctask_num: CTASK123
+        ctask_sys_id: asdas9r70213u1ji321
+  - identifier: Create Snapshot
+    related:
+      success_nodes: 
+        - identifier: Patch
+      failure_nodes: 
+        - identifier: Update CR Task
+    unified_job_template:
+      name: Linux // Patching // No-Op
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+    extra_data:
+      task_purpose: Create a snapshot before patching
+      task_output:
+        action: create_snapshot
+        snapshot_id: snap_xyz
+  - identifier: Patch
+    related:
+      success_nodes: 
+        - identifier: Post-Validation
+      failure_nodes: 
+        - identifier: Update CR Task
+    unified_job_template:
+      name: Linux // Patching // No-Op
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+    extra_data:
+      task_purpose: Patch the target host
+      task_output:
+        action: patch
+        results:
+          packages:
+            httpd: v1
+            bind: v2
+  - identifier: Post-Validation
+    related:
+      success_nodes: 
+        - identifier: Close CR Task
+      failure_nodes: 
+        - identifier: Update CR Task
+    unified_job_template:
+      name: Linux // Patching // No-Op
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+    extra_data:
+      task_purpose: Complete post-validation of patched host
+      task_output:
+        action: post_validation
+        success: true
+  - identifier: Close CR Task
+    unified_job_template:
+      name: Linux // Patching // No-Op
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+    extra_data:
+      task_purpose: Close CR Task
+      task_output:
+        action: close_ctask
+        ctask_num: CTASK123
+        ctask_sys_id: asdas9r70213u1ji321
+  - identifier: Update CR Task
+    unified_job_template:
+      name: Linux // Patching // No-Op
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+    extra_data:
+      task_purpose: Update CR Task
+      task_output:
+        action: update_ctask
+        ctask_num: CTASK123
+        ctask_sys_id: asdas9r70213u1ji321
+- name: Linux // Patching // rhel8_10
+  organization: Autodotes
+  ask_variables_on_launch: true
+  workflow_nodes:
+  - identifier: Sync Project
+    related:
+      success_nodes:
+      - identifier: Create CR Task
+    unified_job_template:
+      name: Linux Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: Sync Inventory
+    related:
+      success_nodes:
+      - identifier: Create CR Task
+    unified_job_template:
+      inventory:
+        name: Cloud Inventory
+        organization:
+          name: Autodotes
+          type: organization
+        type: inventory
+      name: AWS EC2 Instances
+      type: inventory_source
+  - identifier: Create CR Task
+    all_parents_must_converge: true
+    related:
+      success_nodes: 
+        - identifier: Create Snapshot
+    unified_job_template:
+      name: Linux // Patching // No-Op
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+    extra_data:
+      task_purpose: Create a task in ServiceNow tied to the CR
+      task_output:
+        action: create_ctask
+        ctask_num: CTASK123
+        ctask_sys_id: asdas9r70213u1ji321
+  - identifier: Create Snapshot
+    related:
+      success_nodes: 
+        - identifier: Patch
+      failure_nodes: 
+        - identifier: Update CR Task
+    unified_job_template:
+      name: Linux // Patching // No-Op
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+    extra_data:
+      task_purpose: Create a snapshot before patching
+      task_output:
+        action: create_snapshot
+        snapshot_id: snap_xyz
+  - identifier: Patch
+    related:
+      success_nodes: 
+        - identifier: Post-Validation
+      failure_nodes: 
+        - identifier: Update CR Task
+    unified_job_template:
+      name: Linux // Patching // No-Op
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+    extra_data:
+      task_purpose: Patch the target host
+      task_output:
+        action: patch
+        results:
+          packages:
+            httpd: v1
+            bind: v2
+  - identifier: Post-Validation
+    related:
+      success_nodes: 
+        - identifier: Close CR Task
+      failure_nodes: 
+        - identifier: Update CR Task
+    unified_job_template:
+      name: Linux // Patching // No-Op
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+    extra_data:
+      task_purpose: Complete post-validation of patched host
+      task_output:
+        action: post_validation
+        success: true
+  - identifier: Close CR Task
+    unified_job_template:
+      name: Linux // Patching // No-Op
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+    extra_data:
+      task_purpose: Close CR Task
+      task_output:
+        action: close_ctask
+        ctask_num: CTASK123
+        ctask_sys_id: asdas9r70213u1ji321
+  - identifier: Update CR Task
+    unified_job_template:
+      name: Linux // Patching // No-Op
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+    extra_data:
+      task_purpose: Update CR Task
+      task_output:
+        action: update_ctask
+        ctask_num: CTASK123
+        ctask_sys_id: asdas9r70213u1ji321
 - name: Terraform // Deploy and Configure Workflow
   organization: Autodotes
   survey_enabled: true

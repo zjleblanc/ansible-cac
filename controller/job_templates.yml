@@ -1,6 +1,63 @@
 # ansible-playbook pb_controller_cac.yml --tags job_templates
 ---
 controller_templates:
+- name: Linux // Patching // Dispatcher
+  description: Ingress playbook for patching to schedule downstream patching workflows based on pre-processing nodes
+  labels: ['Demo']
+  project: Linux Mgmt
+  organization: Autodotes
+  inventory: Cloud Inventory
+  playbook: workflows/patching/dispatcher.yml
+  execution_environment: ee-default
+  credentials:
+    - AWS (ec2-user)
+    - Controller Credential
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+      - max: 1024
+        min: 1
+        type: text
+        default: linux
+        required: true
+        variable: patch_targets
+        question_name: Specify patch target(s)
+        question_description: ''
+      - max: 1024
+        min: 1
+        type: text
+        choices: []
+        default: '1970-01-01 00:00:00'
+        required: true
+        variable: change_window_datetime
+        new_question: true
+        question_name: Change Window DateTime
+        question_description: Python format "%Y-%m-%d %H:%M:%S"
+      - max: 1024
+        min: 0
+        type: multiplechoice
+        choices:
+          - UTC
+          - America/Chicago
+          - GMT
+        default: UTC
+        required: true
+        variable: change_window_timezone
+        new_question: true
+        question_name: Change Window Time Zone
+        question_description: ''
+- name: Linux // Patching // No-Op
+  description: Generic playbook to represent actions in a patching workflow
+  labels: ['Demo']
+  project: Linux Mgmt
+  organization: Autodotes
+  inventory: Cloud Inventory
+  playbook: workflows/patching/no_op.yml
+  execution_environment: ee-default
+  credentials: ['AWS (ec2-user)']
+  ask_variables_on_launch: true
 - credentials:
   - AAP (id_rsa)
   inventory: Autodotes Lab
@@ -2116,6 +2173,17 @@ controller_templates:
       required: true
       type: password
       variable: az_ssh_pubkey
+- name: Terraform // Web Demo Configure
+  description: Configure webservers provisioned by Terraform
+  labels:
+    - Demo
+  project: Terraform Mgmt
+  organization: Autodotes
+  inventory: Ansible-Terraform Inventory
+  playbook: azure_create_web_demo/ansible/configure_web.yml
+  execution_environment: ee-default
+  credentials:
+    - AAP (id_rsa)
 - name: Terraform // Web Demo Configure
   description: Configure webservers provisioned by Terraform
   labels:
