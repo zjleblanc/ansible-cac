@@ -1,9 +1,15 @@
+# ansible-playbook pb_controller_cac.yml --tags labels
+---
 controller_labels:
   - name: Main
     organization: Autodotes
   - name: Lab
     organization: Autodotes
   - name: Demo
+    organization: Autodotes
+  - name: AWS
+    organization: Autodotes
+  - name: ServiceNow
     organization: Autodotes
   - name: OOTB
     organization: Default
