@@ -1,6 +1,168 @@
 # ansible-playbook pb_controller_cac.yml --tags job_templates
 ---
 controller_templates:
+- name: ServiceNow // Create CIs
+  description: Create cmdb_ci_vm_instance items
+  labels: ['Demo', 'ServiceNow']
+  project: Cloud Mgmt
+  organization: Autodotes
+  inventory: Cloud Inventory
+  playbook: playbooks/snow/manage_ci.yml
+  execution_environment: ee-default
+  credentials:
+    - AWS (ec2-user)
+    - West ServiceNow (ven07621)
+  extra_vars:
+    action: create
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+      - max: 1024
+        min: 1
+        type: text
+        default: OVERRIDE_ME
+        required: true
+        variable: _hosts
+        question_name: Specify target host(s)
+        question_description: pattern for the playbook hosts key
+- name: ServiceNow // Delete CIs
+  description: Delete cmdb_ci_vm_instance items
+  labels: ['Demo', 'ServiceNow']
+  project: Cloud Mgmt
+  organization: Autodotes
+  inventory: Cloud Inventory
+  playbook: playbooks/snow/manage_ci.yml
+  execution_environment: ee-default
+  credentials:
+    - West ServiceNow (ven07621)
+  extra_vars:
+    action: delete
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+      - max: 1024
+        min: 1
+        type: text
+        default: OVERRIDE_ME
+        required: true
+        variable: _hosts
+        question_name: Specify target host(s)
+        question_description: pattern for the playbook hosts key
+- name: AWS // Delete VM
+  description: Terminate virtual machine(s) in AWS
+  labels: ['Demo', 'AWS']
+  project: Cloud Mgmt
+  organization: Autodotes
+  inventory: Service Now Inventory
+  playbook: playbooks/aws/delete_vm.yml
+  execution_environment: ee-default
+  credentials:
+    - AWS Sandbox Credential
+    - Controller Credential
+  survey_enabled: true
+  survey_spec:
+    name: ''
+    description: ''
+    spec:
+    - question_name: Specify VMs to delete
+      question_description: comma separated list of names (vm1,vm2)
+      type: text
+      default: demo-vm-1
+      variable: aws_ec2_names_list
+      required: true
+- name: AWS // Create VM
+  description: Create virtual machine(s) in AWS
+  labels: ['Demo', 'AWS']
+  project: Cloud Mgmt
+  organization: Autodotes
+  inventory: Cloud Inventory
+  playbook: playbooks/aws/create_vm.yml
+  execution_environment: ee-default
+  credentials:
+    - AWS Sandbox Credential
+    - Dynatrace Demo Credential
+  extra_vars:
+    aws_vpc_name: aws-demo-vpc
+    aws_owner_tag: default
+    aws_purpose_tag: ansible_demo
+    aws_tenancy: default
+    aws_vpc_cidr_block: 10.0.0.0/16
+    aws_subnet_cidr: 10.0.1.0/24
+    aws_sg_name: aws-demo-sg
+    aws_subnet_name: aws-demo-subnet
+    aws_rt_name: aws-demo-rt
+    aws_region: us-east-2
+    aws_key_name: demo-keypair
+  allow_simultaneous: true
+  survey_enabled: true
+  survey_spec:
+    name: ''
+    description: ''
+    spec:
+    - max: 1024
+      min: 0
+      type: text
+      choices: []
+      default: demo-vm-1
+      required: true
+      variable: aws_ec2_names_list
+      new_question: true
+      question_name: EC2 Name(s)
+      question_description: comma separated list of names (vm1,vm2)
+    - max: 1024
+      min: 0
+      type: multiplechoice
+      choices:
+      - rhel
+      - rhel8
+      - rhel9
+      - rhel_dev
+      - windows
+      default: rhel
+      required: true
+      variable: target_platform
+      new_question: true
+      question_name: Target Platform
+      question_description: target platform (maps to pre-selected AMI)
+    - max: 4096
+      min: 0
+      type: text
+      choices: []
+      default: ''
+      required: false
+      variable: aws_public_key_src
+      new_question: true
+      question_name: SSH Public Key
+      question_description: Used to create key pair if provided
+- name: AWS // Patch VM
+  description: Patch an EC2 instance with ServiceNow integration
+  labels: ['Demo', 'AWS']
+  project: Cloud Mgmt
+  organization: Autodotes
+  inventory: Cloud Inventory
+  ask_inventory_on_launch: true
+  playbook: playbooks/aws/patch_vm.yml
+  execution_environment: ee-default
+  credentials:
+    - AWS (ec2-user)
+    - West ServiceNow (ven07621)
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+      - max: 1024
+        min: 1
+        type: text
+        default: OVERRIDE_ME
+        required: true
+        variable: _hosts
+        question_name: Specify target host(s)
+        question_description: pattern for the playbook hosts key
 - name: Linux // Patching // Dispatcher
   description: Ingress playbook for patching to schedule downstream patching workflows based on pre-processing nodes
   labels: ['Demo']
@@ -12,7 +174,25 @@ controller_templates:
   credentials:
     - AWS (ec2-user)
     - Controller Credential
-  survey_enabled: true
+  ask_variables_on_launch: true
+  extra_vars:
+    report_server: reports.local
+    report_web_directory: /var/www/reports.autodotes.com/workflows/patching
+    change_request: CHG01234
+    patch_targets:
+      rhel8-vm-1:
+        change_window_datetime: "2025-04-25 12:30:00"
+        change_window_timezone: America/Chicago
+      rhel8-vm-2:
+        change_window_datetime: "2025-04-25 13:00:00"
+        change_window_timezone: America/Chicago
+      rhel9-vm-1:
+        change_window_datetime: "2025-04-26 12:30:00"
+        change_window_timezone: America/Chicago
+      rhel9-vm-2:
+        change_window_datetime: "2025-04-26 13:00:00"
+        change_window_timezone: America/Chicago
+  survey_enabled: false
   survey_spec:
     description: ''
     name: ''
@@ -58,14 +238,12 @@ controller_templates:
   execution_environment: ee-default
   credentials: ['AWS (ec2-user)']
   ask_variables_on_launch: true
-- credentials:
-  - AAP (id_rsa)
-  inventory: Autodotes Lab
-  job_slice_count: 1
-  job_type: run
-  name: AAP // Backup Platform
+- name: AAP // Backup Platform
   playbook: playbooks/aap/backup_platform.yml
   project: Cloud Mgmt
+  credentials:
+    - AAP (id_rsa)
+  inventory: Autodotes Lab
   survey_enabled: true
   survey_spec:
     description: ''
@@ -452,7 +630,8 @@ controller_templates:
 - ask_credential_on_launch: true
   ask_variables_on_launch: true
   credentials:
-  - AAP (zach)
+  - AAP (id_rsa)
+  - Cloudflare DNS
   description: renew certs on non-AAP sites
   execution_environment: ee-default
   extra_vars:
@@ -1082,7 +1261,10 @@ controller_templates:
   name: PAH // Sync Repositories
   playbook: playbooks/aap/pah_sync_repositories.yml
   project: Cloud Mgmt
-- ask_variables_on_launch: true
+- name: Palo Alto // Configure Firewall
+  playbook: demos/panos/pb_firewall_configure.yml
+  project: Network Mgmt
+  ask_variables_on_launch: true
   credentials:
   - Palo Alto Demo Vault
   - Palo Alto Firewall (admin)
@@ -1090,10 +1272,10 @@ controller_templates:
   inventory: Palo Alto Demo Inventory
   job_slice_count: 1
   job_type: run
-  name: Palo Alto // Configure Firewall
-  playbook: demos/panos/pb_firewall_configure.yml
+- name: Palo Alto // Firewall Security Rule
+  playbook: demos/panos/pb_panos_security_rule.yml
   project: Network Mgmt
-- ask_variables_on_launch: true
+  ask_variables_on_launch: true
   credentials:
   - Palo Alto Firewall (admin)
   - West ServiceNow (ven07621)
@@ -1103,10 +1285,10 @@ controller_templates:
   inventory: Palo Alto Demo Inventory
   job_slice_count: 1
   job_type: run
-  name: Palo Alto // Firewall Security Rule
-  playbook: demos/panos/pb_panos_security_rule.yml
+- name: Palo Alto // Setup Infrastructure
+  playbook: demos/panos/pb_infra_setup.yml
   project: Network Mgmt
-- credentials:
+  credentials:
   - AWS Sandbox Credential
   - Controller Credential
   - Palo Alto Bastion
@@ -1116,9 +1298,6 @@ controller_templates:
   inventory: Palo Alto Demo Inventory
   job_slice_count: 1
   job_type: run
-  name: Palo Alto // Setup Infrastructure
-  playbook: demos/panos/pb_infra_setup.yml
-  project: Network Mgmt
   survey_enabled: true
   survey_spec:
     description: ''
@@ -1146,7 +1325,10 @@ controller_templates:
       required: true
       type: multiplechoice
       variable: skip_fw_password
-- credentials:
+- name: Palo Alto // Tear Down Infrastructure
+  playbook: demos/panos/pb_infra_teardown.yml
+  project: Network Mgmt
+  credentials:
   - AWS Sandbox Credential
   execution_environment: ee-default
   extra_vars:
@@ -1154,9 +1336,6 @@ controller_templates:
   inventory: Palo Alto Demo Inventory
   job_slice_count: 1
   job_type: run
-  name: Palo Alto // Tear Down Infrastructure
-  playbook: demos/panos/pb_infra_teardown.yml
-  project: Network Mgmt
 - ask_variables_on_launch: true
   credentials:
   - Palo Alto Bastion
