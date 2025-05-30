@@ -29,7 +29,7 @@ controller_schedules:
           state: enabled
   - name: Turn off Outdoor Lights @ 5:00 Every Morning
     description: Manage Outdoor light state (turn off early morning)
-    unified_job_template: Kasa // Manage Device State DTSTART;TZID=America/Chicago:20241207T050000
+    unified_job_template: Kasa // Manage Device State
     rrule: DTSTART;TZID=America/Chicago:20241206T100000 RRULE:FREQ=DAILY;INTERVAL=1;BYHOUR=5;BYMINUTE=0;BYSECOND=0
     extra_data:
       kasa_devices:
