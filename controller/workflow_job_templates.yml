@@ -1,7 +1,152 @@
 # ansible-playbook pb_controller_cac.yml --tags workflow_job_templates
 ---
 controller_workflows:
-- name: Linux // Patching // rhel9_5
+- name: AWS // Decommission Workflow
+  organization: Autodotes
+  ask_variables_on_launch: true
+  survey_enabled: true
+  allow_simultaneous: true
+  survey_spec:
+    name: workflow survey
+    description: workflow passthrough variables
+    spec:
+      - question_name: VM Names
+        question_description: comma separated list of names (vm1,vm2)
+        max: 1024
+        min: 0
+        required: true
+        type: text
+        variable: aws_ec2_names_list
+        default: OVERRIDE_ME
+  workflow_nodes:
+  - identifier: Sync Project
+    related:
+      success_nodes:
+      - identifier: Delete VM(s)
+    unified_job_template:
+      name: Cloud Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: Delete VM(s)
+    related:
+      success_nodes:
+      - identifier: Delete CI(s)
+    unified_job_template:
+      name: AWS // Delete VM
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Delete CI(s)
+    unified_job_template:
+      name: ServiceNow // Delete CIs
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+- name: AWS // Provisioning Workflow
+  organization: Autodotes
+  ask_variables_on_launch: true
+  allow_simultaneous: true
+  survey_enabled: true
+  survey_spec:
+    name: workflow survey
+    description: workflow passthrough variables
+    spec:
+      - question_name: VM Names
+        question_description: comma separated list of names (vm1,vm2)
+        max: 1024
+        min: 0
+        required: true
+        type: text
+        variable: aws_ec2_names_list
+        default: OVERRIDE_ME
+      - question_name: Target Platform
+        question_description: target platform (maps to pre-selected AMI)
+        max: 1024
+        min: 0
+        type: multiplechoice
+        choices:
+        - rhel
+        - rhel_dev
+        - windows
+        default: rhel
+        required: true
+        variable: target_platform
+      - question_name: AWS region
+        max: 1024
+        min: 0
+        required: true
+        type: text
+        variable: aws_region
+        default: us-east-2
+  workflow_nodes:
+  - identifier: Sync Project
+    related:
+      success_nodes:
+      - identifier: Create VM(s)
+    unified_job_template:
+      name: Cloud Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: Create VM(s)
+    related:
+      success_nodes:
+      - identifier: Sync AWS Inventory
+    unified_job_template:
+      name: AWS // Create VM
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Sync AWS Inventory
+    related:
+      success_nodes:
+      - identifier: Create CI(s)
+    unified_job_template:
+      inventory:
+        name: Cloud Inventory
+        organization:
+          name: Autodotes
+          type: organization
+        type: inventory
+      name: AWS EC2 Instances
+      type: inventory_source
+  - identifier: Create CI(s)
+    related:
+      success_nodes:
+      - identifier: Sync ServiceNow Inventory
+    unified_job_template:
+      name: ServiceNow // Create CIs
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Sync ServiceNow Inventory
+    related:
+      success_nodes:
+      - identifier: Patch VM(s)
+    unified_job_template:
+      inventory:
+        name: ServiceNow Inventory
+        organization:
+          name: Autodotes
+          type: organization
+        type: inventory
+      name: servicenow.itsm.now
+      type: inventory_source
+  - identifier: Patch VM(s)
+    unified_job_template:
+      name: AWS // Patch VM 
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+- name: Linux // Patching // rhel9_3
   organization: Autodotes
   ask_variables_on_launch: true
   workflow_nodes:
@@ -40,6 +185,7 @@ controller_workflows:
         type: organization
       type: job_template
     extra_data:
+      report_status_update: Running
       task_purpose: Create a task in ServiceNow tied to the CR
       task_output:
         action: create_ctask
@@ -95,6 +241,7 @@ controller_workflows:
         type: organization
       type: job_template
     extra_data:
+      report_status_update: Success
       task_purpose: Complete post-validation of patched host
       task_output:
         action: post_validation
@@ -120,6 +267,7 @@ controller_workflows:
         type: organization
       type: job_template
     extra_data:
+      report_status_update: Failed
       task_purpose: Update CR Task
       task_output:
         action: update_ctask
@@ -164,6 +312,7 @@ controller_workflows:
         type: organization
       type: job_template
     extra_data:
+      report_status_update: Running
       task_purpose: Create a task in ServiceNow tied to the CR
       task_output:
         action: create_ctask
@@ -231,6 +380,7 @@ controller_workflows:
         type: organization
       type: job_template
     extra_data:
+      report_status_update: Success
       task_purpose: Close CR Task
       task_output:
         action: close_ctask
@@ -244,6 +394,7 @@ controller_workflows:
         type: organization
       type: job_template
     extra_data:
+      report_status_update: Failed
       task_purpose: Update CR Task
       task_output:
         action: update_ctask
@@ -317,8 +468,8 @@ controller_workflows:
         name: Autodotes
         type: organization
       type: job_template
-- inventory: Autodotes Lab
-  name: AAP // Renew & Update AAP certs
+- name: AAP // Renew & Update AAP certs
+  inventory: Autodotes Lab
   organization: Autodotes
   webhook_service: gitlab
   workflow_nodes:
