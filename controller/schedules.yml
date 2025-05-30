@@ -5,14 +5,18 @@ controller_schedules:
     description: Sync automation hub repositories to update available content
     unified_job_template: PAH // Sync Repositories
     rrule: DTSTART;TZID=America/Chicago:20240310T010000 RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=SU
-  - name: Generate Random User Activity Every 6 Hours
-    description: Login random users to proxmox vms for demo reporting scenarios
-    unified_job_template: Linux // User Login (Random) Workflow
-    rrule: DTSTART;TZID=America/Chicago:20241119T123000 RRULE:INTERVAL=6;FREQ=HOURLY
-  - name: Generate User Login Report on Sundays
-    description: Generate user login report and publish to reports.autodotes.com
-    unified_job_template: Linux // User Login Report Workflow
-    rrule: DTSTART;TZID=America/Chicago:20241123T010000 RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=SU
+  - name: Renew Autodotes Certs Every 30 Days
+    description: Renew Autodotes site certificates
+    unified_job_template: Autodotes // Renew Certs
+    rrule: DTSTART;TZID=America/Chicago:20250701T020000 RRULE:FREQ=MONTHLY;INTERVAL=1
+  # - name: Generate Random User Activity Every 6 Hours
+  #   description: Login random users to proxmox vms for demo reporting scenarios
+  #   unified_job_template: Linux // User Login (Random) Workflow
+  #   rrule: DTSTART;TZID=America/Chicago:20241119T123000 RRULE:INTERVAL=6;FREQ=HOURLY
+  # - name: Generate User Login Report on Sundays
+  #   description: Generate user login report and publish to reports.autodotes.com
+  #   unified_job_template: Linux // User Login Report Workflow
+  #   rrule: DTSTART;TZID=America/Chicago:20241123T010000 RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=SU
   - name: Dynamic DNS Updates [15m]
     description: Update DNS records based on WAN IP changes every 15m
     unified_job_template: Lab // Dynamic DNS
