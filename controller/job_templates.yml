@@ -1,6 +1,30 @@
 # ansible-playbook pb_controller_cac.yml --tags job_templates
 ---
 controller_templates:
+- name: Selenium // Automation Dashboard
+  description: Demonstrate using Selenium to create application screen captures
+  labels: ['Demo', 'ServiceNow']
+  project: Cloud Mgmt
+  organization: Autodotes
+  inventory: Autodotes Lab
+  playbook: demos/selenium_automation_dashboard.yml
+  execution_environment: ee-selenium
+  credentials:
+    - AAP (id_rsa)
+    - Ansible Vault
+    - West ServiceNow (ven07621)
+  extra_vars:
+    automation_dashboard_server: ldap
+- name: Selenium // Screen Capture
+  description: Demonstrate using Selenium to create application screen captures
+  labels: ['Demo', 'ServiceNow']
+  project: Cloud Mgmt
+  organization: Autodotes
+  inventory: Autodotes Lab
+  playbook: demos/selenium_screen_capture.yml
+  execution_environment: ee-selenium
+  credentials:
+    - AAP (id_rsa)
 - name: ServiceNow // Create CIs
   description: Create cmdb_ci_vm_instance items
   labels: ['Demo', 'ServiceNow']
@@ -1570,7 +1594,7 @@ controller_templates:
   description: Install SQL Server on a RHEL box
   extra_vars:
     mssql_version: 2019
-    sql_sa_password: r3dh4t123!
+    # sql_sa_password: REPLACE_ME
   inventory: Proxmox Inventory
   job_slice_count: 1
   job_type: run
