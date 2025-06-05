@@ -9,6 +9,9 @@ controller_execution_environments:
   - name: ee-networking
     description: my networking execution environment
     image: quay.io/zleblanc/ee-networking:7311e0e
+  - name: ee-selenium
+    description: Used to demonstrate automated screen captures using selenium and chrome
+    image: quay.io/zleblanc/ee-selenium:v4
   - name: ee-cloud
     description: Scott Harwell's Cloud EE hosted in quay
     image: quay.io/scottharwell/cloud-ee
