@@ -1,5 +1,9 @@
+# ansible-playbook pb_platform_cac.yml --tags teams  
 ---
 aap_teams:
   - name: redhat
     description: Red Hatters with access to Autodotest
+    organization: Autodotes
+  - name: lab
+    description: lab users
     organization: Autodotes

@@ -12,6 +12,10 @@
       tags: always
       ansible.builtin.include_vars:
         dir: platform
+        ignore_unknown_extensions: true
+        extensions:
+          - yaml
+          - yml
 
     - name: Call dispatch role for Platform configuration
       tags: always
