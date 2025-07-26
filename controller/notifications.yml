@@ -1,0 +1,11 @@
+# ansible-playbook pb_controller_cac.yml --tags notification_templates
+---
+controller_notifications:
+  - name: "Slack Autodotes #ansible-notifications"
+    description: "Notifications to Autodotes Slack in #ansible-notifications"
+    organization: Autodotes
+    notification_type: slack
+    notification_configuration:
+      token: "{{ controller_credential_slack_token }}"
+      channels:
+        - "#ansible-notifications"

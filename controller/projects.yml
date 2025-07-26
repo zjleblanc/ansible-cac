@@ -10,6 +10,14 @@ controller_projects:
   scm_delete_on_update: 'no'
   scm_type: git
   scm_update_on_launch: 'no'
+- name: App Mgmt
+  scm_url: https://github.com/zjleblanc/ansible-app-mgmt.git
+  organization: Autodotes
+  scm_branch: master
+  scm_clean: 'no'
+  scm_delete_on_update: 'no'
+  scm_type: git
+  scm_update_on_launch: 'no'
 - name: Linux Mgmt
   scm_url: https://github.com/zjleblanc/ansible-linux-mgmt.git
   organization: Autodotes
