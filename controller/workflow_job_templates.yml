@@ -1,6 +1,99 @@
 # ansible-playbook pb_controller_cac.yml --tags workflow_job_templates
 ---
 controller_workflows:
+- name: Apps // SSL Certificate Renewal Workflow
+  organization: Autodotes
+  labels: ['Demo','Apps']
+  allow_simultaneous: true
+  ask_variables_on_launch: true
+  extra_vars:
+    _host: raspi
+  survey_enabled: true
+  survey_spec:
+    name: ''
+    description: ''
+    spec:
+    - question_name: Target certificate sites (SN)
+      question_description: comma separated list of names (vm1,vm2)
+      type: text
+      default: example.autodotes.com
+      variable: ssl_target_sites_list
+      required: true
+    - question_name: Custom Expiration Window
+      question_description: "[+-][timespec][w|d|h|m|s] (e.g. +32w1d2h)"
+      type: text
+      default: +30d
+      variable: acme_custom_expiry
+      required: true
+  workflow_nodes:
+  - identifier: Sync Project
+    related:
+      success_nodes:
+      - identifier: Artifact Backup
+    unified_job_template:
+      name: App Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: Artifact Backup
+    related:
+      success_nodes:
+      - identifier: Certificate Renewal
+    unified_job_template:
+      name: App // SSL Artifact Backup
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Certificate Renewal
+    related:
+      success_nodes:
+      - identifier: Health Check
+      failure_nodes:
+      - identifier: Artifact Restore
+    unified_job_template:
+      name: App // SSL Certificate Renewal
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Health Check
+    related:
+      success_nodes:
+      - identifier: Artifact Cleanup
+      failure_nodes:
+      - identifier: Artifact Restore
+    unified_job_template:
+      name: App // Certificate Renewal Health Check
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Artifact Cleanup
+    unified_job_template:
+      name: App // SSL Artifact Cleanup
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Artifact Restore
+    related:
+      success_nodes:
+      - identifier: Health Check Restore
+    unified_job_template:
+      name: App // SSL Artifact Restore
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Health Check Restore
+    unified_job_template:
+      name: App // Certificate Renewal Health Check
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
 - name: AWS // Decommission Workflow
   organization: Autodotes
   ask_variables_on_launch: true
@@ -402,6 +495,9 @@ controller_workflows:
         ctask_sys_id: asdas9r70213u1ji321
 - name: Terraform // Deploy and Configure Workflow
   organization: Autodotes
+  labels:
+    - Demo
+    - Cloud
   survey_enabled: true
   survey_spec:
     name: workflow survey
@@ -410,10 +506,18 @@ controller_workflows:
     - question_name: SSH Public Key
       question_description: SSH public key which will enable configuration after provisioning
       max: 1024
-      min: 0
+      min: 1
       required: true
       type: password
       variable: az_ssh_pubkey
+    - question_name: Azure VM Size
+      question_description: size of the Azure VMs
+      max: 30
+      min: 1
+      required: true
+      default: Standard_DS1_v2
+      type: text
+      variable: az_web_vm_size
   workflow_nodes:
   - identifier: Sync Project
     related:
@@ -464,6 +568,86 @@ controller_workflows:
     job_tags: remove
     unified_job_template:
       name: Terraform // Web Demo Deploy
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+- name: Terraform // HCP // Deploy and Configure Workflow
+  organization: Autodotes
+  labels:
+    - Demo
+    - Cloud
+    - HCP
+  survey_enabled: true
+  survey_spec:
+    name: workflow survey
+    description: SSH public key passthrough
+    spec:
+    - question_name: SSH Public Key
+      question_description: SSH public key which will enable configuration after provisioning
+      max: 1024
+      min: 1
+      required: true
+      type: password
+      variable: az_ssh_pubkey
+    - question_name: Azure VM Size
+      question_description: size of the Azure VMs
+      max: 30
+      min: 1
+      required: true
+      default: Standard_DS1_v2
+      type: text
+      variable: az_web_vm_size
+  workflow_nodes:
+  - identifier: Sync Project
+    related:
+      success_nodes:
+      - identifier: Terraform Create
+    unified_job_template:
+      name: Terraform Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: Terraform Create
+    related:
+      failure_nodes:
+      - identifier: Terraform Destroy
+      success_nodes:
+      - identifier: Sync Terraform Inventory
+    unified_job_template:
+      name: Terraform // HCP // Web Demo Deploy
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Sync Terraform Inventory
+    related:
+      success_nodes:
+      - identifier: Configure Web Servers
+    unified_job_template:
+      inventory:
+        name: Ansible-HCP Inventory
+        organization:
+          name: Autodotes
+          type: organization
+        type: inventory
+      name: app.terraform.io/zleblanc/azure-web-demo-dev/state
+      type: inventory_source
+  - identifier: Configure Web Servers
+    related:
+      failure_nodes:
+      - identifier: Terraform Destroy
+    unified_job_template:
+      name: Terraform // HCP // Web Demo Configure
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Terraform Destroy
+    job_tags: remove
+    unified_job_template:
+      name: Terraform // HCP // Web Demo Deploy
       organization:
         name: Autodotes
         type: organization

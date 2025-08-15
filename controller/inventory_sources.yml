@@ -249,4 +249,26 @@ controller_inventory_sources:
   update_cache_timeout: 0
   update_on_launch: false
   verbosity: 1
+- name: app.terraform.io/zleblanc/azure-web-demo-dev/state
+  inventory: Ansible-HCP Inventory
+  credential: app.terraform.io/zleblanc/azure-web-demo-dev/backend
+  description: Terraform backend configuration from HCP workspace
+  execution_environment: ee-cloud
+  overwrite: true
+  overwrite_vars: true
+  source: terraform
+  source_vars:
+    backend_type: remote
+    hostnames:
+      - name
+    compose:
+      ansible_host: public_ip_address
+      ansible_user: admin_username
+    keyed_groups:
+      - key: tags
+        prefix: tag
+  timeout: 0
+  update_cache_timeout: 0
+  update_on_launch: false
+  verbosity: 1
 ...
