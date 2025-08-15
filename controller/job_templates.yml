@@ -1,6 +1,148 @@
 # ansible-playbook pb_controller_cac.yml --tags job_templates
 ---
 controller_templates:
+- name: App // SSL Artifact Backup
+  description: Backup SSL artifacts for designated site(s)
+  ask_labels_on_launch: true
+  labels: ['Demo', 'Apps']
+  project: App Mgmt
+  organization: Autodotes
+  inventory: Autodotes Lab
+  playbook: pb_ssl_backup.yml
+  execution_environment: ee-default
+  credentials:
+    - AAP (id_rsa)
+  ask_variables_on_launch: true
+  extra_vars:
+    _host: raspi
+  survey_enabled: true
+  survey_spec:
+    name: ''
+    description: ''
+    spec:
+    - question_name: Target certificate sites (SN)
+      question_description: comma separated list of names (vm1,vm2)
+      type: text
+      default: example.autodotes.com
+      variable: ssl_target_sites_list
+      required: true
+  notification_templates_success: ["Slack Autodotes #ansible-notifications"]
+  notification_templates_error: ["Slack Autodotes #ansible-notifications"]
+- name: App // SSL Artifact Cleanup
+  description: Cleanup SSL artifacts for designated site(s)
+  ask_labels_on_launch: true
+  labels: ['Demo', 'Apps']
+  project: App Mgmt
+  organization: Autodotes
+  inventory: Autodotes Lab
+  playbook: pb_ssl_cleanup.yml
+  execution_environment: ee-default
+  credentials:
+    - AAP (id_rsa)
+  ask_variables_on_launch: true
+  extra_vars:
+    _host: raspi
+  survey_enabled: true
+  survey_spec:
+    name: ''
+    description: ''
+    spec:
+    - question_name: Target certificate sites (SN)
+      question_description: comma separated list of names (vm1,vm2)
+      type: text
+      default: example.autodotes.com
+      variable: ssl_target_sites_list
+      required: true
+  notification_templates_success: ["Slack Autodotes #ansible-notifications"]
+  notification_templates_error: ["Slack Autodotes #ansible-notifications"]
+- name: App // SSL Artifact Restore
+  description: Restore SSL artifacts for designated site(s) from backups
+  ask_labels_on_launch: true
+  labels: ['Demo', 'Apps']
+  project: App Mgmt
+  organization: Autodotes
+  inventory: Autodotes Lab
+  playbook: pb_ssl_restore.yml
+  execution_environment: ee-default
+  credentials:
+    - AAP (id_rsa)
+  ask_variables_on_launch: true
+  extra_vars:
+    _host: raspi
+  survey_enabled: true
+  survey_spec:
+    name: ''
+    description: ''
+    spec:
+    - question_name: Target certificate sites (SN)
+      question_description: comma separated list of names (vm1,vm2)
+      type: text
+      default: example.autodotes.com
+      variable: ssl_target_sites_list
+      required: true
+  notification_templates_success: ["Slack Autodotes #ansible-notifications"]
+  notification_templates_error: ["Slack Autodotes #ansible-notifications"]
+- name: App // SSL Certificate Renewal
+  description: Renew SSL certificates for designated site(s)
+  ask_labels_on_launch: true
+  labels: ['Demo', 'Apps']
+  project: App Mgmt
+  organization: Autodotes
+  inventory: Autodotes Lab
+  playbook: pb_ssl_renewal.yml
+  execution_environment: ee-default
+  credentials:
+    - AAP (id_rsa)
+    - Cloudflare DNS
+  ask_variables_on_launch: true
+  extra_vars:
+    _host: raspi
+  survey_enabled: true
+  survey_spec:
+    name: ''
+    description: ''
+    spec:
+    - question_name: Target certificate sites (SN)
+      question_description: comma separated list of names (vm1,vm2)
+      type: text
+      default: example.autodotes.com
+      variable: ssl_target_sites_list
+      required: true
+    - question_name: Custom Expiration Window
+      question_description: "[+-][timespec][w|d|h|m|s] (e.g. +32w1d2h)"
+      type: text
+      default: +30d
+      variable: acme_custom_expiry
+      required: true
+  notification_templates_success: ["Slack Autodotes #ansible-notifications"]
+  notification_templates_error: ["Slack Autodotes #ansible-notifications"]
+- name: App // Certificate Renewal Health Check
+  description: Perform health check and validate SSL certificates for designated site(s)
+  ask_labels_on_launch: true
+  labels: ['Demo', 'Apps']
+  project: App Mgmt
+  organization: Autodotes
+  inventory: Autodotes Lab
+  playbook: pb_ssl_healthcheck.yml
+  execution_environment: ee-default
+  credentials:
+    - AAP (id_rsa)
+  ask_variables_on_launch: true
+  extra_vars:
+    _host: raspi
+  survey_enabled: true
+  survey_spec:
+    name: ''
+    description: ''
+    spec:
+    - question_name: Target certificate sites (SN)
+      question_description: comma separated list of names (vm1,vm2)
+      type: text
+      default: example.autodotes.com
+      variable: ssl_target_sites_list
+      required: true
+  notification_templates_success: ["Slack Autodotes #ansible-notifications"]
+  notification_templates_error: ["Slack Autodotes #ansible-notifications"]
 - name: Selenium // Automation Dashboard
   description: Demonstrate using Selenium to create application screen captures
   labels: ['Demo', 'ServiceNow']
@@ -14,7 +156,18 @@ controller_templates:
     - Ansible Vault
     - West ServiceNow (ven07621)
   extra_vars:
-    automation_dashboard_server: ldap
+    _host: raspi
+  survey_enabled: true
+  survey_spec:
+    name: ''
+    description: ''
+    spec:
+    - question_name: Specify VMs to delete
+      question_description: comma separated list of names (vm1,vm2)
+      type: text
+      default: demo-vm-1
+      variable: aws_ec2_names_list
+      required: true
 - name: Selenium // Screen Capture
   description: Demonstrate using Selenium to create application screen captures
   labels: ['Demo', 'ServiceNow']
@@ -2350,18 +2503,19 @@ controller_templates:
   credentials:
     - AAP (id_rsa)
   ask_variables_on_launch: true
-- name: Terraform // Web Demo Deploy
+- name: Terraform // HCP // Web Demo Deploy
   description: Deploy web demo to Azure using terraform modules
   labels:
     - Demo
+    - Cloud
+    - HCP
   project: Terraform Mgmt
   organization: Autodotes
-  inventory: Ansible-Terraform Inventory
-  playbook: azure_create_web_demo/ansible/tf_ops.yml
+  inventory: Ansible-HCP Inventory
+  playbook: azure_create_web_demo_hcp/ansible/tf_ops.yml
   execution_environment: ee-cloud
   credentials:
-    - Azure RM [openenv-jmdmt]
-    - openenv-jmdmt/zjltfstatemgmtsa/tfstate
+    - app.terraform.io/zleblanc/azure-web-demo-dev
   ask_tags_on_launch: true
   ask_variables_on_launch: true
   survey_enabled: true
@@ -2376,21 +2530,67 @@ controller_templates:
       required: true
       type: password
       variable: az_ssh_pubkey
-- name: Terraform // Web Demo Configure
+    - question_name: Azure VM Size
+      question_description: size of the Azure VMs
+      max: 30
+      min: 1
+      required: true
+      default: Standard_DS1_v2
+      type: text
+      variable: az_web_vm_size
+- name: Terraform // HCP // Web Demo Configure
   description: Configure webservers provisioned by Terraform
   labels:
     - Demo
+    - Cloud
+    - HCP
   project: Terraform Mgmt
   organization: Autodotes
-  inventory: Ansible-Terraform Inventory
-  playbook: azure_create_web_demo/ansible/configure_web.yml
+  inventory: Ansible-HCP Inventory
+  playbook: azure_create_web_demo_hcp/ansible/configure_web.yml
   execution_environment: ee-default
   credentials:
     - AAP (id_rsa)
+- name: Terraform // Web Demo Deploy
+  description: Deploy web demo to Azure using terraform modules
+  labels:
+    - Demo
+    - Cloud
+  project: Terraform Mgmt
+  organization: Autodotes
+  inventory: Ansible-Terraform Inventory
+  playbook: azure_create_web_demo/ansible/tf_ops.yml
+  execution_environment: ee-cloud
+  credentials:
+    - Azure RM [openenv-szvs7]
+    - openenv-szvs7/zjltfstatemgmtsa/tfstate
+  ask_tags_on_launch: true
+  ask_variables_on_launch: true
+  survey_enabled: true
+  survey_spec:
+    description: ''
+    name: ''
+    spec:
+    - question_name: SSH Public Key
+      question_description: SSH public key which will enable configuration after provisioning
+      max: 1024
+      min: 0
+      required: true
+      type: password
+      variable: az_ssh_pubkey
+    - question_name: Azure VM Size
+      question_description: size of the Azure VMs
+      max: 30
+      min: 1
+      required: true
+      default: Standard_DS1_v2
+      type: text
+      variable: az_web_vm_size
 - name: Terraform // Web Demo Configure
   description: Configure webservers provisioned by Terraform
   labels:
     - Demo
+    - Cloud
   project: Terraform Mgmt
   organization: Autodotes
   inventory: Ansible-Terraform Inventory

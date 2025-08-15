@@ -5,6 +5,8 @@ controller_labels:
     organization: Autodotes
   - name: Cloud
     organization: Autodotes
+  - name: HCP
+    organization: Autodotes
   - name: Demo
     organization: Autodotes
   - name: Linux

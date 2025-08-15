@@ -13,6 +13,13 @@ controller_inventories:
 - name: Ansible-Terraform Inventory
   organization: Autodotes
   description: Demo using Ansible and Terraform
+  labels:
+    - Cloud
+- name: Ansible-HCP Inventory
+  organization: Autodotes
+  description: Demo using Ansible and Terraform Enterprise (HCP)
+  labels:
+    - Cloud
 - name: Cisco Lab
   organization: Autodotes 
   description: Static inventory representing Cisco always-on sandbox devices
