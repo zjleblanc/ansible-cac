@@ -1,6 +1,20 @@
 # ansible-playbook pb_eda_cac.yml --tags rulebook_activation
 ---
 eda_rulebook_activations:
+  - name: DataDog Events
+    description: Rulebook that processes various events sourced from DataDog problems
+    organization: Autodotes
+    project: EDA Demos
+    rulebook: datadog_event_stream.yml
+    decision_environment: Default Decision Environment
+    event_streams: 
+      - event_stream: DataDog Event Stream
+        source_name: DataDog Event Source
+    eda_credentials:
+      - Autodotes Controller
+    enabled: false
+    log_level: debug
+    restart_policy: never
   - name: Dynatrace Events
     description: Rulebook that processes various events sourced from Dynatrace problems
     organization: Autodotes
