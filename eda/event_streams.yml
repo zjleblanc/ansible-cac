@@ -1,6 +1,10 @@
 # ansible-playbook pb_eda_cac.yml --tags event_stream
 ---
 eda_event_streams:
+  - name: DataDog Event Stream
+    credential_name: DataDog Credential
+    organization: Autodotes
+    forward_events: true
   - name: Dynatrace Event Stream
     credential_name: Dynatrace Credential
     organization: Autodotes
