@@ -144,6 +144,7 @@ controller_workflows:
   ask_variables_on_launch: true
   allow_simultaneous: true
   survey_enabled: true
+  labels: [Demo,Cloud]
   survey_spec:
     name: workflow survey
     description: workflow passthrough variables
@@ -162,10 +163,13 @@ controller_workflows:
         min: 0
         type: multiplechoice
         choices:
-        - rhel
+        - rhel8
+        - rhel9
         - rhel_dev
+        - rhel_dynatrace
+        - rhel_datadog
         - windows
-        default: rhel
+        default: rhel_dev
         required: true
         variable: target_platform
       - question_name: AWS region
@@ -223,6 +227,7 @@ controller_workflows:
     related:
       success_nodes:
       - identifier: Patch VM(s)
+      - identifier: Install Agent(s)
     unified_job_template:
       inventory:
         name: ServiceNow Inventory
@@ -239,14 +244,23 @@ controller_workflows:
         name: Autodotes
         type: organization
       type: job_template
+  - identifier: Install Agent(s)
+    unified_job_template:
+      name: AWS // Install Agents 
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
 - name: Linux // Patching // rhel9_3
   organization: Autodotes
+  allow_simultaneous: true
   ask_variables_on_launch: true
+  ask_labels_on_launch: true
   workflow_nodes:
   - identifier: Sync Project
     related:
       success_nodes:
-      - identifier: Create CR Task
+      - identifier: Create Snapshot
     unified_job_template:
       name: Linux Mgmt
       organization:
@@ -256,7 +270,7 @@ controller_workflows:
   - identifier: Sync Inventory
     related:
       success_nodes:
-      - identifier: Create CR Task
+      - identifier: Create Snapshot
     unified_job_template:
       inventory:
         name: Cloud Inventory
@@ -266,24 +280,6 @@ controller_workflows:
         type: inventory
       name: AWS EC2 Instances
       type: inventory_source
-  - identifier: Create CR Task
-    all_parents_must_converge: true
-    related:
-      success_nodes: 
-        - identifier: Create Snapshot
-    unified_job_template:
-      name: Linux // Patching // No-Op
-      organization:
-        name: Autodotes
-        type: organization
-      type: job_template
-    extra_data:
-      report_status_update: Running
-      task_purpose: Create a task in ServiceNow tied to the CR
-      task_output:
-        action: create_ctask
-        ctask_num: CTASK123
-        ctask_sys_id: asdas9r70213u1ji321
   - identifier: Create Snapshot
     related:
       success_nodes: 
@@ -368,12 +364,14 @@ controller_workflows:
         ctask_sys_id: asdas9r70213u1ji321
 - name: Linux // Patching // rhel8_10
   organization: Autodotes
+  allow_simultaneous: true
   ask_variables_on_launch: true
+  ask_labels_on_launch: true
   workflow_nodes:
   - identifier: Sync Project
     related:
       success_nodes:
-      - identifier: Create CR Task
+      - identifier: Create Snapshot
     unified_job_template:
       name: Linux Mgmt
       organization:
@@ -383,7 +381,7 @@ controller_workflows:
   - identifier: Sync Inventory
     related:
       success_nodes:
-      - identifier: Create CR Task
+      - identifier: Create Snapshot
     unified_job_template:
       inventory:
         name: Cloud Inventory
@@ -393,24 +391,6 @@ controller_workflows:
         type: inventory
       name: AWS EC2 Instances
       type: inventory_source
-  - identifier: Create CR Task
-    all_parents_must_converge: true
-    related:
-      success_nodes: 
-        - identifier: Create Snapshot
-    unified_job_template:
-      name: Linux // Patching // No-Op
-      organization:
-        name: Autodotes
-        type: organization
-      type: job_template
-    extra_data:
-      report_status_update: Running
-      task_purpose: Create a task in ServiceNow tied to the CR
-      task_output:
-        action: create_ctask
-        ctask_num: CTASK123
-        ctask_sys_id: asdas9r70213u1ji321
   - identifier: Create Snapshot
     related:
       success_nodes: 
@@ -493,7 +473,7 @@ controller_workflows:
         action: update_ctask
         ctask_num: CTASK123
         ctask_sys_id: asdas9r70213u1ji321
-- name: Terraform // Deploy and Configure Workflow
+- name: Terraform // Azure Deploy and Configure Workflow
   organization: Autodotes
   labels:
     - Demo
@@ -536,7 +516,7 @@ controller_workflows:
       success_nodes:
       - identifier: Sync Terraform Inventory
     unified_job_template:
-      name: Terraform // Web Demo Deploy
+      name: Terraform // Azure Web Demo Deploy
       organization:
         name: Autodotes
         type: organization
@@ -552,14 +532,14 @@ controller_workflows:
           name: Autodotes
           type: organization
         type: inventory
-      name: openenv-jmdmt
+      name: Azure Open Environment
       type: inventory_source
   - identifier: Configure Web Servers
     related:
       failure_nodes:
       - identifier: Terraform Destroy
     unified_job_template:
-      name: Terraform // Web Demo Configure
+      name: Terraform // Azure Web Demo Configure
       organization:
         name: Autodotes
         type: organization
@@ -567,17 +547,19 @@ controller_workflows:
   - identifier: Terraform Destroy
     job_tags: remove
     unified_job_template:
-      name: Terraform // Web Demo Deploy
+      name: Terraform // Azure Web Demo Deploy
       organization:
         name: Autodotes
         type: organization
       type: job_template
-- name: Terraform // HCP // Deploy and Configure Workflow
+- name: Terraform // HCP // Azure Deploy and Configure Workflow
   organization: Autodotes
   labels:
     - Demo
     - Cloud
     - HCP
+  ask_variables_on_launch: true
+  ask_labels_on_launch: true
   survey_enabled: true
   survey_spec:
     name: workflow survey
@@ -598,6 +580,280 @@ controller_workflows:
       default: Standard_DS1_v2
       type: text
       variable: az_web_vm_size
+    - question_name: AAP Hostname
+      question_description: Used for documentation of job and workflow details
+      max: 100
+      min: 1
+      required: false
+      default: ansible.autodotes.com
+      type: text
+      variable: aap_host
+  workflow_nodes:
+  - identifier: Sync Terraform Project
+    related:
+      success_nodes:
+      - identifier: Terraform Create
+    unified_job_template:
+      name: Terraform Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: Sync Cloud Project
+    related:
+      success_nodes:
+      - identifier: Create Tf Task
+    unified_job_template:
+      name: Cloud Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: Create Tf Task
+    related:
+      success_nodes:
+      - identifier: Terraform Create
+    extra_data:
+      _hosts: localhost
+      sn_manage_action: create
+      sn_resource: sc_task
+      create_sc_task_data_overrides:
+        localhost:
+          short_description: Ansible initiating Terraform deployment of resources to Azure
+    inventory: Ansible-HCP Inventory
+    unified_job_template:
+      name: ServiceNow // Manage Resources
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Terraform Create
+    related:
+      failure_nodes:
+      - identifier: Terraform Destroy
+      - identifier: Update Tf Task (Sad)
+      success_nodes:
+      - identifier: Update Tf Task (Happy)
+    all_parents_must_converge: true
+    unified_job_template:
+      name: Terraform // HCP // Azure Web Demo Deploy
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Update Tf Task (Happy)
+    related:
+      success_nodes:
+      - identifier: Sync Terraform Inventory
+    extra_data:
+      _hosts: localhost
+      sn_manage_action: update
+      sn_resource: sc_task
+    inventory: Ansible-HCP Inventory
+    unified_job_template:
+      name: ServiceNow // Manage Resources
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Update Tf Task (Sad)
+    extra_data:
+      _hosts: localhost
+      sn_manage_action: update
+      sn_resource: sc_task
+    inventory: Ansible-HCP Inventory
+    unified_job_template:
+      name: ServiceNow // Manage Resources
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Sync Terraform Inventory
+    related:
+      success_nodes:
+      - identifier: Create Web Task
+      - identifier: Create CIs
+    unified_job_template:
+      inventory:
+        name: Ansible-HCP Inventory
+        organization:
+          name: Autodotes
+          type: organization
+        type: inventory
+      name: app.terraform.io/zleblanc/azure-web-demo-dev/state
+      type: inventory_source
+  - identifier: Create CIs
+    related:
+      success_nodes:
+      - identifier: Create Web Task
+    extra_data:
+      sn_manage_action: create
+      sn_resource: ci
+      sn_manage_multiple: true
+    credentials:
+      - name: AAP (id_rsa)
+    inventory: Ansible-HCP Inventory
+    unified_job_template:
+      name: ServiceNow // Manage Resources
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Create Web Task
+    all_parents_must_converge: true
+    related:
+      success_nodes:
+      - identifier: Configure Web Servers
+    credentials:
+      - name: AAP (id_rsa)
+    extra_data:
+      _hosts: tag_demo_web
+      sn_manage_action: create
+      sn_resource: sc_task
+    inventory: Ansible-HCP Inventory
+    unified_job_template:
+      name: ServiceNow // Manage Resources
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Configure Web Servers
+    related:
+      success_nodes:
+        - identifier: Update Web Task (Happy)
+        - identifier: Update RITM
+      failure_nodes:
+      - identifier: Update Web Task (Sad)
+      - identifier: Terraform Destroy
+    unified_job_template:
+      name: Terraform // HCP // Azure Web Demo Configure
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Update Web Task (Happy)
+    extra_data:
+      _hosts: tag_demo_web
+      sn_manage_action: update
+      sn_resource: sc_task
+    credentials:
+      - name: AAP (id_rsa)
+    inventory: Ansible-HCP Inventory
+    unified_job_template:
+      name: ServiceNow // Manage Resources
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Update RITM
+    extra_data:
+      _hosts: localhost
+      sn_manage_action: update
+      sn_resource: ritm
+    inventory: Ansible-HCP Inventory
+    unified_job_template:
+      name: ServiceNow // Manage Resources
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Update Web Task (Sad)
+    extra_data:
+      _hosts: tag_demo_web
+      sn_manage_action: update
+      sn_resource: sc_task
+    credentials:
+      - name: AAP (id_rsa)
+    inventory: Ansible-HCP Inventory
+    unified_job_template:
+      name: ServiceNow // Manage Resources
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Terraform Destroy
+    job_tags: remove
+    unified_job_template:
+      name: Terraform // HCP // Azure Web Demo Deploy
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+- name: Terraform // GitHub // Azure Deploy and Configure Workflow
+  organization: Autodotes
+  labels:
+    - Demo
+    - Cloud
+    - HCP
+  ask_variables_on_launch: true
+  ask_labels_on_launch: true
+  workflow_nodes:
+  - identifier: Sync Terraform Project
+    related:
+      success_nodes:
+      - identifier: Terraform Run
+    unified_job_template:
+      name: Terraform Mgmt
+      organization:
+        name: Autodotes
+        type: organization
+      type: project
+  - identifier: Terraform Run
+    related:
+      success_nodes:
+      - identifier: Update CMDB
+    unified_job_template:
+      name: Terraform // GitHub // Azure Web Demo Deploy
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+  - identifier: Update CMDB
+    extra_data:
+      sn_manage_action: create
+      sn_resource: ci
+      sn_manage_multiple: true
+    inventory: Demo Inventory
+    unified_job_template:
+      name: ServiceNow // Manage Resources
+      organization:
+        name: Autodotes
+        type: organization
+      type: job_template
+- name: Terraform // HCP // AWS Deploy and Configure Workflow
+  organization: Autodotes
+  labels:
+    - Demo
+    - Cloud
+    - HCP
+  survey_enabled: true
+  survey_spec:
+    name: workflow survey
+    description: SSH public key passthrough
+    spec:
+      - question_name: SSH Public Key
+        question_description: SSH public key which will enable configuration after provisioning
+        max: 1024
+        min: 0
+        required: true
+        type: password
+        variable: aws_ssh_pubkey
+      - question_name: Instance Type
+        question_description: ec2 instance type
+        max: 30
+        min: 1
+        required: true
+        default: t3.small
+        type: text
+        variable: aws_ec2_instance_type
+      - question_name: AWS Region
+        question_description: aws region
+        max: 30
+        min: 1
+        required: true
+        default: us-east-1
+        type: text
+        variable: aws_region
   workflow_nodes:
   - identifier: Sync Project
     related:
@@ -616,7 +872,7 @@ controller_workflows:
       success_nodes:
       - identifier: Sync Terraform Inventory
     unified_job_template:
-      name: Terraform // HCP // Web Demo Deploy
+      name: Terraform // HCP // AWS Web Demo Deploy
       organization:
         name: Autodotes
         type: organization
@@ -632,14 +888,14 @@ controller_workflows:
           name: Autodotes
           type: organization
         type: inventory
-      name: app.terraform.io/zleblanc/azure-web-demo-dev/state
+      name: app.terraform.io/zleblanc/aws-web-demo-dev/state
       type: inventory_source
   - identifier: Configure Web Servers
     related:
       failure_nodes:
       - identifier: Terraform Destroy
     unified_job_template:
-      name: Terraform // HCP // Web Demo Configure
+      name: Terraform // HCP // AWS Web Demo Configure
       organization:
         name: Autodotes
         type: organization
@@ -647,7 +903,7 @@ controller_workflows:
   - identifier: Terraform Destroy
     job_tags: remove
     unified_job_template:
-      name: Terraform // HCP // Web Demo Deploy
+      name: Terraform // HCP // AWS Web Demo Deploy
       organization:
         name: Autodotes
         type: organization
