@@ -48,7 +48,7 @@ Use `--vault-password-file` instead of `--ask-vault-pass` in CI or scripted runs
 
 ### Controller export
 
-To pull configuration from a source controller, normalize it, and turn it into YAML you can commit under `controller/` for `pb_controller_cac.yml` on a destination instance, see [Controller export process](#controller-export-process).
+To pull configuration from a source controller, normalize it, and turn it into YAML you can commit under `controller/` for `pb_controller_cac.yml` on a destination instance, see [Export Documentation](./README_EXPORT.md).
 
 ### Pre-commit
 
