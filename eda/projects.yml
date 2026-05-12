@@ -4,4 +4,3 @@ eda_projects:
     description: A collection of various Event-Driven Ansible demos
     url: https://github.com/zjleblanc/ansible-eda-demos.git
     organization: Autodotes
-...

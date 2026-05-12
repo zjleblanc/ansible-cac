@@ -57,7 +57,7 @@
     - name: Parse inventories
       tags: inventories
       ansible.builtin.copy:
-        content: "{{ controller_assets.inventory | parse_inventories |  to_nice_yaml(indent=2, explicit_start=True, explicit_end=True) }}"
+        content: "{{ controller_assets.inventory | parse_inventories | to_nice_yaml(indent=2, explicit_start=True, explicit_end=True) }}"
         dest: "{{ playbook_dir }}/staging/controller_inventories.staging.yml"
 
     - name: Parse inventory sources
@@ -81,5 +81,6 @@
     - name: Parse workflow job templates
       tags: workflow_job_templates
       ansible.builtin.copy:
-        content: "{{ controller_assets.workflow_job_templates | parse_workflow_job_templates | to_nice_yaml(indent=2, explicit_start=True, explicit_end=True) }}"
+        content: >
+          {{ controller_assets.workflow_job_templates | parse_workflow_job_templates | to_nice_yaml(indent=2, explicit_start=True, explicit_end=True) }}"
         dest: "{{ playbook_dir }}/staging/controller_workflow_job_templates.staging.yml"

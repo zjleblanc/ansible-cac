@@ -1,66 +1,65 @@
 # ansible-playbook pb_controller_cac.yml --tags inventories
 ---
 controller_inventories:
-- name: AD LDAP Demo Inventory
-  organization: Autodotes
-  description: Demo using microsoft.ad.ldap inventory plugin
-- name: Autodotes Lab
-  organization: Autodotes 
-  description: Static inventory representing homelab
-- name: Azure Inventory
-  organization: Autodotes
-  description: Demo using ARM inventory plugin
-- name: Ansible-Terraform Inventory
-  organization: Autodotes
-  description: Demo using Ansible and Terraform
-  labels:
-    - Cloud
-- name: Ansible-HCP Inventory
-  organization: Autodotes
-  description: Demo using Ansible and Terraform Enterprise (HCP)
-  labels:
-    - Cloud
-- name: Cisco Lab
-  organization: Autodotes 
-  description: Static inventory representing Cisco always-on sandbox devices
-  variables:
-    ansible_network_cli_ssh_type: paramiko
-    ansible_paramiko_host_key_checking: false
-    ansible_paramiko_look_for_keys: false
-    report_server: reports.autodotes.com
-    web_path: /var/www/reports.autodotes.com/networking
-- name: Cloud Inventory
-  organization: Autodotes 
-  description: Leverages various cloud dynamic inventory plugins
-  variables:
-    ansible_ssh_common_args: -o StrictHostKeyChecking=no
-    autodotes_report_server: raspi
-    autodotes_report_server_user: zach
-- name: Daily Demo Inventory
-  organization: Autodotes 
-  description: Used with Eric Ames daily demo project
-- name: Palo Alto Demo Inventory
-  organization: Autodotes 
-  description: Used with Palo Alto Firewall demo based on AWS EC2 infrastructure
-- name: Proxmox Inventory
-  organization: Autodotes 
-  description: collection of dynamically created proxmox instances
-- name: Satellite Inventory
-  organization: Autodotes 
-  description: Demo using Satellite dynamic inventory plugin
-- name: Service Now Inventory
-  organization: Autodotes 
-  description: Demo using servicenow.itsm.now inventory plugin
-- name: Windows Inventory
-  organization: Autodotes 
-  description: Isolates Windows hosts in AWS
-  variables:
-    ansible_connection: winrm
-    ansible_winrm_port: 5986
-    ansible_winrm_server_cert_validation: ignore
-    ansible_winrm_kerberos_delegation: true
-    aws_region: east-us-2
-- name: Workshop Inventory
-  organization: Autodotes 
-  description: Used in workshops
-...
+  - name: AD LDAP Demo Inventory
+    organization: Autodotes
+    description: Demo using microsoft.ad.ldap inventory plugin
+  - name: Autodotes Lab
+    organization: Autodotes
+    description: Static inventory representing homelab
+  - name: Azure Inventory
+    organization: Autodotes
+    description: Demo using ARM inventory plugin
+  - name: Ansible-Terraform Inventory
+    organization: Autodotes
+    description: Demo using Ansible and Terraform
+    labels:
+      - Cloud
+  - name: Ansible-HCP Inventory
+    organization: Autodotes
+    description: Demo using Ansible and Terraform Enterprise (HCP)
+    labels:
+      - Cloud
+  - name: Cisco Lab
+    organization: Autodotes
+    description: Static inventory representing Cisco always-on sandbox devices
+    variables:
+      ansible_network_cli_ssh_type: paramiko
+      ansible_paramiko_host_key_checking: false
+      ansible_paramiko_look_for_keys: false
+      report_server: reports.autodotes.com
+      web_path: /var/www/reports.autodotes.com/networking
+  - name: Cloud Inventory
+    organization: Autodotes
+    description: Leverages various cloud dynamic inventory plugins
+    variables:
+      ansible_ssh_common_args: -o StrictHostKeyChecking=no
+      autodotes_report_server: raspi
+      autodotes_report_server_user: zach
+  - name: Daily Demo Inventory
+    organization: Autodotes
+    description: Used with Eric Ames daily demo project
+  - name: Palo Alto Demo Inventory
+    organization: Autodotes
+    description: Used with Palo Alto Firewall demo based on AWS EC2 infrastructure
+  - name: Proxmox Inventory
+    organization: Autodotes
+    description: collection of dynamically created proxmox instances
+  - name: Satellite Inventory
+    organization: Autodotes
+    description: Demo using Satellite dynamic inventory plugin
+  - name: Service Now Inventory
+    organization: Autodotes
+    description: Demo using servicenow.itsm.now inventory plugin
+  - name: Windows Inventory
+    organization: Autodotes
+    description: Isolates Windows hosts in AWS
+    variables:
+      ansible_connection: winrm
+      ansible_winrm_port: 5986
+      ansible_winrm_server_cert_validation: ignore
+      ansible_winrm_kerberos_delegation: true
+      aws_region: east-us-2
+  - name: Workshop Inventory
+    organization: Autodotes
+    description: Used in workshops

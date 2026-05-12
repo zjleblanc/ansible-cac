@@ -1,4 +1,4 @@
-# ansible-playbook pb_platform_cac.yml --tags authenticators   
+# ansible-playbook pb_platform_cac.yml --tags authenticators
 ---
 gateway_authenticators:
   - name: Autodotes LDAP
