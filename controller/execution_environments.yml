@@ -18,4 +18,3 @@ controller_execution_environments:
   - name: product-demos-ee
     description: Ansible Product Demos EE
     image: quay.io/acme_corp/product-demos-ee:be37a30ae707621916178f87512be6b3306a94d4
-

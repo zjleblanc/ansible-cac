@@ -17,4 +17,3 @@ eda_event_streams:
     credential_name: ServiceNow Webhook Token
     organization: Autodotes
     forward_events: true
-...

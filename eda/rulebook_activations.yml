@@ -7,7 +7,7 @@ eda_rulebook_activations:
     project: EDA Demos
     rulebook: datadog_event_stream.yml
     decision_environment: Default Decision Environment
-    event_streams: 
+    event_streams:
       - event_stream: DataDog Event Stream
         source_name: DataDog Event Source
     eda_credentials:
@@ -21,7 +21,7 @@ eda_rulebook_activations:
     project: EDA Demos
     rulebook: dynatrace_event_stream.yml
     decision_environment: Default Decision Environment
-    event_streams: 
+    event_streams:
       - event_stream: Dynatrace Event Stream
         source_name: Dynatrace Event Source
     eda_credentials:
@@ -37,7 +37,7 @@ eda_rulebook_activations:
     project: EDA Demos
     rulebook: demo_webhook.yml
     decision_environment: Default Decision Environment
-    event_streams: 
+    event_streams:
       - event_stream: Demo OAuth2 Event Stream
         source_name: Demo Webhook Event Source
     eda_credentials:
@@ -53,7 +53,7 @@ eda_rulebook_activations:
     project: EDA Demos
     rulebook: sc_req_items.yml
     decision_environment: Default Decision Environment
-    event_streams: 
+    event_streams:
       - event_stream: ServiceNow Event Stream
         source_name: Service Now Event Source
     eda_credentials:

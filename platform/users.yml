@@ -40,7 +40,7 @@ aap_user_accounts:
   - username: zach
     password: encrypted
     email: zleblanc@redhat.com
-    organizations: 
+    organizations:
       - Autodotes
       - Red Hat
     is_superuser: true

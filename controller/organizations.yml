@@ -2,7 +2,7 @@
 ---
 controller_organizations:
   - name: Red Hat
-    # description: Shared organization for Red Hat collaborators 
+    # description: Shared organization for Red Hat collaborators
     max_hosts: 0
     default_environment: ee-default
     galaxy_credentials:
