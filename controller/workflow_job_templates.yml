@@ -802,6 +802,7 @@ controller_workflows:
         related:
           success_nodes:
             - identifier: Update CMDB
+            - identifier: Sync Inventory
         unified_job_template:
           name: Terraform // GitHub // Azure Web Demo Deploy
           organization:
@@ -816,6 +817,26 @@ controller_workflows:
         inventory: Demo Inventory
         unified_job_template:
           name: ServiceNow // Manage Resources
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Sync Inventory
+        related:
+          success_nodes:
+            - identifier: Configure Web Servers
+        unified_job_template:
+          inventory:
+            name: Ansible-Terraform Inventory
+            organization:
+              name: Autodotes
+              type: organization
+            type: inventory
+          name: Azure Open Environment
+          type: inventory_source
+      - identifier: Configure Web Servers
+        unified_job_template:
+          name: Terraform // GitHub // Azure Web Demo Configure
           organization:
             name: Autodotes
             type: organization
@@ -1023,47 +1044,20 @@ controller_workflows:
     name: EDA // Remediation Workflow // Disk Space
     organization: Autodotes
     workflow_nodes:
-      - identifier: 9954c450-ec30-451a-be4a-d1d71b922a96
+      - identifier: Sync Project
         related:
           success_nodes:
-            - identifier: ac35ffa6-f471-4ee7-8e20-0d9f0a209627
+            - identifier: Create Incident
         unified_job_template:
           name: Cloud Mgmt
           organization:
             name: Autodotes
             type: organization
           type: project
-      - identifier: ac35ffa6-f471-4ee7-8e20-0d9f0a209627
+      - identifier: Sync Inventory
         related:
           success_nodes:
-            - identifier: 5837efba-9fd0-43f3-8ef9-fbc321d688c5
-        unified_job_template:
-          name: Service Now // Create Incident
-          organization:
-            name: Autodotes
-            type: organization
-          type: job_template
-      - identifier: 97d33c76-b766-4b01-9c5a-b2766951341b
-        unified_job_template:
-          name: Service Now // Update Incident
-          organization:
-            name: Autodotes
-            type: organization
-          type: job_template
-      - identifier: 5837efba-9fd0-43f3-8ef9-fbc321d688c5
-        related:
-          always_nodes:
-            - identifier: 97d33c76-b766-4b01-9c5a-b2766951341b
-        unified_job_template:
-          name: EDA // Resize EBS Volume
-          organization:
-            name: Autodotes
-            type: organization
-          type: job_template
-      - identifier: 50d77c41-efdd-4a41-945e-a9a7ff8e02f3
-        related:
-          success_nodes:
-            - identifier: ac35ffa6-f471-4ee7-8e20-0d9f0a209627
+            - identifier: Create Incident
         unified_job_template:
           inventory:
             name: Cloud Inventory
@@ -1073,6 +1067,44 @@ controller_workflows:
             type: inventory
           name: AWS EC2 Instances
           type: inventory_source
+      - identifier: Create Incident
+        all_parents_must_converge: true
+        related:
+          success_nodes:
+            - identifier: AI RCA
+        unified_job_template:
+          name: Service Now // Create Incident
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: AI RCA
+        related:
+          success_nodes:
+            - identifier: Resize EBS Volume
+        unified_job_template:
+          name: AIOps // Ticket Enrichment // RHEL
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Resize EBS Volume
+        related:
+          always_nodes:
+            - identifier: Update Incident
+        unified_job_template:
+          name: EDA // Resize EBS Volume
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Update Incident
+        unified_job_template:
+          name: Service Now // Update Incident
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
   - ask_variables_on_launch: true
     inventory: Cloud Inventory
     name: EDA // Remediation Workflow // High Memory Usage

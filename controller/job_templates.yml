@@ -1261,6 +1261,18 @@ controller_templates:
     name: EDA // Remediate High Memory Usage Processes
     playbook: playbooks/remediate_memory_usage.yml
     project: Event-Driven Demos
+  - name: AIOps // Ticket Enrichment // RHEL
+    labels: ["Demo"]
+    playbook: playbooks/aws/pb_ai_rca.yml
+    project: Cloud Mgmt
+    execution_environment: ee-default
+    credentials:
+      - AWS (ec2-user)
+      - AWS Sandbox Credential
+      - West ServiceNow (ven07621)
+      - Ticket Enrichment API Key
+    inventory: Cloud Inventory
+    ask_variables_on_launch: true
   - ask_skip_tags_on_launch: true
     ask_variables_on_launch: true
     credentials:
@@ -2811,6 +2823,19 @@ controller_templates:
     ask_variables_on_launch: true
     credentials:
       - Terraform (zleblanc)
+  - name: Terraform // GitHub // Azure Web Demo Configure
+    description: Configure webservers provisioned by Terraform
+    labels:
+      - Demo
+      - Cloud
+      - HCP
+    project: Terraform Mgmt
+    organization: Autodotes
+    inventory: Ansible-Terraform Inventory
+    playbook: azure_create_web_demo_tfe_aap/ansible/configure_web.yml
+    execution_environment: ee-default
+    credentials:
+      - AAP (tf)
   - name: Policy Enforcement // Database Maintenance Demo
     description: Demonstrate integration with Policy Enforcement using a mock database maintenance scenario
     project: Policy Enforcement
