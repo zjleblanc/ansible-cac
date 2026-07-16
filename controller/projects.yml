@@ -1,102 +1,102 @@
 # ansible-playbook pb_controller_cac.yml --tags projects
 ---
 controller_projects:
+  - name: App Mgmt
+    organization: Autodotes
+    scm_branch: master
+    scm_clean: "no"
+    scm_delete_on_update: "no"
+    scm_type: git
+    scm_update_on_launch: "no"
+    scm_url: https://github.com/zjleblanc/ansible-app-mgmt.git
   - name: Autodotes
-    scm_url: git@gitlab.com:zachleblanc/ansible-autodotes.git
-    credential: Gitlab - Autodotes
     organization: Autodotes
     scm_branch: main
     scm_clean: "no"
     scm_delete_on_update: "no"
     scm_type: git
     scm_update_on_launch: "no"
-  - name: App Mgmt
-    scm_url: https://github.com/zjleblanc/ansible-app-mgmt.git
-    organization: Autodotes
-    scm_branch: master
-    scm_clean: "no"
-    scm_delete_on_update: "no"
-    scm_type: git
-    scm_update_on_launch: "no"
-  - name: Linux Mgmt
-    scm_url: https://github.com/zjleblanc/ansible-linux-mgmt.git
-    organization: Autodotes
-    scm_branch: master
-    scm_clean: "no"
-    scm_delete_on_update: "no"
-    scm_type: git
-    scm_update_on_launch: "no"
+    scm_url: git@gitlab.com:zachleblanc/ansible-autodotes.git
+    credential: Gitlab - Autodotes
   - name: Cloud Mgmt
+    organization: Autodotes
+    scm_branch: master
+    scm_clean: "no"
+    scm_delete_on_update: "no"
+    scm_type: git
+    scm_update_on_launch: "no"
     scm_url: https://github.com/zjleblanc/ansible-cloud-mgmt.git
-    organization: Autodotes
-    scm_branch: master
-    scm_clean: "no"
-    scm_delete_on_update: "no"
+  - name: CyberArk-Conjur Demo
+    organization: Default
     scm_type: git
-    scm_update_on_launch: "no"
-  - name: Windows Mgmt
-    scm_url: https://github.com/zjleblanc/ansible-windows-mgmt.git
-    organization: Autodotes
-    default_environment: ee-windows
-    scm_branch: master
-    scm_clean: "no"
-    scm_delete_on_update: "no"
-    scm_type: git
-    scm_update_on_launch: "no"
-  - name: Network Mgmt
-    scm_url: https://github.com/zjleblanc/ansible-network-mgmt.git
-    organization: Autodotes
-    scm_branch: master
-    scm_clean: "no"
-    scm_delete_on_update: "no"
-    scm_type: git
-    scm_update_on_launch: "no"
-  - name: Terraform Mgmt
-    scm_url: https://github.com/zjleblanc/ansible-terraform.git
-    organization: Autodotes
-    scm_branch: master
-    scm_clean: "no"
-    scm_delete_on_update: "no"
-    scm_type: git
-    scm_update_on_launch: "no"
+    scm_url: https://github.com/gregsowell/ansible-cyberark.git
   - name: EE Builds
     organization: Autodotes
     scm_type: git
     scm_update_on_launch: true
     scm_url: https://github.com/zjleblanc/aap-ee-builds.git
-  - default_environment: ee-default
-    name: Lockdown RHEL8 CIS
-    organization: Autodotes
-    scm_type: git
-    scm_url: https://github.com/ansible-lockdown/RHEL8-CIS.git
-  - default_environment: ee-default
-    name: Execution Environment Builds [Legacy]
-    organization: Autodotes
-    scm_type: git
-    scm_update_on_launch: true
-    scm_url: https://zach-leblanc@bitbucket.org/zach-leblanc/ansible-execution-environments.git
   - name: Event-Driven Demos
     organization: Autodotes
     scm_type: git
     scm_url: https://github.com/zjleblanc/ansible-eda-demos.git
-  - default_environment: ee-default
-    name: Execution Environment Builder
+  - name: Execution Environment Builds [Legacy]
+    organization: Autodotes
+    scm_type: git
+    scm_update_on_launch: true
+    scm_url: https://zach-leblanc@bitbucket.org/zach-leblanc/ansible-execution-environments.git
+    default_environment: ee-default
+  - name: Execution Environment Builder
     organization: Autodotes
     scm_type: git
     scm_update_on_launch: true
     scm_url: https://gitlab.com/zjleblanc/ansible-ee-builder.git
-  - default_environment: ee-default
-    name: "[Ext] aap.dailydemos.linux"
+    default_environment: ee-default
+  - name: Linux Mgmt
     organization: Autodotes
-    scm_branch: main
+    scm_branch: master
+    scm_clean: "no"
+    scm_delete_on_update: "no"
     scm_type: git
-    scm_url: https://github.com/ericcames/aap.dailydemo.linux.git
+    scm_update_on_launch: "no"
+    scm_url: https://github.com/zjleblanc/ansible-linux-mgmt.git
+  - name: Lockdown RHEL8 CIS
+    organization: Autodotes
+    scm_type: git
+    scm_url: https://github.com/ansible-lockdown/RHEL8-CIS.git
+    default_environment: ee-default
+  - name: Network Mgmt
+    organization: Autodotes
+    scm_branch: master
+    scm_clean: "no"
+    scm_delete_on_update: "no"
+    scm_type: git
+    scm_update_on_launch: "no"
+    scm_url: https://github.com/zjleblanc/ansible-network-mgmt.git
   - name: RH Gov Samples
     organization: Default
     scm_branch: product-demos
     scm_type: git
     scm_url: https://github.com/RedHatGov/ansible-tower-samples
-  - name: CyberArk-Conjur Demo
-    organization: Default
+  - name: Terraform Mgmt
+    organization: Autodotes
+    scm_branch: master
+    scm_clean: "no"
+    scm_delete_on_update: "no"
     scm_type: git
-    scm_url: https://github.com/gregsowell/ansible-cyberark.git
+    scm_update_on_launch: "no"
+    scm_url: https://github.com/zjleblanc/ansible-terraform.git
+  - name: Windows Mgmt
+    organization: Autodotes
+    scm_branch: master
+    scm_clean: "no"
+    scm_delete_on_update: "no"
+    scm_type: git
+    scm_update_on_launch: "no"
+    scm_url: https://github.com/zjleblanc/ansible-windows-mgmt.git
+    default_environment: ee-windows
+  - name: "[Ext] aap.dailydemos.linux"
+    organization: Autodotes
+    scm_branch: main
+    scm_type: git
+    scm_url: https://github.com/ericcames/aap.dailydemo.linux.git
+    default_environment: ee-default
