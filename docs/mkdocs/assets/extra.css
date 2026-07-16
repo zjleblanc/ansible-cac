@@ -126,6 +126,25 @@
 }
 
 /* Path breadcrumbs in the navbar (always visible; not scroll-swapped) */
+.md-header__title {
+  display: flex;
+  align-items: center;
+}
+
+.md-header__title .md-header__ellipsis {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.md-header__title .md-header__topic {
+  position: relative;
+  top: auto;
+  transform: none;
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .ad-breadcrumbs {
   display: flex;
   align-items: center;
@@ -140,17 +159,21 @@
 .ad-breadcrumbs__item,
 .md-header a.ad-breadcrumbs__item {
   color: inherit;
-  opacity: 0.82;
+  opacity: 0.88;
   text-decoration: none;
   white-space: nowrap;
   transition: color 0.15s ease, opacity 0.15s ease;
 }
 
-.md-header a.ad-breadcrumbs__item:hover,
-.md-header a.ad-breadcrumbs__item:focus {
+.md-header a.ad-breadcrumbs__item--link:hover,
+.md-header a.ad-breadcrumbs__item--link:focus {
   color: color-mix(in srgb, var(--md-accent-fg-color) 72%, #fff);
   opacity: 1;
   text-decoration: none;
+}
+
+.ad-breadcrumbs__item--muted {
+  opacity: 0.48;
 }
 
 .ad-breadcrumbs__item--current {
