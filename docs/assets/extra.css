@@ -1,38 +1,36 @@
-@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;700;900&display=swap");
+/* Autodotes brand — https://autodotes.com */
 
-/* Red Hat brand colors — light mode */
+/* Light mode */
 [data-md-color-scheme="default"] {
-  --md-primary-fg-color: #ee0000;
-  --md-primary-fg-color--light: #ff6666;
-  --md-primary-fg-color--dark: #a30000;
-  --md-accent-fg-color: #a30000;
-  --md-typeset-a-color: #0066cc;
+  --md-primary-fg-color: #001157;
+  --md-primary-fg-color--light: #264d7a;
+  --md-primary-fg-color--dark: #001157;
+  --md-accent-fg-color: #e2c044;
+  --md-default-bg-color: #faf9fe;
+  --md-default-fg-color: #1a1b1f;
+  --md-default-fg-color--light: #43474f;
+  --md-typeset-a-color: #002d62;
 }
 
-/* Red Hat brand colors — dark mode */
+/* Dark mode */
 [data-md-color-scheme="slate"] {
-  --md-primary-fg-color: #ee0000;
-  --md-primary-fg-color--light: #ff6666;
-  --md-primary-fg-color--dark: #a30000;
-  --md-accent-fg-color: #ff6666;
-  --md-default-bg-color: #151515;
-  --md-default-bg-color--light: #1a1a1a;
-  --md-typeset-a-color: #73bcf7;
+  --md-primary-fg-color: #001157;
+  --md-primary-fg-color--light: #264d7a;
+  --md-primary-fg-color--dark: #001157;
+  --md-accent-fg-color: #e2c044;
+  --md-default-bg-color: #1a1b1f;
+  --md-default-bg-color--light: #2f3034;
+  --md-typeset-a-color: #d2e4ff;
 }
 
-/* Headings use Red Hat Display */
+/* Headings and site title use Dosis */
 .md-typeset h1,
 .md-typeset h2,
 .md-typeset h3,
 .md-typeset h4,
 .md-typeset h5,
-.md-typeset h6 {
-  font-family: "Red Hat Display", var(--md-text-font-family), sans-serif;
-  font-weight: 700;
-}
-
-/* Site title in header */
+.md-typeset h6,
 .md-header__title {
-  font-family: "Red Hat Display", var(--md-text-font-family), sans-serif;
-  font-weight: 700;
+  font-family: "Dosis", var(--md-text-font-family), sans-serif;
+  font-weight: 600;
 }
