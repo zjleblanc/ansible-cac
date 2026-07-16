@@ -1,0 +1,544 @@
+# ansible-playbook pb_aap_config.yml --tags cloud,job_templates --skip-tags common
+---
+controller_templates_cloud:
+  - name: GCP // CLI Test
+    labels: ["Cloud"]
+    playbook: playbooks/gcp/gcloud_cli_test.yml
+    project: Cloud Mgmt
+    execution_environment: ee-cloud
+    credentials:
+      - GCP Sandbox Credential
+    inventory: Cloud Inventory
+  - name: GCP // Convert RHEL License
+    labels: ["Cloud"]
+    playbook: playbooks/gcp/gcp_convert_license.yml
+    project: Cloud Mgmt
+    execution_environment: ee-cloud
+    credentials:
+      - GCP Sandbox Credential
+    inventory: Cloud Inventory
+    survey_enabled: true
+    survey_spec:
+      name: ""
+      description: ""
+      spec:
+        - question_name: GCP Project
+          question_description: project where VM instances reside
+          type: text
+          default: openenv-*
+          variable: gcp_project
+          required: true
+        - question_name: Target Instance Type
+          question_description: byos (bring your own subscription), server (paygo), els (extended lifecycle support)
+          type: multiplechoice
+          choices:
+            - byos
+            - server
+            - els
+          default: byos
+          variable: instance_target_type
+          required: true
+  - name: AWS // Delete VM
+    description: Terminate virtual machine(s) in AWS
+    labels: ["Demo", "AWS"]
+    project: Cloud Mgmt
+    organization: Autodotes
+    inventory: Service Now Inventory
+    playbook: playbooks/aws/delete_vm.yml
+    execution_environment: ee-default
+    credentials:
+      - AWS Sandbox Credential
+      - Controller Credential
+    survey_enabled: true
+    survey_spec:
+      name: ""
+      description: ""
+      spec:
+        - question_name: Specify VMs to delete
+          question_description: comma separated list of names (vm1,vm2)
+          type: text
+          default: demo-vm-1
+          variable: aws_ec2_names_list
+          required: true
+  - name: AWS // Create VM
+    description: Create virtual machine(s) in AWS
+    labels: ["Demo", "AWS"]
+    project: Cloud Mgmt
+    organization: Autodotes
+    inventory: Cloud Inventory
+    playbook: playbooks/aws/create_vm.yml
+    execution_environment: ee-default
+    credentials:
+      - AWS Sandbox Credential
+      - Dynatrace Demo Credential
+    extra_vars:
+      aws_vpc_name: aws-demo-vpc
+      aws_owner_tag: default
+      aws_purpose_tag: ansible_demo
+      aws_tenancy: default
+      aws_vpc_cidr_block: 10.0.0.0/16
+      aws_subnet_cidr: 10.0.1.0/24
+      aws_sg_name: aws-demo-sg
+      aws_subnet_name: aws-demo-subnet
+      aws_rt_name: aws-demo-rt
+      aws_region: us-east-2
+      aws_key_name: demo-keypair
+    allow_simultaneous: true
+    survey_enabled: true
+    survey_spec:
+      name: ""
+      description: ""
+      spec:
+        - max: 1024
+          min: 0
+          type: text
+          choices: []
+          default: demo-vm-1
+          required: true
+          variable: aws_ec2_names_list
+          new_question: true
+          question_name: EC2 Name(s)
+          question_description: comma separated list of names (vm1,vm2)
+        - max: 1024
+          min: 0
+          type: multiplechoice
+          choices:
+            - rhel8
+            - rhel9
+            - rhel_dev
+            - rhel_dynatrace
+            - rhel_datadog
+            - windows
+          default: rhel_dev
+          required: true
+          variable: target_platform
+          new_question: true
+          question_name: Target Platform
+          question_description: target platform (maps to pre-selected AMI)
+        - max: 4096
+          min: 0
+          type: text
+          choices: []
+          default: ""
+          required: false
+          variable: aws_public_key_src
+          new_question: true
+          question_name: SSH Public Key
+          question_description: Used to create key pair if provided
+  - name: AWS // Install Agents
+    description: Install agents on cloud infrastructure
+    labels: ["Demo", "AWS"]
+    project: Cloud Mgmt
+    organization: Autodotes
+    inventory: Cloud Inventory
+    ask_inventory_on_launch: true
+    playbook: playbooks/aws/install_agents.yml
+    execution_environment: ee-default
+    credentials:
+      - AWS (ec2-user)
+      - DataDog Demo Credential
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - max: 1024
+          min: 1
+          type: text
+          default: OVERRIDE_ME
+          required: true
+          variable: _hosts
+          question_name: Specify target host(s)
+          question_description: pattern for the playbook hosts key
+        - max: 1024
+          min: 0
+          type: multiplechoice
+          choices:
+            - rhel8
+            - rhel9
+            - rhel_dev
+            - rhel_dynatrace
+            - rhel_datadog
+            - windows
+          default: rhel_dev
+          required: true
+          variable: target_platform
+          new_question: true
+          question_name: Target Platform
+          question_description: target platform (maps to pre-selected AMI)
+  - name: AWS // Install Applications
+    description: Install applications on cloud infrastructure
+    labels: ["Demo", "AWS"]
+    project: Cloud Mgmt
+    organization: Autodotes
+    inventory: Cloud Inventory
+    ask_inventory_on_launch: true
+    playbook: playbooks/aws/install_apps.yml
+    execution_environment: ee-default
+    credentials:
+      - AWS (ec2-user)
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - max: 1024
+          min: 1
+          type: text
+          default: OVERRIDE_ME
+          required: true
+          variable: _hosts
+          question_name: Specify target host(s)
+          question_description: pattern for the playbook hosts key
+        - max: 1024
+          min: 0
+          type: multiselect
+          choices:
+            - kafka
+          default: ""
+          required: true
+          variable: install_apps
+          question_name: Choose Applications
+          question_description: Choose applications to install on cloud infrastructure
+        - max: 100
+          min: 1
+          type: text
+          required: false
+          variable: demo_topic
+          question_name: Name of demo topic
+          question_description: The kafka role will create a demo topic after install if specified
+  - name: AWS // Patch VM
+    description: Patch an EC2 instance with ServiceNow integration
+    labels: ["Demo", "AWS"]
+    project: Cloud Mgmt
+    organization: Autodotes
+    inventory: Cloud Inventory
+    ask_inventory_on_launch: true
+    playbook: playbooks/aws/patch_vm.yml
+    execution_environment: ee-default
+    credentials:
+      - AWS (ec2-user)
+      - West ServiceNow (ven07621)
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - max: 1024
+          min: 1
+          type: text
+          default: OVERRIDE_ME
+          required: true
+          variable: _hosts
+          question_name: Specify target host(s)
+          question_description: pattern for the playbook hosts key
+  - credentials:
+      - Ansible Service Account (Minimal Sub)
+    execution_environment: ee-default
+    inventory: Azure Inventory
+    job_slice_count: 1
+    job_type: run
+    name: Azure // Create Disks
+    playbook: playbooks/azure/snapshot_mgmt/create_disks.yml
+    project: Cloud Mgmt
+  - description: delete snapshots in azure based on tagged retention date
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: Azure // Delete Snapshots
+    playbook: playbooks/azure/snapshot_mgmt/delete_snapshots.yml
+    project: Cloud Mgmt
+  - credentials:
+      - Satellite (Autodotes)
+      - Satellite Provisioner
+    execution_environment: Default execution environment
+    host_config_key: "{{ controller_credential_callback_host_config_key }}"
+    inventory: Satellite Inventory
+    job_slice_count: 1
+    job_type: run
+    name: Azure // Provisioning Callback
+    playbook: playbooks/azure_vm_setup.yml
+    project: Linux Mgmt
+    use_fact_cache: true
+  - credentials:
+      - Ansible Service Account (Minimal Sub)
+      - Gmail SMTP
+    description: scan snapshots in azure based on tagged retention date
+    execution_environment: ee-default
+    inventory: Cloud Inventory
+    job_slice_count: 1
+    job_type: run
+    name: Azure // Scan Snapshots
+    playbook: playbooks/azure/snapshot_mgmt/scan_snapshots.yml
+    project: Cloud Mgmt
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: 45
+          max: 100000
+          min: 0
+          new_question: true
+          question_description: Used to demonstrate notifications that would arise in the future
+          question_name: Set the desired scan offset (days)
+          required: true
+          type: integer
+          variable: scan_offset_days
+  - credentials:
+      - Ansible Service Account (Minimal Sub)
+    execution_environment: ee-default
+    inventory: Azure Inventory
+    job_slice_count: 1
+    job_type: run
+    name: Azure // Snapshot Disks
+    playbook: playbooks/azure/snapshot_mgmt/snapshot_disks.yml
+    project: Cloud Mgmt
+  - ask_verbosity_on_launch: true
+    credentials:
+      - AWS (ec2-user)
+    execution_environment: ee-default
+    inventory: Cloud Inventory
+    job_slice_count: 1
+    job_type: run
+    name: Cloud // EC2 Process Report
+    playbook: playbooks/aws/ec2_process_report.yml
+    project: Cloud Mgmt
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: raspi
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: What is the destination report server?
+          required: true
+          type: text
+          variable: autodotes_report_server
+        - choices: ""
+          default: ""
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: What is the target report server hostname/ip?
+          required: false
+          type: password
+          variable: autodotes_report_server_host
+        - choices: ""
+          default: zach
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: What is the target report server user?
+          required: true
+          type: text
+          variable: autodotes_report_server_user
+  - ask_variables_on_launch: true
+    credentials:
+      - AWS (ec2-user)
+    execution_environment: ee-windows
+    inventory: Cloud Inventory
+    job_slice_count: 1
+    job_type: run
+    name: Cloud // Patch EC2
+    playbook: playbooks/aws/patch_vm.yml
+    project: Cloud Mgmt
+  - ask_variables_on_launch: true
+    credentials:
+      - AWS (ec2-user)
+      - AWS Sandbox Credential
+    inventory: Cloud Inventory
+    job_slice_count: 1
+    job_type: run
+    name: Cloud // Restore EC2
+    playbook: playbooks/aws/restore_from_snapshot.yml
+    project: Cloud Mgmt
+  - ask_variables_on_launch: true
+    credentials:
+      - AWS (ec2-user)
+      - AWS Sandbox Credential
+    inventory: Cloud Inventory
+    job_slice_count: 1
+    job_type: run
+    name: Cloud // Snapshot EC2
+    playbook: playbooks/aws/snapshot_vm.yml
+    project: Cloud Mgmt
+  - ask_limit_on_launch: true
+    credentials:
+      - VMWare (ansible)
+      - VMWare Bastion (gf7fr)
+    execution_environment: ee-default
+    inventory: Cloud Inventory
+    job_slice_count: 1
+    job_type: run
+    limit: new_guest
+    name: VMWare // Gather Facts
+    playbook: playbooks/vmware/no_op.yml
+    project: Cloud Mgmt
+    verbosity: 4
+  - credentials:
+      - VMWare (gf7fr)
+    execution_environment: ee-default
+    inventory: Cloud Inventory
+    job_slice_count: 1
+    job_type: run
+    name: VMWare // Gather Info
+    playbook: playbooks/vmware/info.yml
+    project: Cloud Mgmt
+  - credentials:
+      - VMWare (gf7fr)
+    execution_environment: ee-default
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: VMWare // Power State
+    playbook: playbooks/vmware/power.yml
+    project: Cloud Mgmt
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: vmware-demo-1
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: What is the name of the vm?
+          required: true
+          type: text
+          variable: vm_name
+        - choices:
+            - powered-on
+            - powered-off
+            - reboot-guest
+            - shutdown-guest
+            - suspended
+          default: powered-on
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Choose the power state
+          required: true
+          type: multiplechoice
+          variable: vm_desired_state
+  - ask_variables_on_launch: true
+    ask_verbosity_on_launch: true
+    credentials:
+      - VMWare (ansible)
+      - VMWare Bastion (gf7fr)
+      - VMWare (gf7fr)
+      - West ServiceNow (ven07621)
+    execution_environment: ee-default
+    inventory: Cloud Inventory
+    job_slice_count: 1
+    job_type: run
+    name: VMWare // Provision Guest
+    playbook: playbooks/vmware/deploy.yml
+    project: Cloud Mgmt
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: ""
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Guest name
+          required: true
+          type: text
+          variable: vmware_guest_name
+        - choices:
+            - SDDC-Datacenter
+          default: SDDC-Datacenter
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Datacenter
+          required: true
+          type: multiplechoice
+          variable: vmware_datacenter
+        - choices:
+            - Cluster-1
+          default: Cluster-1
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: Cluster
+          required: false
+          type: multiplechoice
+          variable: vmware_cluster_name
+        - choices: ""
+          default: /Workloads/sandbox-w7gqh
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Folder
+          required: true
+          type: text
+          variable: vmware_folder
+        - choices:
+            - rhel9
+            - rhel8
+            - win_2016
+            - fedora_32
+          default: rhel9
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: Choose desired OS
+          required: true
+          type: multiplechoice
+          variable: vmware_os
+        - choices: ""
+          default: ""
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: SSH Public Key
+          required: false
+          type: textarea
+          variable: vmware_public_key
+    verbosity: 4
+  - ask_variables_on_launch: true
+    credentials:
+      - VMWare (gf7fr)
+    execution_environment: ee-default
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: VMWare // Snapshot
+    playbook: playbooks/vmware/snapshot.yml
+    project: Cloud Mgmt
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: 30
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: Enter 0 to always create a new snapshot
+          question_name: Create if last snapshot is older than (days)
+          required: false
+          type: integer
+          variable: snapshot_ttl_days

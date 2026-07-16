@@ -1,0 +1,12 @@
+# ansible-playbook pb_aap_config.yml --tags windows,inventories --skip-tags common
+---
+controller_inventories_windows:
+  - name: Windows Inventory
+    organization: Autodotes
+    description: Isolates Windows hosts in AWS
+    variables:
+      ansible_connection: winrm
+      ansible_winrm_port: 5986
+      ansible_winrm_server_cert_validation: ignore
+      ansible_winrm_kerberos_delegation: true
+      aws_region: east-us-2

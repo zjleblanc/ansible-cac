@@ -1,0 +1,147 @@
+# ansible-playbook pb_aap_config.yml --tags networking,workflow_job_templates --skip-tags common
+---
+controller_workflows_networking:
+  - inventory: Palo Alto Demo Inventory
+    name: Palo Alto // Provision Firewall Demo Workflow
+    organization: Autodotes
+    workflow_nodes:
+      - identifier: Setup Infrastructure
+        related:
+          success_nodes:
+            - identifier: Sync Palo Alto Demo Inventory
+            - identifier: Configure Firewall
+        unified_job_template:
+          name: Palo Alto // Setup Infrastructure
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: 028a3414-4fa9-47c4-ae50-bbf06916bfc3
+        related:
+          success_nodes:
+            - identifier: Setup Infrastructure
+        unified_job_template:
+          name: Network Mgmt
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - all_parents_must_converge: true
+        identifier: Setup Web Server
+        unified_job_template:
+          name: Palo Alto // Web Server Setup
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Sync Palo Alto Demo Inventory
+        related:
+          success_nodes:
+            - identifier: Setup Web Server
+        unified_job_template:
+          inventory:
+            name: Palo Alto Demo Inventory
+            organization:
+              name: Autodotes
+              type: organization
+            type: inventory
+          name: EC2 Inventory Source
+          type: inventory_source
+      - identifier: Configure Firewall
+        related:
+          success_nodes:
+            - identifier: Setup Web Server
+        unified_job_template:
+          name: Palo Alto // Configure Firewall
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+  - description: Demo workflow for configuring network devices and notifying users of changes via Slack
+    inventory: Cisco Lab
+    name: Summit Connect // Network Configuration Workflow
+    organization: Autodotes
+    survey_enabled: true
+    survey_spec:
+      description: VLAN configuration based on ansible networking data model
+      name: VLAN config survey
+      spec:
+        - choices: ""
+          default: sandbox-iosxe-latest-1.cisco.com
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Specify target hosts
+          required: true
+          type: text
+          variable: _hosts
+        - choices: ""
+          default: ansible-network-configs
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: What is the name of your config repository?
+          required: true
+          type: text
+          variable: config_repo_name
+        - choices: ""
+          # noqa: yaml[line-length]
+          default: "interfaces:\n  - description: MANAGEMENT INTERFACE - DON'T TOUCH ME\n    enabled: true\n    name: GigabitEthernet1\n  - description: Port to Fabric
+            (edit 2 -> ansible)\n    enabled: true\n    name: GigabitEthernet2"
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: Network configs to apply
+          question_name: What configs do you want to apply? (represent with YAML)
+          required: true
+          type: textarea
+          variable: network_configs
+    workflow_nodes:
+      - identifier: Project Sync
+        related:
+          success_nodes:
+            - identifier: Network Backup
+        unified_job_template:
+          name: Network Mgmt
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: Network Backup
+        related:
+          success_nodes:
+            - identifier: Apply Configs
+        unified_job_template:
+          name: Summit Connect // Network Backup
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Apply Configs
+        related:
+          failure_nodes:
+            - identifier: Network Restore
+          success_nodes:
+            - identifier: Slack Notification
+        unified_job_template:
+          name: Summit Connect //  Network Apply Configs
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Slack Notification
+        unified_job_template:
+          name: Summit Connect // Slack Notification
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Network Restore
+        unified_job_template:
+          name: Summit Connect // Network Restore
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template

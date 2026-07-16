@@ -1,0 +1,23 @@
+# ansible-playbook pb_aap_config.yml --tags cloud,inventory_sources --skip-tags common
+---
+controller_inventory_sources_cloud:
+  - credential: Ansible Service Account (Minimal Sub)
+    description: ""
+    enabled_value: ""
+    enabled_var: ""
+    execution_environment:
+    host_filter: ""
+    inventory: Azure Inventory
+    limit: ""
+    name: Minimal Sub
+    overwrite: false
+    overwrite_vars: false
+    scm_branch: ""
+    source: azure_rm
+    source_path: ""
+    source_project:
+    source_vars:
+    timeout: 0
+    update_cache_timeout: 0
+    update_on_launch: false
+    verbosity: 1

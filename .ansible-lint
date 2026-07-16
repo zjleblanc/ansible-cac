@@ -6,6 +6,7 @@ exclude_paths:
   - .cache/
   - .git/
   - staging/
+  - scripts/
   # ansible-lint parses YAML with a fixed dummy vault password, not
   # vault_password_file from ansible.cfg. Encrypted *secrets.yml cannot be
   # decrypted here; exclude matches .gitignore and still lints *.redacted.yml.
@@ -19,10 +20,7 @@ mock_roles:
 
 kinds:
   - playbook: "pb_*.yml"
-  - vars: "controller/**/*.yml"
-  - vars: "hub/**/*.yml"
-  - vars: "platform/**/*.yml"
-  - vars: "eda/**/*.yml"
+  - vars: "config/**/*.yml"
   - vars: "vars/**/*.yml"
 
 skip_list:

@@ -1,0 +1,20 @@
+# ansible-playbook pb_aap_config.yml --tags aap,projects --skip-tags common
+---
+controller_projects_aap:
+  - name: EE Builds
+    organization: Autodotes
+    scm_type: git
+    scm_update_on_launch: true
+    scm_url: https://github.com/zjleblanc/aap-ee-builds.git
+  - name: Execution Environment Builds [Legacy]
+    organization: Autodotes
+    scm_type: git
+    scm_update_on_launch: true
+    scm_url: https://zach-leblanc@bitbucket.org/zach-leblanc/ansible-execution-environments.git
+    default_environment: ee-default
+  - name: Execution Environment Builder
+    organization: Autodotes
+    scm_type: git
+    scm_update_on_launch: true
+    scm_url: https://gitlab.com/zjleblanc/ansible-ee-builder.git
+    default_environment: ee-default

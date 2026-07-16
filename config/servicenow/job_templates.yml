@@ -1,0 +1,132 @@
+# ansible-playbook pb_aap_config.yml --tags servicenow,job_templates --skip-tags common
+---
+controller_templates_servicenow:
+  - name: Selenium // Automation Dashboard
+    description: Demonstrate using Selenium to create application screen captures
+    labels: ["Demo", "ServiceNow"]
+    project: Cloud Mgmt
+    organization: Autodotes
+    inventory: Autodotes Lab
+    playbook: demos/selenium_automation_dashboard.yml
+    execution_environment: ee-selenium
+    credentials:
+      - AAP (id_rsa)
+      - Ansible Vault
+      - West ServiceNow (ven07621)
+    extra_vars:
+      _host: raspi
+    survey_enabled: true
+    survey_spec:
+      name: ""
+      description: ""
+      spec:
+        - question_name: Specify VMs to delete
+          question_description: comma separated list of names (vm1,vm2)
+          type: text
+          default: demo-vm-1
+          variable: aws_ec2_names_list
+          required: true
+  - name: Selenium // Screen Capture
+    description: Demonstrate using Selenium to create application screen captures
+    labels: ["Demo", "ServiceNow"]
+    project: Cloud Mgmt
+    organization: Autodotes
+    inventory: Autodotes Lab
+    playbook: demos/selenium_screen_capture.yml
+    execution_environment: ee-selenium
+    credentials:
+      - AAP (id_rsa)
+  - name: ServiceNow // Create CIs
+    description: Create cmdb_ci_vm_instance items
+    labels: ["Demo", "ServiceNow"]
+    project: Cloud Mgmt
+    organization: Autodotes
+    inventory: Cloud Inventory
+    playbook: playbooks/snow/manage_ci.yml
+    execution_environment: ee-default
+    credentials:
+      - AWS (ec2-user)
+      - West ServiceNow (ven07621)
+    extra_vars:
+      action: create
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - max: 1024
+          min: 1
+          type: text
+          default: OVERRIDE_ME
+          required: true
+          variable: _hosts
+          question_name: Specify target host(s)
+          question_description: pattern for the playbook hosts key
+  - name: ServiceNow // Delete CIs
+    description: Delete cmdb_ci_vm_instance items
+    labels: ["Demo", "ServiceNow"]
+    project: Cloud Mgmt
+    organization: Autodotes
+    inventory: Cloud Inventory
+    playbook: playbooks/snow/manage_ci.yml
+    execution_environment: ee-default
+    credentials:
+      - West ServiceNow (ven07621)
+    extra_vars:
+      action: delete
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - max: 1024
+          min: 1
+          type: text
+          default: OVERRIDE_ME
+          required: true
+          variable: _hosts
+          question_name: Specify target host(s)
+          question_description: pattern for the playbook hosts key
+  - credentials:
+      - West ServiceNow (ven07621)
+    execution_environment: ee-default
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: Service Now // Create Incident
+    playbook: playbooks/snow/create_incident.yml
+    project: Cloud Mgmt
+  - ask_variables_on_launch: true
+    credentials:
+      - West ServiceNow (ven07621)
+    execution_environment: ee-windows
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: Service Now // Mock Decomm VM
+    playbook: demos/snow_no_op.yml
+    project: Windows Mgmt
+  - credentials:
+      - West ServiceNow (ven07621)
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: Service Now // Update Incident
+    playbook: playbooks/snow/update_incident.yml
+    project: Cloud Mgmt
+  - name: ServiceNow // Manage Resources
+    description: Generic template to interface with supported ServiceNow Table API operations
+    project: Cloud Mgmt
+    organization: Autodotes
+    playbook: playbooks/snow/manage_resource.yml
+    execution_environment: ee-default
+    ask_variables_on_launch: true
+    ask_inventory_on_launch: true
+    ask_credential_on_launch: true
+    allow_simultaneous: true
+    credentials:
+      - AAP (id_rsa)
+      - West ServiceNow (ven07621)
+    extra_vars:
+      sn_manage_action: REPLACE_ME # create, update, delete
+      sn_resource: REPLACE_ME # sc_task, cr, ci

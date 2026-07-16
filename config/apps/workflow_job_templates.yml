@@ -1,0 +1,141 @@
+# ansible-playbook pb_aap_config.yml --tags apps,workflow_job_templates --skip-tags common
+---
+controller_workflows_apps:
+  - name: Apps // SSL Certificate Renewal Workflow
+    organization: Autodotes
+    labels: ["Demo", "Apps"]
+    allow_simultaneous: true
+    ask_variables_on_launch: true
+    extra_vars:
+      _host: raspi
+    survey_enabled: true
+    survey_spec:
+      name: ""
+      description: ""
+      spec:
+        - question_name: Target certificate sites (SN)
+          question_description: comma separated list of names (vm1,vm2)
+          type: text
+          default: example.autodotes.com
+          variable: ssl_target_sites_list
+          required: true
+        - question_name: Custom Expiration Window
+          question_description: "[+-][timespec][w|d|h|m|s] (e.g. +32w1d2h)"
+          type: text
+          default: +30d
+          variable: acme_custom_expiry
+          required: true
+    workflow_nodes:
+      - identifier: Sync Project
+        related:
+          success_nodes:
+            - identifier: Artifact Backup
+        unified_job_template:
+          name: App Mgmt
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: Artifact Backup
+        related:
+          success_nodes:
+            - identifier: Certificate Renewal
+        unified_job_template:
+          name: App // SSL Artifact Backup
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Certificate Renewal
+        related:
+          success_nodes:
+            - identifier: Health Check
+          failure_nodes:
+            - identifier: Artifact Restore
+        unified_job_template:
+          name: App // SSL Certificate Renewal
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Health Check
+        related:
+          success_nodes:
+            - identifier: Artifact Cleanup
+          failure_nodes:
+            - identifier: Artifact Restore
+        unified_job_template:
+          name: App // Certificate Renewal Health Check
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Artifact Cleanup
+        unified_job_template:
+          name: App // SSL Artifact Cleanup
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Artifact Restore
+        related:
+          success_nodes:
+            - identifier: Health Check Restore
+        unified_job_template:
+          name: App // SSL Artifact Restore
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Health Check Restore
+        unified_job_template:
+          name: App // Certificate Renewal Health Check
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+  - name: AAP // Renew & Update AAP certs
+    inventory: Autodotes Lab
+    organization: Autodotes
+    webhook_service: gitlab
+    workflow_nodes:
+      - identifier: Sync Project
+        related:
+          success_nodes:
+            - identifier: Sync Inventory
+        unified_job_template:
+          name: Autodotes
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: Sync Inventory
+        related:
+          success_nodes:
+            - identifier: 2cf3060c-1b43-47e3-856c-4bfdd70f7f54
+        unified_job_template:
+          inventory:
+            name: Autodotes Lab
+            organization:
+              name: Autodotes
+              type: organization
+            type: inventory
+          name: Autodotes Lab Machines
+          type: inventory_source
+      - identifier: 0ad47cdf-81e2-40a3-bd90-fd4130f17ec4
+        unified_job_template:
+          name: AAP // Update AAP Certs
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: 2cf3060c-1b43-47e3-856c-4bfdd70f7f54
+        related:
+          success_nodes:
+            - identifier: 0ad47cdf-81e2-40a3-bd90-fd4130f17ec4
+        unified_job_template:
+          name: Autodotes // Renew Certs
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template

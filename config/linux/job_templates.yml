@@ -1,0 +1,197 @@
+# ansible-playbook pb_aap_config.yml --tags linux,job_templates --skip-tags common
+---
+controller_templates_linux:
+  - name: Linux // Patching // Dispatcher
+    description: Ingress playbook for patching to schedule downstream patching workflows based on pre-processing nodes
+    labels: ["Demo"]
+    project: Linux Mgmt
+    organization: Autodotes
+    inventory: Cloud Inventory
+    playbook: workflows/patching/dispatcher.yml
+    execution_environment: ee-default
+    credentials:
+      - AWS (ec2-user)
+      - Controller Credential
+      - West ServiceNow (ven07621)
+    ask_variables_on_launch: true
+    extra_vars:
+      report_server: reports.local
+      report_web_directory: /var/www/reports.autodotes.com/workflows/patching
+      patch_targets:
+        rhel8-vm-1:
+          change_window_datetime: "2025-04-25 12:30:00"
+          change_window_timezone: America/Chicago
+        rhel8-vm-2:
+          change_window_datetime: "2025-04-25 13:00:00"
+          change_window_timezone: America/Chicago
+        rhel9-vm-1:
+          change_window_datetime: "2025-04-26 12:30:00"
+          change_window_timezone: America/Chicago
+        rhel9-vm-2:
+          change_window_datetime: "2025-04-26 13:00:00"
+          change_window_timezone: America/Chicago
+    survey_enabled: false
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - max: 1024
+          min: 1
+          type: text
+          default: linux
+          required: true
+          variable: patch_targets
+          question_name: Specify patch target(s)
+          question_description: ""
+        - max: 1024
+          min: 1
+          type: text
+          choices: []
+          default: "1970-01-01 00:00:00"
+          required: true
+          variable: change_window_datetime
+          new_question: true
+          question_name: Change Window DateTime
+          question_description: Python format "%Y-%m-%d %H:%M:%S"
+        - max: 1024
+          min: 0
+          type: multiplechoice
+          choices:
+            - UTC
+            - America/Chicago
+            - GMT
+          default: UTC
+          required: true
+          variable: change_window_timezone
+          new_question: true
+          question_name: Change Window Time Zone
+          question_description: ""
+  - name: Linux // Patching // No-Op
+    description: Generic playbook to represent actions in a patching workflow
+    labels: ["Demo"]
+    project: Linux Mgmt
+    organization: Autodotes
+    inventory: Cloud Inventory
+    playbook: workflows/patching/no_op.yml
+    execution_environment: ee-default
+    credentials: ["AWS (ec2-user)"]
+    ask_variables_on_launch: true
+  - ask_execution_environment_on_launch: true
+    credentials:
+      - AAP (zach)
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    limit: localhost
+    name: Linux // Debug
+    playbook: playbooks/debug.yml
+    project: Linux Mgmt
+    use_fact_cache: true
+    verbosity: 4
+  - credentials:
+      - AAP (id_rsa)
+    extra_vars:
+      _hosts: rhel8
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: Linux // Gather Package Facts
+    playbook: playbooks/r4e_blueprint.yml
+    project: Linux Mgmt
+  - execution_environment: ee-windows
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    limit: localhost
+    name: Linux // Powershell Test
+    playbook: playbooks/pwsh.yml
+    project: Windows Mgmt
+  - credentials:
+      - AAP (id_rsa)
+      - Camper Vault
+    execution_environment: ee-default
+    extra_vars:
+      last_records_max: 500
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    limit: camp:fedora
+    name: Linux // User Login (Random)
+    playbook: playbooks/user_login_random.yml
+    project: Linux Mgmt
+  - credentials:
+      - AAP (id_rsa)
+    execution_environment: ee-default
+    extra_vars:
+      _hosts:
+        - camp
+        - fedora
+      last_records_max: 500
+      report_desc: Report based on last output with relevant home directory information
+      report_dest: /var/www/reports.autodotes.com/roles/table_per_host.last_login.html
+      report_server: raspi
+      report_title: Last Login Report
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: Linux // User Login Report
+    playbook: playbooks/user_login_report.yml
+    project: Linux Mgmt
+  - ask_limit_on_launch: true
+    credentials:
+      - AAP (id_rsa)
+    execution_environment: ee-default
+    extra_vars:
+      rhel8cis_rule_6_1_15: false
+      rhel8cis_rule_6_2_11: false
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: check
+    limit: rhel8
+    name: Lockdown // RHEL 8 CIS
+    playbook: site.yml
+    project: Lockdown RHEL8 CIS
+  - ask_limit_on_launch: true
+    credentials:
+      - AAP (cloud-user)
+    description: Install SQL Server on a RHEL box
+    extra_vars:
+      mssql_version: 2019
+    # sql_sa_password: REPLACE_ME
+    inventory: Proxmox Inventory
+    job_slice_count: 1
+    job_type: run
+    limit: "*.rhel-guest"
+    name: RHEL // Install SQL Server
+    playbook: demos/sqlserver-rhel.yml
+    project: Linux Mgmt
+  - ask_limit_on_launch: true
+    credentials:
+      - AAP (cloud-user)
+      - RHSM (zachleblanc)
+    description: Register server using subscription-manager
+    extra_vars:
+      rhsm_repos:
+        - !unsafe rhel-{{ ansible_distribution_major_version }}-server-optional-rpms
+    inventory: Proxmox Inventory
+    job_slice_count: 1
+    job_type: run
+    limit: "*.rhel-guest"
+    name: RHEL // Register
+    playbook: demos/rhsm.yml
+    project: Linux Mgmt
+  - ask_variables_on_launch: true
+    execution_environment: ee-default
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: Sandbox // Consumer
+    playbook: playbooks/consumer.yml
+    project: Linux Mgmt
+  - execution_environment: ee-default
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: Sandbox // Producer
+    playbook: playbooks/producer.yml
+    project: Linux Mgmt

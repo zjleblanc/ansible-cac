@@ -1,0 +1,25 @@
+# ansible-playbook pb_aap_config.yml --tags inventories
+---
+controller_inventories_common:
+  - name: Autodotes Lab
+    organization: Autodotes
+    description: Static inventory representing homelab
+  - name: Cloud Inventory
+    organization: Autodotes
+    description: Leverages various cloud dynamic inventory plugins
+    variables:
+      ansible_ssh_common_args: -o StrictHostKeyChecking=no
+      autodotes_report_server: raspi
+      autodotes_report_server_user: zach
+  - name: Daily Demo Inventory
+    organization: Autodotes
+    description: Used with Eric Ames daily demo project
+  - name: Proxmox Inventory
+    organization: Autodotes
+    description: collection of dynamically created proxmox instances
+  - name: Service Now Inventory
+    organization: Autodotes
+    description: Demo using servicenow.itsm.now inventory plugin
+  - name: Workshop Inventory
+    organization: Autodotes
+    description: Used in workshops

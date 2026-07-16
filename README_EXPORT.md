@@ -1,6 +1,6 @@
 # Export Controller Assets
 
-Use this flow when a **source** Automation Controller (or compatible API) already holds the configuration you want, and you need **configuration as code** under `controller/` to apply to a **destination** with `pb_controller_cac.yml`.
+Use this flow when a **source** Automation Controller (or compatible API) already holds the configuration you want, and you need **configuration as code** under `config/` to apply to a **destination** with `pb_aap_config.yml`.
 
 Export-related paths and playbooks (not shown in [Repository structure](#repository-structure) above):
 
@@ -50,10 +50,10 @@ If you already have a single-file raw export at `configs/old_controller_assets_r
 
 ## Promote to CaC and apply on the destination
 
-Copy or merge the staged (or processed) YAML into the canonical files under `controller/` (and adjust names, organizations, or secrets to match the destination). Populate `vars/controller_secrets.yml` for any credential inputs and other vaulted values. Then apply to the **destination** controller:
+Copy or merge the staged (or processed) YAML into the appropriate domain folders under `config/` (and adjust names, organizations, or secrets to match the destination). Populate `vars/controller_secrets.yml` for any credential inputs and other vaulted values. Then apply to the **destination** with the relevant domain tags:
 
 ```bash
-ansible-playbook pb_controller_cac.yml --ask-vault-pass
+ansible-playbook pb_aap_config.yml --tags cloud,networking,linux,windows,hashi,aiops,servicenow,apps,aap,hub --ask-vault-pass
 ```
 
-The destination is whatever host and credentials your `pb_controller_cac.yml` / collection configuration targets; it does not use `OLD_CONTROLLER_*`.
+The destination is whatever host and credentials your `pb_aap_config.yml` / collection configuration targets; it does not use `OLD_CONTROLLER_*`.

@@ -1,0 +1,303 @@
+# ansible-playbook pb_aap_config.yml --tags apps,job_templates --skip-tags common
+---
+controller_templates_apps:
+  - name: Lab // Dynamic DNS
+    playbook: playbooks/homelab/dynamic_dns.yml
+    project: Autodotes
+    execution_environment: ee-default
+    credentials:
+      - Router
+      - Controller Credential
+      - Cloudflare DNS
+    inventory: Autodotes Lab
+  - name: Lab // Dynamic DNS // Webhook
+    playbook: playbooks/homelab/dynamic_dns_webhook.yml
+    project: Autodotes
+    execution_environment: ee-default
+    credentials:
+      - Router
+      - Controller Credential
+      - Cloudflare DNS
+    inventory: Autodotes Lab
+  - name: App // SSL Artifact Backup
+    description: Backup SSL artifacts for designated site(s)
+    ask_labels_on_launch: true
+    labels: ["Demo", "Apps"]
+    project: App Mgmt
+    organization: Autodotes
+    inventory: Autodotes Lab
+    playbook: pb_ssl_backup.yml
+    execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)
+    ask_variables_on_launch: true
+    extra_vars:
+      _host: raspi
+    survey_enabled: true
+    survey_spec:
+      name: ""
+      description: ""
+      spec:
+        - question_name: Target certificate sites (SN)
+          question_description: comma separated list of names (vm1,vm2)
+          type: text
+          default: example.autodotes.com
+          variable: ssl_target_sites_list
+          required: true
+    notification_templates_success: ["Slack Autodotes #ansible-notifications"]
+    notification_templates_error: ["Slack Autodotes #ansible-notifications"]
+  - name: App // SSL Artifact Cleanup
+    description: Cleanup SSL artifacts for designated site(s)
+    ask_labels_on_launch: true
+    labels: ["Demo", "Apps"]
+    project: App Mgmt
+    organization: Autodotes
+    inventory: Autodotes Lab
+    playbook: pb_ssl_cleanup.yml
+    execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)
+    ask_variables_on_launch: true
+    extra_vars:
+      _host: raspi
+    survey_enabled: true
+    survey_spec:
+      name: ""
+      description: ""
+      spec:
+        - question_name: Target certificate sites (SN)
+          question_description: comma separated list of names (vm1,vm2)
+          type: text
+          default: example.autodotes.com
+          variable: ssl_target_sites_list
+          required: true
+    notification_templates_success: ["Slack Autodotes #ansible-notifications"]
+    notification_templates_error: ["Slack Autodotes #ansible-notifications"]
+  - name: App // SSL Artifact Restore
+    description: Restore SSL artifacts for designated site(s) from backups
+    ask_labels_on_launch: true
+    labels: ["Demo", "Apps"]
+    project: App Mgmt
+    organization: Autodotes
+    inventory: Autodotes Lab
+    playbook: pb_ssl_restore.yml
+    execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)
+    ask_variables_on_launch: true
+    extra_vars:
+      _host: raspi
+    survey_enabled: true
+    survey_spec:
+      name: ""
+      description: ""
+      spec:
+        - question_name: Target certificate sites (SN)
+          question_description: comma separated list of names (vm1,vm2)
+          type: text
+          default: example.autodotes.com
+          variable: ssl_target_sites_list
+          required: true
+    notification_templates_success: ["Slack Autodotes #ansible-notifications"]
+    notification_templates_error: ["Slack Autodotes #ansible-notifications"]
+  - name: App // SSL Certificate Renewal
+    description: Renew SSL certificates for designated site(s)
+    ask_labels_on_launch: true
+    labels: ["Demo", "Apps"]
+    project: App Mgmt
+    organization: Autodotes
+    inventory: Autodotes Lab
+    playbook: pb_ssl_renewal.yml
+    execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)
+      - Cloudflare DNS
+    ask_variables_on_launch: true
+    extra_vars:
+      _host: raspi
+    survey_enabled: true
+    survey_spec:
+      name: ""
+      description: ""
+      spec:
+        - question_name: Target certificate sites (SN)
+          question_description: comma separated list of names (vm1,vm2)
+          type: text
+          default: example.autodotes.com
+          variable: ssl_target_sites_list
+          required: true
+        - question_name: Custom Expiration Window
+          question_description: "[+-][timespec][w|d|h|m|s] (e.g. +32w1d2h)"
+          type: text
+          default: +30d
+          variable: acme_custom_expiry
+          required: true
+    notification_templates_success: ["Slack Autodotes #ansible-notifications"]
+    notification_templates_error: ["Slack Autodotes #ansible-notifications"]
+  - name: App // Certificate Renewal Health Check
+    description: Perform health check and validate SSL certificates for designated site(s)
+    ask_labels_on_launch: true
+    labels: ["Demo", "Apps"]
+    project: App Mgmt
+    organization: Autodotes
+    inventory: Autodotes Lab
+    playbook: pb_ssl_healthcheck.yml
+    execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)
+    ask_variables_on_launch: true
+    extra_vars:
+      _host: raspi
+    survey_enabled: true
+    survey_spec:
+      name: ""
+      description: ""
+      spec:
+        - question_name: Target certificate sites (SN)
+          question_description: comma separated list of names (vm1,vm2)
+          type: text
+          default: example.autodotes.com
+          variable: ssl_target_sites_list
+          required: true
+    notification_templates_success: ["Slack Autodotes #ansible-notifications"]
+    notification_templates_error: ["Slack Autodotes #ansible-notifications"]
+  - ask_variables_on_launch: true
+    extra_vars:
+      _domains:
+        - name: example.autodotes.com
+      _hosts: raspi
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: Autodotes // Create Site with SSL
+    playbook: playbooks/configure_nginx_site_ssl.yml
+    project: Linux Mgmt
+  - ask_credential_on_launch: true
+    ask_variables_on_launch: true
+    credentials:
+      - AAP (id_rsa)
+      - Cloudflare DNS
+    description: renew certs on non-AAP sites
+    execution_environment: ee-default
+    extra_vars:
+      sites:
+        - artifacts.autodotes.com
+        - reports.autodotes.com
+        - docs.autodotes.com
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: Autodotes // Renew Certs
+    playbook: playbooks/acme/renew_certs.yml
+    project: Autodotes
+  - credentials:
+      - CyberArk Conjur Secret - Ansible
+    description: Use CyberArk Conjur lookup and print out secret for demo purposes only.
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: CyberArk // Demo Credential
+    playbook: playbooks/demo/demo_conjur_secret.yml
+    project: Autodotes
+  - credentials:
+      - AAP (zach)
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: CyberArk // Install Conjur
+    playbook: conjur-install-config.yml
+    project: CyberArk-Conjur Demo
+  - ask_variables_on_launch: true
+    credentials:
+      - CyberArk Conjur Client (Controller)
+    execution_environment: ee-default
+    extra_vars:
+      _hosts: linux
+      cyberark_no_log: true
+      method: sshkey
+    inventory: Cloud Inventory
+    job_slice_count: 1
+    job_type: run
+    name: CyberArk // Per-host Credential Lookup
+    playbook: demos/cyberark_per_host.yml
+    project: Cloud Mgmt
+    survey_enabled: true
+    verbosity: 3
+  - ask_verbosity_on_launch: true
+    credentials:
+      - AAP (zach)
+    execution_environment: ee-default
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: Kasa // Discover Smart Devices
+    playbook: playbooks/kasa/discover.yml
+    project: Autodotes
+  - credentials:
+      - AAP (zach)
+    execution_environment: ee-default
+    extra_vars:
+      desired_state: disabled
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: Kasa // Turn Off Daytime Air Wicks
+    playbook: playbooks/kasa/daytime.yml
+    project: Autodotes
+  - credentials:
+      - AAP (zach)
+    execution_environment: ee-default
+    extra_vars:
+      desired_state: disabled
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: Kasa // Turn Off Outdoor Lights
+    playbook: playbooks/kasa/outdoor.yml
+    project: Autodotes
+  - credentials:
+      - AAP (zach)
+    execution_environment: ee-default
+    extra_vars:
+      desired_state: enabled
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: Kasa // Turn On Daytime Air Wicks
+    playbook: playbooks/kasa/daytime.yml
+    project: Autodotes
+  - credentials:
+      - AAP (zach)
+    execution_environment: ee-default
+    extra_vars:
+      desired_state: enabled
+    inventory: Autodotes Lab
+    job_slice_count: 1
+    job_type: run
+    name: Kasa // Turn On Outdoor Lights
+    playbook: playbooks/kasa/outdoor.yml
+    project: Autodotes
+  - name: Kasa // Manage Device State
+    project: Autodotes
+    playbook: playbooks/kasa/manage_device_state.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)
+    ask_variables_on_launch: true
+  - name: Policy Enforcement // Database Maintenance Demo
+    description: Demonstrate integration with Policy Enforcement using a mock database maintenance scenario
+    project: Policy Enforcement
+    organization: Autodotes
+    inventory: Demo Inventory
+    playbook: demo_aap_policy_enforcement.yml
+    execution_environment: ee-default
+    opa_query_path: autodotes_policy/demo_database_maintenance
+    credentials:
+      - OPA (local)
+    ask_variables_on_launch: true
+    extra_vars:
+      opa_namespace: autodotes_policy
+      opa_policy_name: demo_database_maintenance
+      demo_target_environment: dev
+      demo_change_ticket: CHG12345

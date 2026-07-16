@@ -1,0 +1,440 @@
+# ansible-playbook pb_aap_config.yml --tags linux,workflow_job_templates --skip-tags common
+---
+controller_workflows_linux:
+  - name: Linux // Patching // rhel9_3
+    organization: Autodotes
+    allow_simultaneous: true
+    ask_variables_on_launch: true
+    ask_labels_on_launch: true
+    workflow_nodes:
+      - identifier: Sync Project
+        related:
+          success_nodes:
+            - identifier: Create Snapshot
+        unified_job_template:
+          name: Linux Mgmt
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: Sync Inventory
+        related:
+          success_nodes:
+            - identifier: Create Snapshot
+        unified_job_template:
+          inventory:
+            name: Cloud Inventory
+            organization:
+              name: Autodotes
+              type: organization
+            type: inventory
+          name: AWS EC2 Instances
+          type: inventory_source
+      - identifier: Create Snapshot
+        related:
+          success_nodes:
+            - identifier: Patch
+          failure_nodes:
+            - identifier: Update CR Task
+        unified_job_template:
+          name: Linux // Patching // No-Op
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+        extra_data:
+          task_purpose: Create a snapshot before patching
+          task_output:
+            action: create_snapshot
+            snapshot_id: snap_xyz
+      - identifier: Patch
+        related:
+          success_nodes:
+            - identifier: Post-Validation
+          failure_nodes:
+            - identifier: Update CR Task
+        unified_job_template:
+          name: Linux // Patching // No-Op
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+        extra_data:
+          task_purpose: Patch the target host
+          task_output:
+            action: patch
+            results:
+              packages:
+                httpd: v1
+                bind: v2
+      - identifier: Post-Validation
+        related:
+          success_nodes:
+            - identifier: Close CR Task
+          failure_nodes:
+            - identifier: Update CR Task
+        unified_job_template:
+          name: Linux // Patching // No-Op
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+        extra_data:
+          report_status_update: Success
+          task_purpose: Complete post-validation of patched host
+          task_output:
+            action: post_validation
+            success: true
+      - identifier: Close CR Task
+        unified_job_template:
+          name: Linux // Patching // No-Op
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+        extra_data:
+          task_purpose: Close CR Task
+          task_output:
+            action: close_ctask
+            ctask_num: CTASK123
+            ctask_sys_id: asdas9r70213u1ji321
+      - identifier: Update CR Task
+        unified_job_template:
+          name: Linux // Patching // No-Op
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+        extra_data:
+          report_status_update: Failed
+          task_purpose: Update CR Task
+          task_output:
+            action: update_ctask
+            ctask_num: CTASK123
+            ctask_sys_id: asdas9r70213u1ji321
+  - name: Linux // Patching // rhel8_10
+    organization: Autodotes
+    allow_simultaneous: true
+    ask_variables_on_launch: true
+    ask_labels_on_launch: true
+    workflow_nodes:
+      - identifier: Sync Project
+        related:
+          success_nodes:
+            - identifier: Create Snapshot
+        unified_job_template:
+          name: Linux Mgmt
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: Sync Inventory
+        related:
+          success_nodes:
+            - identifier: Create Snapshot
+        unified_job_template:
+          inventory:
+            name: Cloud Inventory
+            organization:
+              name: Autodotes
+              type: organization
+            type: inventory
+          name: AWS EC2 Instances
+          type: inventory_source
+      - identifier: Create Snapshot
+        related:
+          success_nodes:
+            - identifier: Patch
+          failure_nodes:
+            - identifier: Update CR Task
+        unified_job_template:
+          name: Linux // Patching // No-Op
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+        extra_data:
+          task_purpose: Create a snapshot before patching
+          task_output:
+            action: create_snapshot
+            snapshot_id: snap_xyz
+      - identifier: Patch
+        related:
+          success_nodes:
+            - identifier: Post-Validation
+          failure_nodes:
+            - identifier: Update CR Task
+        unified_job_template:
+          name: Linux // Patching // No-Op
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+        extra_data:
+          task_purpose: Patch the target host
+          task_output:
+            action: patch
+            results:
+              packages:
+                httpd: v1
+                bind: v2
+      - identifier: Post-Validation
+        related:
+          success_nodes:
+            - identifier: Close CR Task
+          failure_nodes:
+            - identifier: Update CR Task
+        unified_job_template:
+          name: Linux // Patching // No-Op
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+        extra_data:
+          task_purpose: Complete post-validation of patched host
+          task_output:
+            action: post_validation
+            success: true
+      - identifier: Close CR Task
+        unified_job_template:
+          name: Linux // Patching // No-Op
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+        extra_data:
+          report_status_update: Success
+          task_purpose: Close CR Task
+          task_output:
+            action: close_ctask
+            ctask_num: CTASK123
+            ctask_sys_id: asdas9r70213u1ji321
+      - identifier: Update CR Task
+        unified_job_template:
+          name: Linux // Patching // No-Op
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+        extra_data:
+          report_status_update: Failed
+          task_purpose: Update CR Task
+          task_output:
+            action: update_ctask
+            ctask_num: CTASK123
+            ctask_sys_id: asdas9r70213u1ji321
+  - inventory: Autodotes Lab
+    name: Linux // Debug Workflow
+    workflow_nodes:
+      - identifier: Debug Variables
+        unified_job_template:
+          name: Linux // Debug
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+  - name: Linux // User Login (Random) Workflow
+    organization: Autodotes
+    workflow_nodes:
+      - identifier: Sync Project
+        related:
+          success_nodes:
+            - identifier: Start VMs
+        unified_job_template:
+          name: Linux Mgmt
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: Start VMs
+        related:
+          failure_nodes:
+            - identifier: Stop VMs
+          success_nodes:
+            - identifier: User Login
+        unified_job_template:
+          name: Proxmox // Manage Instance State
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+        extra_data:
+          proxmox_kvms:
+            - node: nuc
+              name: camp
+              state: started
+            - node: fedora-master
+              name: fedora
+              state: started
+      - identifier: Stop VMs
+        unified_job_template:
+          name: Proxmox // Manage Instance State
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+        extra_data:
+          proxmox_kvms:
+            - node: nuc
+              name: camp
+              state: stopped
+      - identifier: User Login
+        related:
+          always_nodes:
+            - identifier: Restore VM State
+        unified_job_template:
+          name: Linux // User Login (Random)
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Restore VM State
+        unified_job_template:
+          name: Proxmox // Manage Instance State
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+        extra_data:
+          proxmox_kvms:
+            - node: nuc
+              name: camp
+              state: stopped
+  - name: Linux // User Login Report Workflow
+    organization: Autodotes
+    workflow_nodes:
+      - identifier: Project Sync
+        related:
+          success_nodes:
+            - identifier: Start VMs
+        unified_job_template:
+          name: Linux Mgmt
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: Start VMs
+        related:
+          failure_nodes:
+            - identifier: Stop VMs
+          success_nodes:
+            - identifier: Generate Report
+        unified_job_template:
+          name: Proxmox // Manage Instance State
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+        extra_data:
+          proxmox_kvms:
+            - node: nuc
+              name: camp
+              state: started
+            - node: fedora-master
+              name: fedora
+              state: started
+      - identifier: Generate Report
+        related:
+          always_nodes:
+            - identifier: Stop VMs
+        unified_job_template:
+          name: Linux // User Login Report
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Stop VMs
+        unified_job_template:
+          name: Proxmox // Manage Instance State
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+        extra_data:
+          proxmox_kvms:
+            - node: nuc
+              name: camp
+              state: stopped
+  - description: Provision a guest in proxmox, register with subscription-manager, and install sql server
+    inventory: Proxmox Inventory
+    limit: "*.rhel-guest"
+    name: RHEL // Provision RHEL SQL Server Host
+    organization: Autodotes
+    workflow_nodes:
+      - identifier: 4cfd736f-cc84-4a0c-90b6-7e7e83c6dea8
+        related:
+          success_nodes:
+            - identifier: Provision Guest Host
+        unified_job_template:
+          name: Linux Mgmt
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: Provision Guest Host
+        related:
+          success_nodes:
+            - identifier: Register RHEL Guest
+        unified_job_template:
+          name: Proxmox // Provision KVM Guest
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Install SQL Server
+        limit: "*.rhel-guest"
+        unified_job_template:
+          name: RHEL // Install SQL Server
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Register RHEL Guest
+        limit: "*.rhel-guest"
+        related:
+          success_nodes:
+            - identifier: Install SQL Server
+        unified_job_template:
+          name: RHEL // Register
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+  # - identifier: 7f279466-ecb6-49a9-9e48-d7ba049c3c22
+  #   related:
+  #     create_approval_template:
+  #       description: Wait for an administrator to confirm the rhel guest was provisioned
+  #         and added to the inventory.
+  #       name: Confirm Provisioning Process
+  #       timeout: 900
+  #     success_nodes:
+  #     - identifier: Register RHEL Guest
+  - name: Sandbox // Produce & Consume
+    workflow_nodes:
+      - identifier: 6cac0b40-ab3e-400f-89a7-6d4d8d7f001b
+        related:
+          success_nodes:
+            - identifier: 422c0149-0b02-4530-a7e1-30bd920de72d
+        unified_job_template:
+          name: Linux Mgmt
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: 2bf53359-45fb-4620-b989-ba753f33c103
+        unified_job_template:
+          name: Sandbox // Consumer
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: 422c0149-0b02-4530-a7e1-30bd920de72d
+        related:
+          success_nodes:
+            - identifier: 2bf53359-45fb-4620-b989-ba753f33c103
+        unified_job_template:
+          name: Sandbox // Producer
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
