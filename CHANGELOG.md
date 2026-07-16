@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-07-16 — Refine docs breadcrumbs and var page presentation
+
+### Added
+- Path-based navbar breadcrumbs (`ansible-cac / …`) via header overrides, with links only for directories that have an index page
+- Autodotes red (`#b31b1b`) accordion styling for Full definition on generated config var pages
+
+### Changed
+- Default palette to dark mode; glass header only in slate, solid primary in light
+- Compact heading spacing; brighter dark-mode section and side-nav headers
+- Removed Home and the site title from the primary side nav (logo still links home)
+- Full definition opens by default, has a TOC heading, and keeps YAML syntax highlighting
+- Breadcrumb links match navbar text until hover (soft gold accent)
+- Tightened Pygments highlight settings (`pygments_lang_class`, `inlinehilite`)
+- Dropped obsolete export playbooks from the README tree diagram
+
 ## 2026-07-16 — Polish docs site chrome and side nav
 
 ### Added
