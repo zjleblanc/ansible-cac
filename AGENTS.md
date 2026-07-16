@@ -162,7 +162,7 @@ Rules:
 - Keep the one-liner in sync when renaming files or changing resource tags.
 - When adding/removing YAML files in a domain, update that domain’s `README.md` file table.
 
-Resource tags match `infra.aap_configuration.dispatch` (examples: `projects`, `credentials`, `credential_types`, `job_templates`, `workflow_job_templates`, `inventories`, `inventory_sources`, `host_groups`, `schedules`, `organizations`, `users`, `teams`, `authenticators`, `authenticator_maps`, `execution_environments`, `labels`, `notification_templates`, EDA `project` / `credential` / `event_stream` / `rulebook_activation`, Hub `registries` / `repos` / `collectionremote`).
+Resource tags match `infra.aap_configuration.dispatch` (examples: `projects`, `credentials`, `credential_input_sources`, `credential_types`, `job_templates`, `workflow_job_templates`, `inventories`, `inventory_sources`, `host_groups`, `schedules`, `organizations`, `users`, `teams`, `authenticators`, `authenticator_maps`, `execution_environments`, `labels`, `notification_templates`, EDA `project` / `credential` / `event_stream` / `rulebook_activation`, Hub `registries` / `repos` / `collectionremote`).
 
 ## Applying configuration
 

@@ -101,6 +101,16 @@ Keys that are absent from an entry are simply omitted; the remaining keys keep t
   inputs:
 ```
 
+### Credential Input Sources (`controller_credential_input_sources_*`)
+
+```yaml
+- source_credential:
+  target_credential:
+  input_field_name:
+  description:
+  metadata:
+```
+
 ### Credential Types (`controller_credential_types_*`)
 
 ```yaml

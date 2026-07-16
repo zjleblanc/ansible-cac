@@ -10,6 +10,7 @@ Paths are under `config/<domain>/`. Variable suffix is always `_<domain>` (`_com
 | `workflow_job_template` | `workflow_job_templates.yml` | `controller_workflows` | Workflow Job Templates |
 | `project` (Controller) | `projects.yml` | `controller_projects` | Projects |
 | `credential` (Controller) | `credentials.yml` | `controller_credentials` | Credentials |
+| `credential_input_source` | `credential_input_sources.yml` | `controller_credential_input_sources` | Credential Input Sources |
 | `credential_type` (Controller) | `credential_types.yml` | `controller_credential_types` | Credential Types |
 | `inventory` | `inventories.yml` | `controller_inventories` | Inventories |
 | `inventory_source` | `inventory_sources.yml` | `controller_inventory_sources` | Inventory Sources |
