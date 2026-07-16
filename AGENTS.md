@@ -75,6 +75,44 @@ The full specification with per-type orderings is in [`docs/key_ordering.md`](./
 The general principle: **identity first** (`name`, `organization`, `description`), then type/classification,
 then behavioral config, then complex nested structures last (e.g. `survey_spec`, `workflow_nodes`, `inputs`, `injectors`).
 
+## Domain labels (required)
+
+Labelable Controller resources — **job templates**, **workflow job templates**, and **inventories** — must carry
+exactly **one** domain label matching their `config/<domain>/` folder. Definitions live in
+[`config/common/labels.yml`](./config/common/labels.yml).
+
+| Domain folder | Label name |
+|---------------|------------|
+| `cloud` | `Cloud` |
+| `networking` | `Network` |
+| `linux` | `Linux` |
+| `windows` | `Windows` |
+| `hashi` | `Hashi` |
+| `aiops` | `AIOps` |
+| `servicenow` | `ServiceNow` |
+| `apps` | `Apps` |
+| `aap` | `AAP` |
+
+Rules:
+
+- **Replace** any existing / API-exported labels with the single domain label (do not keep `Demo`, `AWS`, `HCP`, etc. alongside it).
+- **Do not** label objects in `config/common/` with a domain label. There is no `Common` label.
+- **`hub`** has no Controller JT/workflow/inventory vars; skip domain labels there.
+- When adding a **new** domain, add its label to `config/common/labels.yml` (Autodotes org unless another org is required) before referencing it.
+- If the domain label is missing from `labels.yml`, add it there (merge with existing entries; do not duplicate).
+
+Example:
+
+```yaml
+controller_templates_cloud:
+  - name: AWS // Create VM
+    organization: Autodotes
+    labels:
+      - Cloud
+    project: Cloud Mgmt
+    ...
+```
+
 ## Placement rules (no cross-dependencies)
 
 Before adding or moving a resource, ask: **is this definition referenced by job templates / workflows / inventory sources in more than one domain?**
@@ -158,10 +196,11 @@ Tag layers:
 3. Ensure the file has the correct one-liner comment at the top (see above).
 4. Ensure any **referenced** project, credential, credential type, inventory, EE, and label already exist in that domain or in `common`.
 5. If a dependency is missing and would be used only here, add it in the same domain. If other domains already need it, put the definition in `common` instead of duplicating.
-6. For `aiops` job templates and workflows, include `labels` containing `AIOps`. Keep the `AIOps` label definition in `config/common/labels.yml`.
+6. For labelable resources (job templates, workflows, inventories) outside `common`, set `labels` to exactly the domain label (see **Domain labels**). Ensure that label exists in `config/common/labels.yml`.
 7. Do not put secrets in config YAML. Reference vaulted vars from `vars/*_secrets.yml` (see redacted examples). Never commit real `*secrets.yml` files.
 8. If you add a **new domain folder**:
    - Add `include_vars` in `pb_aap_config.yml` with `tags: [<domain>, never]`
+   - Add the domain label to `config/common/labels.yml`
    - Add `config/<domain>/README.md` (apply instructions + file table)
    - Link it from [config/README.md](./config/README.md)
 9. If you add/remove a YAML file in an existing domain, update that domain’s README file table.
@@ -172,6 +211,7 @@ Tag layers:
 - Do not put a shared project/credential/inventory only in one domain if another domain’s templates reference it by name — that creates a silent apply-order / missing-object dependency. Move the definition to `common`.
 - Do not invent or hardcode secret values; use `{{ controller_credential_* }}` (or the appropriate vault var) and document new vars in the matching `*_secrets.redacted.yml`.
 - Do not omit or drift var-file one-liners / domain README tables when changing config layout.
+- Do not leave labelable domain objects without their domain label, keep multi-label leftovers from exports, or invent a `Common` label.
 - Do not edit the plan file under `.cursor/plans/` unless the user asks.
 
 ## Related files
@@ -179,7 +219,9 @@ Tag layers:
 - [`pb_aap_config.yml`](./pb_aap_config.yml) — apply playbook
 - [`config/README.md`](./config/README.md) — domain index
 - [`config/<domain>/README.md`](./config/README.md) — per-domain apply docs
+- [`config/common/labels.yml`](./config/common/labels.yml) — domain label definitions
 - [`README.md`](./README.md) — repo overview
 - [`README_EXPORT.md`](./README_EXPORT.md) — export/normalize into CaC
+- [`.cursor/skills/cac-parser/SKILL.md`](./.cursor/skills/cac-parser/SKILL.md) — API payload → CaC conversion (includes domain labels)
 - [`scripts/migrate_to_wildcard_config.py`](./scripts/migrate_to_wildcard_config.py) — one-time migration reference (historical)
 - [redhat-cop/aap_configuration_template](https://github.com/redhat-cop/aap_configuration_template) — upstream pattern for wildcard vars + `dispatch_include_wildcard_vars`

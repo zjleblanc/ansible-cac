@@ -9,3 +9,11 @@ controller_projects_hashi:
     scm_clean: "no"
     scm_delete_on_update: "no"
     scm_update_on_launch: "no"
+  - name: Zero Trust
+    organization: Autodotes
+    scm_type: git
+    scm_url: https://github.com/zjleblanc/ansible-zero-trust.git
+    scm_branch: main
+    scm_clean: "no"
+    scm_delete_on_update: "no"
+    scm_update_on_launch: "no"

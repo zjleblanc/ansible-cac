@@ -2,6 +2,8 @@
 ---
 controller_templates_apps:
   - name: Lab // Dynamic DNS
+    labels:
+      - Apps
     project: Autodotes
     playbook: playbooks/homelab/dynamic_dns.yml
     inventory: Autodotes Lab
@@ -11,6 +13,8 @@ controller_templates_apps:
       - Controller Credential
       - Cloudflare DNS
   - name: Lab // Dynamic DNS // Webhook
+    labels:
+      - Apps
     project: Autodotes
     playbook: playbooks/homelab/dynamic_dns_webhook.yml
     inventory: Autodotes Lab
@@ -22,7 +26,8 @@ controller_templates_apps:
   - name: App // SSL Artifact Backup
     organization: Autodotes
     description: Backup SSL artifacts for designated site(s)
-    labels: ["Demo", "Apps"]
+    labels:
+      - Apps
     project: App Mgmt
     playbook: pb_ssl_backup.yml
     inventory: Autodotes Lab
@@ -49,7 +54,8 @@ controller_templates_apps:
   - name: App // SSL Artifact Cleanup
     organization: Autodotes
     description: Cleanup SSL artifacts for designated site(s)
-    labels: ["Demo", "Apps"]
+    labels:
+      - Apps
     project: App Mgmt
     playbook: pb_ssl_cleanup.yml
     inventory: Autodotes Lab
@@ -76,7 +82,8 @@ controller_templates_apps:
   - name: App // SSL Artifact Restore
     organization: Autodotes
     description: Restore SSL artifacts for designated site(s) from backups
-    labels: ["Demo", "Apps"]
+    labels:
+      - Apps
     project: App Mgmt
     playbook: pb_ssl_restore.yml
     inventory: Autodotes Lab
@@ -103,7 +110,8 @@ controller_templates_apps:
   - name: App // SSL Certificate Renewal
     organization: Autodotes
     description: Renew SSL certificates for designated site(s)
-    labels: ["Demo", "Apps"]
+    labels:
+      - Apps
     project: App Mgmt
     playbook: pb_ssl_renewal.yml
     inventory: Autodotes Lab
@@ -137,7 +145,8 @@ controller_templates_apps:
   - name: App // Certificate Renewal Health Check
     organization: Autodotes
     description: Perform health check and validate SSL certificates for designated site(s)
-    labels: ["Demo", "Apps"]
+    labels:
+      - Apps
     project: App Mgmt
     playbook: pb_ssl_healthcheck.yml
     inventory: Autodotes Lab
@@ -162,6 +171,8 @@ controller_templates_apps:
     notification_templates_success: ["Slack Autodotes #ansible-notifications"]
     notification_templates_error: ["Slack Autodotes #ansible-notifications"]
   - name: Autodotes // Create Site with SSL
+    labels:
+      - Apps
     project: Linux Mgmt
     playbook: playbooks/configure_nginx_site_ssl.yml
     inventory: Autodotes Lab
@@ -174,6 +185,8 @@ controller_templates_apps:
       _hosts: raspi
   - name: Autodotes // Renew Certs
     description: renew certs on non-AAP sites
+    labels:
+      - Apps
     project: Autodotes
     playbook: playbooks/acme/renew_certs.yml
     inventory: Autodotes Lab
@@ -192,6 +205,8 @@ controller_templates_apps:
         - docs.autodotes.com
   - name: CyberArk // Demo Credential
     description: Use CyberArk Conjur lookup and print out secret for demo purposes only.
+    labels:
+      - Apps
     project: Autodotes
     playbook: playbooks/demo/demo_conjur_secret.yml
     inventory: Autodotes Lab
@@ -200,6 +215,8 @@ controller_templates_apps:
     job_type: run
     job_slice_count: 1
   - name: CyberArk // Install Conjur
+    labels:
+      - Apps
     project: CyberArk-Conjur Demo
     playbook: conjur-install-config.yml
     inventory: Autodotes Lab
@@ -208,6 +225,8 @@ controller_templates_apps:
     job_type: run
     job_slice_count: 1
   - name: CyberArk // Per-host Credential Lookup
+    labels:
+      - Apps
     project: Cloud Mgmt
     playbook: demos/cyberark_per_host.yml
     inventory: Cloud Inventory
@@ -224,6 +243,8 @@ controller_templates_apps:
       method: sshkey
     survey_enabled: true
   - name: Kasa // Discover Smart Devices
+    labels:
+      - Apps
     project: Autodotes
     playbook: playbooks/kasa/discover.yml
     inventory: Autodotes Lab
@@ -234,6 +255,8 @@ controller_templates_apps:
     job_slice_count: 1
     ask_verbosity_on_launch: true
   - name: Kasa // Turn Off Daytime Air Wicks
+    labels:
+      - Apps
     project: Autodotes
     playbook: playbooks/kasa/daytime.yml
     inventory: Autodotes Lab
@@ -245,6 +268,8 @@ controller_templates_apps:
     extra_vars:
       desired_state: disabled
   - name: Kasa // Turn Off Outdoor Lights
+    labels:
+      - Apps
     project: Autodotes
     playbook: playbooks/kasa/outdoor.yml
     inventory: Autodotes Lab
@@ -256,6 +281,8 @@ controller_templates_apps:
     extra_vars:
       desired_state: disabled
   - name: Kasa // Turn On Daytime Air Wicks
+    labels:
+      - Apps
     project: Autodotes
     playbook: playbooks/kasa/daytime.yml
     inventory: Autodotes Lab
@@ -267,6 +294,8 @@ controller_templates_apps:
     extra_vars:
       desired_state: enabled
   - name: Kasa // Turn On Outdoor Lights
+    labels:
+      - Apps
     project: Autodotes
     playbook: playbooks/kasa/outdoor.yml
     inventory: Autodotes Lab
@@ -278,6 +307,8 @@ controller_templates_apps:
     extra_vars:
       desired_state: enabled
   - name: Kasa // Manage Device State
+    labels:
+      - Apps
     project: Autodotes
     playbook: playbooks/kasa/manage_device_state.yml
     inventory: Autodotes Lab
@@ -288,6 +319,8 @@ controller_templates_apps:
   - name: Policy Enforcement // Database Maintenance Demo
     organization: Autodotes
     description: Demonstrate integration with Policy Enforcement using a mock database maintenance scenario
+    labels:
+      - Apps
     project: Policy Enforcement
     playbook: demo_aap_policy_enforcement.yml
     inventory: Demo Inventory

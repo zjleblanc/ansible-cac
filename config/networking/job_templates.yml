@@ -2,6 +2,8 @@
 ---
 controller_templates_networking:
   - name: Networking // Cisco Compliance
+    labels:
+      - Network
     project: Network Mgmt
     playbook: workshop-addons/cisco_compliance.yml
     inventory: Cisco Lab
@@ -10,6 +12,8 @@ controller_templates_networking:
     job_type: run
     job_slice_count: 1
   - name: Networking // Cisco EOX Lifecycle
+    labels:
+      - Network
     project: Network Mgmt
     playbook: workshop-addons/cisco_lifecycle.yml
     inventory: Cisco Lab
@@ -19,6 +23,8 @@ controller_templates_networking:
     job_type: run
     job_slice_count: 1
   - name: Networking // Cisco Upgrade (ios)
+    labels:
+      - Network
     project: Network Mgmt
     playbook: workshop-addons/cisco_upgrade.yml
     inventory: Cisco Lab
@@ -45,6 +51,8 @@ controller_templates_networking:
           type: text
           variable: _hosts
   - name: Networking // Cisco VLAN ACLs
+    labels:
+      - Network
     project: Network Mgmt
     playbook: workshop-addons/cisco_vlan_acls.yml
     inventory: Cisco Lab
@@ -52,6 +60,8 @@ controller_templates_networking:
     job_type: run
     job_slice_count: 1
   - name: Networking // Dynatrace -> ServiceNow CMDB
+    labels:
+      - Network
     project: Network Mgmt
     playbook: playbooks/dynatrace_snow_cmdb.yml
     inventory: Proxmox Inventory
@@ -64,6 +74,8 @@ controller_templates_networking:
     extra_vars:
       record_limit: 5
   - name: Networking // Golden Configs
+    labels:
+      - Network
     project: Network Mgmt
     playbook: playbooks/network_config.yml
     inventory: Cisco Lab
@@ -86,6 +98,8 @@ controller_templates_networking:
           type: text
           variable: _hosts
   - name: Networking // Label CDP Neighbors
+    labels:
+      - Network
     project: Network Mgmt
     playbook: playbooks/label_cdp_neighbors.yml
     inventory: Cisco Lab
@@ -93,6 +107,8 @@ controller_templates_networking:
     job_type: run
     job_slice_count: 1
   - name: Networking // MS O365 ACLs
+    labels:
+      - Network
     project: Network Mgmt
     playbook: playbooks/o365_acls.yml
     inventory: Cisco Lab
@@ -100,6 +116,8 @@ controller_templates_networking:
     job_type: run
     job_slice_count: 1
   - name: Palo Alto // Configure Firewall
+    labels:
+      - Network
     project: Network Mgmt
     playbook: demos/panos/pb_firewall_configure.yml
     inventory: Palo Alto Demo Inventory
@@ -111,6 +129,8 @@ controller_templates_networking:
     job_slice_count: 1
     ask_variables_on_launch: true
   - name: Palo Alto // Firewall Security Rule
+    labels:
+      - Network
     project: Network Mgmt
     playbook: demos/panos/pb_panos_security_rule.yml
     inventory: Palo Alto Demo Inventory
@@ -124,6 +144,8 @@ controller_templates_networking:
     extra_vars:
       panos_commit: false
   - name: Palo Alto // Setup Infrastructure
+    labels:
+      - Network
     project: Network Mgmt
     playbook: demos/panos/pb_infra_setup.yml
     inventory: Palo Alto Demo Inventory
@@ -164,6 +186,8 @@ controller_templates_networking:
           type: multiplechoice
           variable: skip_fw_password
   - name: Palo Alto // Tear Down Infrastructure
+    labels:
+      - Network
     project: Network Mgmt
     playbook: demos/panos/pb_infra_teardown.yml
     inventory: Palo Alto Demo Inventory
@@ -175,6 +199,8 @@ controller_templates_networking:
     extra_vars:
       aws_region: us-east-2
   - name: Palo Alto // Web Server Setup
+    labels:
+      - Network
     project: Network Mgmt
     playbook: demos/panos/pb_webserver_setup.yml
     inventory: Palo Alto Demo Inventory
@@ -185,6 +211,8 @@ controller_templates_networking:
     job_slice_count: 1
     ask_variables_on_launch: true
   - name: Summit Connect // Apply Network CaC
+    labels:
+      - Network
     project: Network Mgmt
     playbook: summit-connect/playbooks/network_apply_cac.yml
     inventory: Cisco Lab
@@ -195,6 +223,8 @@ controller_templates_networking:
     job_slice_count: 1
     ask_variables_on_launch: true
   - name: Summit Connect //  Network Apply Configs
+    labels:
+      - Network
     project: Network Mgmt
     playbook: summit-connect/playbooks/network_apply_config.yml
     inventory: Cisco Lab
@@ -229,6 +259,8 @@ controller_templates_networking:
           type: text
           variable: _hosts
   - name: Summit Connect // Network Backup
+    labels:
+      - Network
     project: Network Mgmt
     playbook: summit-connect/playbooks/network_backup.yml
     inventory: Cisco Lab
@@ -256,6 +288,8 @@ controller_templates_networking:
           type: text
           variable: _hosts
   - name: Summit Connect // Network Restore
+    labels:
+      - Network
     project: Network Mgmt
     playbook: summit-connect/playbooks/network_restore.yml
     inventory: Cisco Lab
@@ -328,6 +362,8 @@ controller_templates_networking:
           type: multiplechoice
           variable: backup_config_tag
   - name: Summit Connect // Setup
+    labels:
+      - Network
     project: Network Mgmt
     playbook: summit-connect/setup.yml
     inventory: Cisco Lab
@@ -340,6 +376,8 @@ controller_templates_networking:
     extra_vars:
       input_slack_token: REPLACE_ME
   - name: Summit Connect // Slack Notification
+    labels:
+      - Network
     project: Network Mgmt
     playbook: summit-connect/playbooks/slack_notification.yml
     inventory: Cisco Lab

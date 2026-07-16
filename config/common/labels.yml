@@ -5,6 +5,8 @@ controller_labels_common:
     organization: Autodotes
   - name: Cloud
     organization: Autodotes
+  - name: Hashi
+    organization: Autodotes
   - name: HCP
     organization: Autodotes
   - name: Demo
@@ -20,4 +22,6 @@ controller_labels_common:
   - name: OOTB
     organization: Default
   - name: AIOps
+    organization: Autodotes
+  - name: AAP
     organization: Autodotes

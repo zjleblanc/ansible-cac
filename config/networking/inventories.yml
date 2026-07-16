@@ -4,6 +4,8 @@ controller_inventories_networking:
   - name: Cisco Lab
     organization: Autodotes
     description: Static inventory representing Cisco always-on sandbox devices
+    labels:
+      - Network
     variables:
       ansible_network_cli_ssh_type: paramiko
       ansible_paramiko_host_key_checking: false
@@ -13,3 +15,5 @@ controller_inventories_networking:
   - name: Palo Alto Demo Inventory
     organization: Autodotes
     description: Used with Palo Alto Firewall demo based on AWS EC2 infrastructure
+    labels:
+      - Network

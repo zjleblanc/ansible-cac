@@ -3,6 +3,8 @@
 controller_workflows_networking:
   - name: Palo Alto // Provision Firewall Demo Workflow
     organization: Autodotes
+    labels:
+      - Network
     inventory: Palo Alto Demo Inventory
     workflow_nodes:
       - identifier: Setup Infrastructure
@@ -60,6 +62,8 @@ controller_workflows_networking:
   - name: Summit Connect // Network Configuration Workflow
     organization: Autodotes
     description: Demo workflow for configuring network devices and notifying users of changes via Slack
+    labels:
+      - Network
     inventory: Cisco Lab
     survey_enabled: true
     survey_spec:
@@ -88,8 +92,7 @@ controller_workflows_networking:
           variable: config_repo_name
         - choices: ""
           # noqa: yaml[line-length]
-          default: "interfaces:\n  - description: MANAGEMENT INTERFACE - DON'T TOUCH ME\n    enabled: true\n    name: GigabitEthernet1\n  - description: Port to Fabric
-            (edit 2 -> ansible)\n    enabled: true\n    name: GigabitEthernet2"
+          default: "interfaces:\n  - description: MANAGEMENT INTERFACE - DON'T TOUCH ME\n    enabled: true\n    name: GigabitEthernet1\n  - description: Port to Fabric (edit 2 -> ansible)\n    enabled: true\n    name: GigabitEthernet2"
           max: 1024
           min: 0
           new_question: false

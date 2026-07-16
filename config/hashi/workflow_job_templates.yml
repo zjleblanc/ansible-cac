@@ -4,8 +4,7 @@ controller_workflows_hashi:
   - name: Terraform // Azure Deploy and Configure Workflow
     organization: Autodotes
     labels:
-      - Demo
-      - Cloud
+      - Hashi
     survey_enabled: true
     survey_spec:
       name: workflow survey
@@ -83,9 +82,7 @@ controller_workflows_hashi:
   - name: Terraform // HCP // Azure Deploy and Configure Workflow
     organization: Autodotes
     labels:
-      - Demo
-      - Cloud
-      - HCP
+      - Hashi
     ask_variables_on_launch: true
     ask_labels_on_launch: true
     survey_enabled: true
@@ -310,9 +307,7 @@ controller_workflows_hashi:
   - name: Terraform // GitHub // Azure Deploy and Configure Workflow
     organization: Autodotes
     labels:
-      - Demo
-      - Cloud
-      - HCP
+      - Hashi
     ask_variables_on_launch: true
     ask_labels_on_launch: true
     workflow_nodes:
@@ -372,9 +367,7 @@ controller_workflows_hashi:
   - name: Terraform // HCP // AWS Deploy and Configure Workflow
     organization: Autodotes
     labels:
-      - Demo
-      - Cloud
-      - HCP
+      - Hashi
     survey_enabled: true
     survey_spec:
       name: workflow survey

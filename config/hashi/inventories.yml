@@ -5,9 +5,9 @@ controller_inventories_hashi:
     organization: Autodotes
     description: Demo using Ansible and Terraform
     labels:
-      - Cloud
+      - Hashi
   - name: Ansible-HCP Inventory
     organization: Autodotes
     description: Demo using Ansible and Terraform Enterprise (HCP)
     labels:
-      - Cloud
+      - Hashi

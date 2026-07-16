@@ -3,7 +3,8 @@
 controller_workflows_aiops:
   - name: EDA // Remediation Workflow // Disk Space
     organization: Autodotes
-    labels: ["AIOps"]
+    labels:
+      - AIOps
     ask_variables_on_launch: true
     workflow_nodes:
       - identifier: Sync Project
@@ -69,7 +70,8 @@ controller_workflows_aiops:
           type: job_template
   - name: EDA // Remediation Workflow // High Memory Usage
     organization: Autodotes
-    labels: ["AIOps"]
+    labels:
+      - AIOps
     inventory: Cloud Inventory
     ask_variables_on_launch: true
     workflow_nodes:
@@ -132,7 +134,8 @@ controller_workflows_aiops:
           type: job_template
   - name: EDA // Remediation Workflow // OneAgent
     organization: Autodotes
-    labels: ["AIOps"]
+    labels:
+      - AIOps
     ask_variables_on_launch: true
     workflow_nodes:
       - identifier: cf69755d-be79-4432-b67d-1aad633a9576

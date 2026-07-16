@@ -4,3 +4,5 @@ controller_inventories_cloud:
   - name: Azure Inventory
     organization: Autodotes
     description: Demo using ARM inventory plugin
+    labels:
+      - Cloud

@@ -1,6 +1,6 @@
 ---
 name: cac-parser
-description: Convert an AAP/Controller/EDA/Hub/Gateway API resource payload into ansible-cac domain YAML. Chooses domain and vars file, normalizes nested API objects to names, omits role/module defaults from infra.aap_configuration and ansible.* collections listed in collections/requirements.yml, and applies docs/key_ordering.md. Use when the user pastes an AAP API JSON/YAML object, export payload, or asks to add a Controller/EDA/Hub resource into config/.
+description: Convert an AAP/Controller/EDA/Hub/Gateway API resource payload into ansible-cac domain YAML. Chooses domain and vars file, applies the single domain label on job templates/workflows/inventories, normalizes nested API objects to names, omits role/module defaults from infra.aap_configuration and ansible.* collections listed in collections/requirements.yml, and applies docs/key_ordering.md. Use when the user pastes an AAP API JSON/YAML object, export payload, or asks to add a Controller/EDA/Hub resource into config/.
 disable-model-invocation: true
 ---
 
@@ -24,9 +24,10 @@ Copy this checklist and track it:
 - [ ] 1. Identify resource type
 - [ ] 2. Choose domain + vars file
 - [ ] 3. Normalize API shape → CaC fields
-- [ ] 4. Drop omit-able defaults
-- [ ] 5. Apply canonical key order
-- [ ] 6. Emit placement + YAML (write only if asked)
+- [ ] 4. Apply domain label (JT / workflow / inventory)
+- [ ] 5. Drop omit-able defaults
+- [ ] 6. Apply canonical key order
+- [ ] 7. Emit placement + YAML (write only if asked)
 ```
 
 ### 1. Identify resource type
@@ -53,13 +54,14 @@ Placement rules (from AGENTS.md):
 | Used by **one** domain only? | That domain folder with `_<domain>` suffix |
 | Schedule? | Same domain as the `unified_job_template` it targets |
 | Inventory source / group? | With the inventory’s domain (or `common` if inventory is shared); prefer use-case domain for groups on shared inventories |
-| AIOps JT/workflow? | `aiops`; include `AIOps` in `labels` |
+| Labelable JT / workflow / inventory? | Non-`common` domain → set domain label (step 4); never a `Common` label |
 
 Hints for domain when not stated:
 
-- Name / labels / project name (`AWS //`, `Vault //`, `EDA //`, `PAH //`, `Cisco`, `Windows`, `ServiceNow`, …).
+- Name / project name (`AWS //`, `Vault //`, `EDA //`, `PAH //`, `Cisco`, `Windows`, `ServiceNow`, …).
 - Existing similar resources already in `config/<domain>/`.
 - User-stated product area.
+- API `labels` may hint at domain but are **not** kept as-is — see step 4.
 
 If still unclear, ask **one** clarifying question (domain only). Prefer suggesting the best guess with rationale.
 
@@ -79,7 +81,27 @@ Transform Controller/Gateway/EDA/Hub API objects into the flat dict shape used i
 
 Match field names already used in sibling entries in the target file (e.g. `controller_templates_*` not `job_templates`).
 
-### 4. Drop omit-able defaults
+### 4. Apply domain label
+
+For **job templates**, **workflow job templates**, and **inventories** placed outside `common`, set `labels` to **exactly one** domain label (replace API/export labels — do not merge `Demo` / provider tags / etc.):
+
+| Domain | Label |
+|--------|-------|
+| `cloud` | `Cloud` |
+| `networking` | `Network` |
+| `linux` | `Linux` |
+| `windows` | `Windows` |
+| `hashi` | `Hashi` |
+| `aiops` | `AIOps` |
+| `servicenow` | `ServiceNow` |
+| `apps` | `Apps` |
+| `aap` | `AAP` |
+
+- Objects in `common`: omit `labels` (no `Common` label).
+- Ensure the label exists in [`config/common/labels.yml`](../../../config/common/labels.yml); add it there if missing.
+- New domain folder: add the label definition before referencing it.
+
+### 5. Drop omit-able defaults
 
 API exports are verbose. Omit keys whose value matches a **documented default** (or an effective no-op empty) from the collections this repo depends on — see [collections/requirements.yml](../../../collections/requirements.yml).
 
@@ -99,24 +121,24 @@ See omit tables in [resource-map.md](resource-map.md). Common job-template drops
 - `allow_simultaneous: false`, `use_fact_cache: false`, `survey_enabled: false`
 - empty strings / empty lists / empty dicts that only restate defaults (`limit: ""`, `extra_vars: {}`, `labels: []`, …)
 
-**Keep** non-default values even if noisy (`ask_variables_on_launch: true`, custom verbosity, real `extra_vars`, labels, surveys).
+**Keep** non-default values even if noisy (`ask_variables_on_launch: true`, custom verbosity, real `extra_vars`, surveys). Domain `labels` are set in step 4 (not preserved from export as-is).
 
 When unsure, open the matching role task and the matching `ansible.*` module docs under the installed collections (typical path: `~/.ansible/collections/ansible_collections/`).
 
-### 5. Apply canonical key order
+### 6. Apply canonical key order
 
 Reorder remaining keys to match [docs/key_ordering.md](../../../docs/key_ordering.md) for that variable family. Omit absent keys; do not add keys just to fill the template.
 
-### 6. Emit result
+### 7. Emit result
 
 Default: **do not write files** unless the user asks to add/append.
 
 Output:
 
 1. **Placement** — domain, file path, variable name, one-line apply command matching the file’s header style.
-2. **Rationale** — one or two sentences (shared → common, label/name cues, etc.).
+2. **Rationale** — one or two sentences (shared → common, name cues, etc.).
 3. **YAML entry** — a single list item (`- name: …`) ready to paste under the target variable (not a full file rewrite).
-4. **Follow-ups** — missing deps (project/credential/inventory/EE/label that must exist in domain or common), vault vars, or AIOps label reminder.
+4. **Follow-ups** — missing deps (project/credential/inventory/EE/domain label in `config/common/labels.yml`), vault vars.
 
 If the user asks to apply: append the entry to the correct list in the vars file; preserve the file one-liner and `---`; do not reorder unrelated entries unless asked; update the domain README file table only when adding a **new** YAML file.
 
@@ -145,9 +167,9 @@ If the user asks to apply: append the entry to the correct list in the vars file
 
 ## Examples
 
-**Input (API job template excerpt):** playbook + project summary_fields, `job_type: run`, `job_slice_count: 1`, many `ask_*: false`, `labels` as related list.
+**Input (API job template excerpt):** playbook + project summary_fields, `job_type: run`, `job_slice_count: 1`, many `ask_*: false`, `labels` as related list (`Demo`, `AWS`, …).
 
-**Output:** `name` / `organization` / `description` / `labels` (name list) / `project` / `playbook` / `inventory` / `execution_environment` / `credentials` — no default `job_type` / `job_slice_count` / false `ask_*`. Domain from name prefix or labels (e.g. `AWS //` → `cloud`).
+**Output:** `name` / `organization` / `description` / `labels: [Cloud]` / `project` / `playbook` / `inventory` / `execution_environment` / `credentials` — no default `job_type` / `job_slice_count` / false `ask_*`. Domain from name prefix (e.g. `AWS //` → `cloud`); export labels replaced by the single domain label.
 
 ## Additional resources
 
