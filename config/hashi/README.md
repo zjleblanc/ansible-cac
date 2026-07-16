@@ -16,7 +16,7 @@ ansible-playbook pb_aap_config.yml --tags hashi
 
 - Terraform Mgmt project, HCP/Terraform inventories and sources
 - Terraform Cloud / backend credentials and credential types
-- Vault install/lookup job templates and HashiCorp Vault credentials
+- Vault install/lookup/OIDC demo job templates and HashiCorp Vault credentials (including OIDC lookup + input sources)
 - Terraform deploy/configure workflows
 
 ## Scope to a single resource file
@@ -29,6 +29,7 @@ Each YAML file has a one-liner comment at the top. Domain + resource tags filter
 |------|--------------|--------|
 | `credential_types.yml` | `credential_types` | `ansible-playbook pb_aap_config.yml --tags hashi,credential_types --skip-tags common` |
 | `credentials.yml` | `credentials` | `ansible-playbook pb_aap_config.yml --tags hashi,credentials --skip-tags common` |
+| `credential_input_sources.yml` | `credential_input_sources` | `ansible-playbook pb_aap_config.yml --tags hashi,credential_input_sources --skip-tags common` |
 | `inventories.yml` | `inventories` | `ansible-playbook pb_aap_config.yml --tags hashi,inventories --skip-tags common` |
 | `inventory_sources.yml` | `inventory_sources` | `ansible-playbook pb_aap_config.yml --tags hashi,inventory_sources --skip-tags common` |
 | `job_templates.yml` | `job_templates` | `ansible-playbook pb_aap_config.yml --tags hashi,job_templates --skip-tags common` |

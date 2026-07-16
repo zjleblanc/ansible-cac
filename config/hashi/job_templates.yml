@@ -149,7 +149,7 @@ controller_templates_hashi:
     inventory: Ansible-HCP Inventory
     execution_environment: ee-default
     credentials:
-      - AAP (id_rsa)HCP // AWS Web Demo Configur
+      - AAP (id_rsa)
   - name: Terraform // GitHub // Azure Web Demo Deploy
     organization: Autodotes
     description: Orchestrate a Terraform run based on GitHub action
@@ -304,3 +304,15 @@ controller_templates_hashi:
       - Vault Demo Credential
     job_type: run
     job_slice_count: 1
+  - name: Vault // OIDC // Demo
+    organization: Autodotes
+    description: Demonstrate the Vault integration with AAP as an OIDC provider. Choose a credential based on expected allow/deny outcome.
+    labels:
+      - Hashi
+    project: Zero Trust
+    playbook: playbooks/pb_demo_oidc.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
+      - Vault OIDC Allow
+    ask_credential_on_launch: true

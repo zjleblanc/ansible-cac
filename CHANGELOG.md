@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-07-16 — Add Vault OIDC demo CaC to hashi
+
+### Added
+- Hashi credentials `Vault OIDC Lookup`, `Vault OIDC Allow`, and `Vault OIDC Deny`
+- `config/hashi/credential_input_sources.yml` wiring Allow/Deny tokens from the OIDC Vault lookup
+- Job template `Vault // OIDC // Demo` (Zero Trust project) with credential prompt on launch
+- Canonical key order and cac-parser resource map for credential input sources
+
+### Changed
+- Documented `credential_input_sources` in AGENTS.md resource-tag examples and the hashi README file table
+
+### Fixed
+- Restored corrupted machine credential name on `Terraform // HCP // AWS Web Demo Configure`
+
 ## 2026-07-16 — Document local venv and AAP env vars in README
 
 ### Added
