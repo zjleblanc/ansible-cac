@@ -1,0 +1,12 @@
+# ansible-playbook pb_aap_config.yml --tags organizations
+---
+aap_organizations_common:
+  - name: Autodotes
+    description: Default organization for Autodotes containerized AAP instance
+  - name: Red Hat
+    # description: Shared organization for Red Hat collaborators
+    max_hosts: 0
+    default_environment: ee-default
+    galaxy_credentials:
+      - Red Hat Automation Hub [Certified]
+      - Ansible Galaxy

@@ -1,0 +1,63 @@
+# ansible-playbook pb_aap_config.yml --tags hashi,inventory_sources --skip-tags common
+---
+controller_inventory_sources_hashi:
+  - name: Azure Open Environment
+    description: Azure VMs in open environment (all resource groups)
+    inventory: Ansible-Terraform Inventory
+    source: azure_rm
+    source_vars:
+      keyed_groups:
+        - prefix: tag
+          key: tags
+    credential: Azure Open Environment Service Principal
+    execution_environment: ee-cloud
+    overwrite: true
+    overwrite_vars: true
+    update_on_launch: false
+    update_cache_timeout: 0
+    timeout: 0
+    verbosity: 1
+  - name: app.terraform.io/zleblanc/azure-web-demo-dev/state
+    description: Terraform backend configuration from HCP workspace
+    inventory: Ansible-HCP Inventory
+    source: terraform
+    source_vars:
+      backend_type: remote
+      hostnames:
+        - name
+      compose:
+        ansible_host: public_ip_address
+        ansible_user: admin_username
+      keyed_groups:
+        - key: tags
+          prefix: tag
+    credential: app.terraform.io/zleblanc/azure-web-demo-dev/backend
+    execution_environment: ee-cloud
+    overwrite: true
+    overwrite_vars: true
+    update_on_launch: false
+    update_cache_timeout: 0
+    timeout: 0
+    verbosity: 1
+  - name: app.terraform.io/zleblanc/aws-web-demo-dev/state
+    description: Terraform backend configuration from HCP workspace
+    inventory: Ansible-HCP Inventory
+    source: terraform
+    source_vars:
+      backend_type: remote
+      hostnames:
+        - name
+      compose:
+        ansible_host: public_ip_address
+        ansible_user: admin_username
+      keyed_groups:
+        - key: tags
+          prefix: tag
+    credential: app.terraform.io/zleblanc/aws-web-demo-dev/backend
+    execution_environment: ee-cloud
+    overwrite: true
+    overwrite_vars: true
+    update_on_launch: false
+    update_cache_timeout: 0
+    timeout: 0
+    verbosity: 1

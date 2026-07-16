@@ -1,0 +1,32 @@
+# ansible-playbook pb_aap_config.yml --tags networking,inventory_sources --skip-tags common
+---
+controller_inventory_sources_networking:
+  - name: EC2 Inventory Source
+    description: ""
+    inventory: Palo Alto Demo Inventory
+    source: ec2
+    source_project:
+    source_path: ""
+    source_vars:
+      aws_region: us-east-2
+      compose:
+        ansible_host: public_ip_address | default(private_ip_address)
+        ansible_user: "'ec2-user'"
+      hostnames:
+        - tag:Name
+      keyed_groups:
+        - key: tags['role']
+          prefix: role
+    credential: AWS Sandbox Credential
+    execution_environment: ee-default
+    overwrite: false
+    overwrite_vars: false
+    update_on_launch: false
+    update_cache_timeout: 0
+    enabled_var: ""
+    enabled_value: ""
+    host_filter: ""
+    limit: ""
+    scm_branch: ""
+    timeout: 0
+    verbosity: 1

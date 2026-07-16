@@ -1,0 +1,10 @@
+# ansible-playbook pb_aap_config.yml --tags hub,roles --skip-tags common
+---
+ah_roles_hub:
+  - name: coach
+    description: manage the astros (aka users)
+    perms:
+      - add_user
+      - change_user
+      - delete_user
+      - view_user

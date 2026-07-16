@@ -1,0 +1,19 @@
+# ansible-playbook pb_aap_config.yml --tags aiops,event_stream --skip-tags common
+---
+eda_event_streams_aiops:
+  - name: DataDog Event Stream
+    organization: Autodotes
+    credential_name: DataDog Credential
+    forward_events: true
+  - name: Dynatrace Event Stream
+    organization: Autodotes
+    credential_name: Dynatrace Credential
+    forward_events: true
+  - name: Demo OAuth2 Event Stream
+    organization: Autodotes
+    credential_name: OAuth2 Event Stream Client
+    forward_events: true
+  - name: ServiceNow Event Stream
+    organization: Autodotes
+    credential_name: ServiceNow Webhook Token
+    forward_events: true

@@ -1,0 +1,226 @@
+# ansible-playbook pb_aap_config.yml --tags cloud,workflow_job_templates --skip-tags common
+---
+controller_workflows_cloud:
+  - name: AWS // Decommission Workflow
+    organization: Autodotes
+    allow_simultaneous: true
+    ask_variables_on_launch: true
+    survey_enabled: true
+    survey_spec:
+      name: workflow survey
+      description: workflow passthrough variables
+      spec:
+        - question_name: VM Names
+          question_description: comma separated list of names (vm1,vm2)
+          max: 1024
+          min: 0
+          required: true
+          type: text
+          variable: aws_ec2_names_list
+          default: OVERRIDE_ME
+    workflow_nodes:
+      - identifier: Sync Project
+        related:
+          success_nodes:
+            - identifier: Delete VM(s)
+        unified_job_template:
+          name: Cloud Mgmt
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: Delete VM(s)
+        related:
+          success_nodes:
+            - identifier: Delete CI(s)
+        unified_job_template:
+          name: AWS // Delete VM
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Delete CI(s)
+        unified_job_template:
+          name: ServiceNow // Delete CIs
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+  - name: AWS // Provisioning Workflow
+    organization: Autodotes
+    labels: [Demo, Cloud]
+    allow_simultaneous: true
+    ask_variables_on_launch: true
+    survey_enabled: true
+    survey_spec:
+      name: workflow survey
+      description: workflow passthrough variables
+      spec:
+        - question_name: VM Names
+          question_description: comma separated list of names (vm1,vm2)
+          max: 1024
+          min: 0
+          required: true
+          type: text
+          variable: aws_ec2_names_list
+          default: OVERRIDE_ME
+        - question_name: Target Platform
+          question_description: target platform (maps to pre-selected AMI)
+          max: 1024
+          min: 0
+          type: multiplechoice
+          choices:
+            - rhel8
+            - rhel9
+            - rhel_dev
+            - rhel_dynatrace
+            - rhel_datadog
+            - windows
+          default: rhel_dev
+          required: true
+          variable: target_platform
+        - question_name: AWS region
+          max: 1024
+          min: 0
+          required: true
+          type: text
+          variable: aws_region
+          default: us-east-2
+    workflow_nodes:
+      - identifier: Sync Project
+        related:
+          success_nodes:
+            - identifier: Create VM(s)
+        unified_job_template:
+          name: Cloud Mgmt
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: Create VM(s)
+        related:
+          success_nodes:
+            - identifier: Sync AWS Inventory
+        unified_job_template:
+          name: AWS // Create VM
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Sync AWS Inventory
+        related:
+          success_nodes:
+            - identifier: Create CI(s)
+        unified_job_template:
+          inventory:
+            name: Cloud Inventory
+            organization:
+              name: Autodotes
+              type: organization
+            type: inventory
+          name: AWS EC2 Instances
+          type: inventory_source
+      - identifier: Create CI(s)
+        related:
+          success_nodes:
+            - identifier: Sync ServiceNow Inventory
+        unified_job_template:
+          name: ServiceNow // Create CIs
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Sync ServiceNow Inventory
+        related:
+          success_nodes:
+            - identifier: Patch VM(s)
+            - identifier: Install Agent(s)
+        unified_job_template:
+          inventory:
+            name: ServiceNow Inventory
+            organization:
+              name: Autodotes
+              type: organization
+            type: inventory
+          name: servicenow.itsm.now
+          type: inventory_source
+      - identifier: Patch VM(s)
+        unified_job_template:
+          name: AWS // Patch VM
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Install Agent(s)
+        unified_job_template:
+          name: AWS // Install Agents
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+  - name: Cloud // Patch Workflow
+    inventory: Cloud Inventory
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: all
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: Specify target hosts
+          required: true
+          type: text
+          variable: _hosts
+        - choices:
+            - us-east-2
+          default: us-east-2
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: Choose your AWS region
+          required: true
+          type: multiplechoice
+          variable: aws_region
+    workflow_nodes:
+      - identifier: a511b6f2-b779-4e9e-90b6-ceffc363deca
+        related:
+          success_nodes:
+            - identifier: a01fba54-ae60-4a7a-9bc1-7dfbaecc0b4d
+        unified_job_template:
+          name: Cloud Mgmt
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: fbde8f01-bda4-4571-9710-6a3c34be044a
+        related:
+          failure_nodes:
+            - identifier: 92b5e060-faeb-4e62-9df3-bab84fa93d6f
+        unified_job_template:
+          name: Cloud // Patch EC2
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: a01fba54-ae60-4a7a-9bc1-7dfbaecc0b4d
+        related:
+          success_nodes:
+            - identifier: fbde8f01-bda4-4571-9710-6a3c34be044a
+        unified_job_template:
+          name: Cloud // Snapshot EC2
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: 92b5e060-faeb-4e62-9df3-bab84fa93d6f
+        unified_job_template:
+          name: Cloud // Restore EC2
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template

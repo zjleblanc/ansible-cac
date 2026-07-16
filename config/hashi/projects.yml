@@ -1,0 +1,11 @@
+# ansible-playbook pb_aap_config.yml --tags hashi,projects --skip-tags common
+---
+controller_projects_hashi:
+  - name: Terraform Mgmt
+    organization: Autodotes
+    scm_type: git
+    scm_url: https://github.com/zjleblanc/ansible-terraform.git
+    scm_branch: master
+    scm_clean: "no"
+    scm_delete_on_update: "no"
+    scm_update_on_launch: "no"

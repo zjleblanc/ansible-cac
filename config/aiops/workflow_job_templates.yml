@@ -1,0 +1,174 @@
+# ansible-playbook pb_aap_config.yml --tags aiops,workflow_job_templates --skip-tags common
+---
+controller_workflows_aiops:
+  - name: EDA // Remediation Workflow // Disk Space
+    organization: Autodotes
+    labels: ["AIOps"]
+    ask_variables_on_launch: true
+    workflow_nodes:
+      - identifier: Sync Project
+        related:
+          success_nodes:
+            - identifier: Create Incident
+        unified_job_template:
+          name: Cloud Mgmt
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: Sync Inventory
+        related:
+          success_nodes:
+            - identifier: Create Incident
+        unified_job_template:
+          inventory:
+            name: Cloud Inventory
+            organization:
+              name: Autodotes
+              type: organization
+            type: inventory
+          name: AWS EC2 Instances
+          type: inventory_source
+      - identifier: Create Incident
+        all_parents_must_converge: true
+        related:
+          success_nodes:
+            - identifier: AI RCA
+        unified_job_template:
+          name: Service Now // Create Incident
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: AI RCA
+        related:
+          success_nodes:
+            - identifier: Resize EBS Volume
+        unified_job_template:
+          name: AIOps // Ticket Enrichment // RHEL
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Resize EBS Volume
+        related:
+          always_nodes:
+            - identifier: Update Incident
+        unified_job_template:
+          name: EDA // Resize EBS Volume
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Update Incident
+        unified_job_template:
+          name: Service Now // Update Incident
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+  - name: EDA // Remediation Workflow // High Memory Usage
+    organization: Autodotes
+    labels: ["AIOps"]
+    inventory: Cloud Inventory
+    ask_variables_on_launch: true
+    workflow_nodes:
+      - identifier: 78e2549e-0834-4def-aa33-85a5ba1259d4
+        related:
+          success_nodes:
+            - identifier: fc552f02-3086-4f1b-8a2a-3d8a8d40dba3
+        unified_job_template:
+          name: Cloud Mgmt
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: fc552f02-3086-4f1b-8a2a-3d8a8d40dba3
+        related:
+          success_nodes:
+            - identifier: e8eb2480-7d6c-4c5d-8900-5f92d2eab793
+        unified_job_template:
+          name: Service Now // Create Incident
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: 1a8b816b-e907-429b-a4a1-39cd9b418e0d
+        unified_job_template:
+          name: Service Now // Update Incident
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: 5e3a4fb0-9d67-4d02-81cf-a7ba5a4d281a
+        related:
+          success_nodes:
+            - identifier: fc552f02-3086-4f1b-8a2a-3d8a8d40dba3
+        unified_job_template:
+          name: Event-Driven Demos
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: bd6a4b1b-bc6f-4f50-a19b-77263c4552e2
+        related:
+          always_nodes:
+            - identifier: 1a8b816b-e907-429b-a4a1-39cd9b418e0d
+        unified_job_template:
+          name: EDA // Remediate High Memory Usage Processes
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: e8eb2480-7d6c-4c5d-8900-5f92d2eab793
+        related:
+          success_nodes:
+            - identifier: bd6a4b1b-bc6f-4f50-a19b-77263c4552e2
+        unified_job_template:
+          name: VMWare // Snapshot
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+  - name: EDA // Remediation Workflow // OneAgent
+    organization: Autodotes
+    labels: ["AIOps"]
+    ask_variables_on_launch: true
+    workflow_nodes:
+      - identifier: cf69755d-be79-4432-b67d-1aad633a9576
+        related:
+          success_nodes:
+            - identifier: 75ba8539-4f6c-4d40-adbf-a67c3ad73fc6
+        unified_job_template:
+          name: Event-Driven Demos
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: 75ba8539-4f6c-4d40-adbf-a67c3ad73fc6
+        related:
+          success_nodes:
+            - identifier: 9b177574-fc1d-4208-8cb1-b84b4406d16d
+        unified_job_template:
+          name: Service Now // Create Incident
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: 9b177574-fc1d-4208-8cb1-b84b4406d16d
+        related:
+          always_nodes:
+            - identifier: 6ef1755a-e29f-49d0-8e58-360ae3aae10b
+        unified_job_template:
+          name: EDA // OneAgent Restart
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: 6ef1755a-e29f-49d0-8e58-360ae3aae10b
+        unified_job_template:
+          name: Service Now // Update Incident
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template

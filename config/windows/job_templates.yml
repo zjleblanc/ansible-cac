@@ -1,0 +1,448 @@
+# ansible-playbook pb_aap_config.yml --tags windows,job_templates --skip-tags common
+---
+controller_templates_windows:
+  - name: Proxmox // Decomm VM
+    project: Windows Mgmt
+    playbook: demos/decomm_kvm.yml
+    inventory: Workshop Inventory
+    execution_environment: ee-windows
+    credentials:
+      - West ServiceNow (ven07621)
+      - Windows Kerberos Credential
+    job_type: run
+    job_slice_count: 1
+    skip_tags: dns_delete,kvm_delete,ad_delete
+    ask_variables_on_launch: true
+    extra_vars:
+      kvm_name: hcl-guest-1
+      sys_id: undef
+  - name: Proxmox // Manage Instance State
+    project: Linux Mgmt
+    playbook: playbooks/proxmox_vm_state.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
+      - Proxmox API
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true
+  - name: Proxmox // Prep VM for Decomm
+    project: Windows Mgmt
+    playbook: demos/decomm_kvm_prep.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-windows
+    credentials:
+      - Autodotes[local] Admin
+      - West ServiceNow (ven07621)
+      - Windows Kerberos Credential
+    job_type: run
+    job_slice_count: 1
+    skip_tags: kvm_snapshot,ad_disable,kvm_stop
+    ask_variables_on_launch: true
+    ask_skip_tags_on_launch: true
+  - name: Proxmox // Provision KVM Guest
+    description: Create a proxmox kvm guest
+    project: Linux Mgmt
+    playbook: demos/proxmox_kvm_guest.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-default
+    credentials:
+      - AAP (root)
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true
+    extra_vars:
+      proxmox_vm_configs:
+        - cores: 2
+          cpu: host
+          description: KVM guest created from template
+          ide:
+            ide2: none,media=cdrom
+          kvm: !unsafe "{{ qcows.rhel7 }}"
+          memory: 8192
+          name: rhel-guest-1
+          net:
+            net0: virtio,bridge=vmbr0,firewall=1
+          node: pve
+          onboot: true
+          ostype: l26
+          scsihw: virtio-scsi-single
+          sockets: 2
+          tags:
+            - demo
+            - rhel
+            - linux
+          timeout: 120
+          virtio:
+            virtio0: local:32,format=qcow2
+      qcows:
+        rhel7: rhel-server-7.9-x86_64-kvm.qcow2
+        rhel8: rhel-8.7-x86_64-kvm.qcow2
+        rhel9: rhel-baseos-9.1-x86_64-kvm.qcow2
+  - name: Proxmox // Provision Windows VM
+    description: Provision a VM in Proxmox VE
+    project: Windows Mgmt
+    playbook: demos/proxmox_kvm_clone.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-windows
+    credentials:
+      - Controller Credential
+      - Proxmox Windows Default Credential
+    job_type: run
+    job_slice_count: 1
+    verbosity: 3
+    ask_variables_on_launch: true
+    extra_vars:
+      proxmox_ve_configs:
+        - agent: true
+          clone: win11-admin-server-template
+          full: false
+          name: win11-guest-1
+          nameservers:
+            - 8.8.8.8
+          node: pve
+          tags:
+            - ansible
+            - windows
+            - yaml-config
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: ""
+          max: 100
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: What is the VM name? (for proxmox UI)
+          required: true
+          type: text
+          variable: pve_survey_name
+        - choices:
+            - win11-server-template
+          default: win11-server-template
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: What template are you cloning?
+          required: true
+          type: multiplechoice
+          variable: pve_survey_clone
+        - choices:
+            - pve
+          default: pve
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: What proxmox node?
+          required: true
+          type: multiplechoice
+          variable: pve_survey_node
+        - choices: ""
+          default: ansible-created,windows
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: Provide VM tags (comma separated)
+          required: false
+          type: text
+          variable: pve_survey_tags
+        - choices:
+            - 1.1.1.1
+            - 8.8.8.8
+            - 192.168.1.1
+          default: 8.8.8.8
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: Select your nameservers
+          required: false
+          type: multiselect
+          variable: pve_survey_nameservers
+        - choices:
+            - "yes"
+            - "no"
+          default: "no"
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: Are you doing a full clone?
+          required: false
+          type: multiplechoice
+          variable: pve_survey_full
+        - choices:
+            - "2"
+            - "4"
+            - "8"
+          default: "2"
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: How many cores?
+          required: false
+          type: multiplechoice
+          variable: pve_survey_cores
+        - choices: ""
+          default: 4096
+          max: 8192
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: How much memory? (in MB)
+          required: false
+          type: integer
+          variable: pve_survey_memory
+        - choices: ""
+          default: 1200
+          max: 3600
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: Set provisioning timeout (in seconds)
+          required: false
+          type: integer
+          variable: pve_survey_timeout
+  - name: Proxmox // Setup WinRM
+    project: Windows Mgmt
+    playbook: demos/setup_winrm.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-windows
+    credentials:
+      - Controller Credential
+      - Proxmox Windows Default Credential
+    job_type: run
+    job_slice_count: 1
+  - name: Windows // Bulk Add Users to Group
+    project: Windows Mgmt
+    playbook: demos/bulk_add_users_to_group.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-windows
+    credentials:
+      - Autodotes[local] Admin
+    job_type: run
+    job_slice_count: 1
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: DC=autodotes,DC=local
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Enter a subtree to search
+          required: true
+          type: text
+          variable: search_root
+        - choices: ""
+          default: Austin
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Enter your target group name
+          required: true
+          type: text
+          variable: target_group
+        - choices: ""
+          default: "example_user1\nexample_user2"
+          max: 102400
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Paste in your list of user accounts
+          required: true
+          type: textarea
+          variable: user_accounts
+  - name: Windows // EC2 Domain Configure
+    project: Windows Mgmt
+    playbook: demos/ad_domain/pb_domain_config.yml
+    inventory: Windows Inventory
+    execution_environment: ee-windows
+    credentials:
+      - Ansible Vault
+    job_type: run
+    job_slice_count: 1
+  - name: Windows // EC2 Domain Infra Deploy
+    project: Windows Mgmt
+    playbook: demos/ad_domain/pb_aws_infra.yml
+    inventory: Windows Inventory
+    execution_environment: ee-default
+    credentials:
+      - Ansible Vault
+      - AWS Sandbox Credential
+    job_type: run
+    job_slice_count: 1
+  - name: Windows // EC2 Domain Join
+    project: Windows Mgmt
+    playbook: demos/ad_domain/pb_domain_join.yml
+    inventory: Windows Inventory
+    execution_environment: ee-windows
+    credentials:
+      - Ansible Vault
+    job_type: run
+    job_slice_count: 1
+  - name: Windows // EC2 Domain Setup [Monolith]
+    project: Windows Mgmt
+    playbook: demos/ad_domain/setup.yml
+    inventory: Windows Inventory
+    execution_environment: ee-windows
+    credentials:
+      - Ansible Vault
+      - AWS Sandbox Credential
+    job_type: run
+    job_slice_count: 1
+  - name: Windows // EC2 Kerberos Check
+    project: Windows Mgmt
+    playbook: demos/ad_domain/pb_check_krb.yml
+    inventory: Windows Inventory
+    execution_environment: ee-windows
+    credentials:
+      - Windows Kerberos Credential
+    job_type: run
+    job_slice_count: 1
+    ask_verbosity_on_launch: true
+  - name: Windows // Gather Facts
+    project: Windows Mgmt
+    playbook: playbooks/win_facts.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-windows
+    credentials:
+      - Windows Server Credential
+    job_type: run
+    job_slice_count: 1
+    use_fact_cache: true
+    ask_variables_on_launch: true
+    ask_inventory_on_launch: true
+    ask_limit_on_launch: true
+    ask_credential_on_launch: true
+  - name: Windows // Get Folder Stats
+    project: Windows Mgmt
+    playbook: playbooks/get_folder_stats.yml
+    inventory: Windows Inventory
+    execution_environment: ee-windows
+    credentials:
+      - Windows Kerberos Credential
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true
+    extra_vars:
+      domain_controller: dc01.autodotes.com
+      servers: "winston\nwinthrop"
+  - name: Windows // Join Domain
+    project: Windows Mgmt
+    playbook: demos/join_domain.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-windows
+    credentials:
+      - Autodotes[local] Admin
+      - Controller Credential
+      - Windows Server Credential
+    job_type: run
+    job_slice_count: 1
+    limit: windows
+    ask_limit_on_launch: true
+    extra_vars:
+      join_domain: true
+  - name: Windows // Leave Domain
+    project: Windows Mgmt
+    playbook: demos/leave_domain.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-windows
+    credentials:
+      - Autodotes[local] Admin
+      - Controller Credential
+      - Windows Server Credential
+    job_type: run
+    job_slice_count: 1
+    ask_limit_on_launch: true
+  - name: Windows // Long paths - Delete
+    project: Windows Mgmt
+    playbook: demos/delete_folder_long_path.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-windows
+    credentials:
+      - Windows Kerberos Credential
+    job_type: run
+    job_slice_count: 1
+    job_tags: delete
+    ask_variables_on_launch: true
+    extra_vars:
+      _hosts: win11-guest-2.autodotes.local
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          # noqa: yaml[line-length]
+          default: "\\\\win11-guest-1\\c$\\Users\\Administrator\\superlongfolder\n\\\\win11-guest-1\\c$\\Users\\Administrator\\anotherlongone\n\\\\win11-guest-1\\c$\\Users\\Administrator\\whyarethesenamessolong"
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: "Example: \\\\win11-guest-1\\c$\\Users\\Administrator\\superlongpath"
+          question_name: Enter list of paths to delete
+          required: true
+          type: textarea
+          variable: root_folders
+  - name: Windows // Long Paths - Setup
+    project: Windows Mgmt
+    playbook: demos/delete_folder_long_path.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-windows
+    credentials:
+      - Windows Kerberos Credential
+    job_type: run
+    job_slice_count: 1
+    job_tags: setup
+    extra_vars:
+      _hosts: win11-guest-1.autodotes.local
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: "C:\\Users\\Administrator\\superlongfolder\nC:\\Users\\Administrator\\anotherlongone\nC:\\Users\\Administrator\\whyarethesenamessolong"
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: C:\Users\Administrator\superlongpath
+          question_name: Enter list of absolute paths to create
+          required: true
+          type: textarea
+          variable: root_folders
+  - name: Windows // MSSQL Role
+    description: Install a SQL Server instance using DSC
+    project: Windows Mgmt
+    playbook: demos/install_mssql_dsc.yml
+    inventory: Proxmox Inventory
+    credentials:
+      - Autodotes[local] Admin
+      - Demo SQL Service Account Credentials
+      - Windows Server Credential
+    job_type: run
+    job_slice_count: 1
+    limit: win11-guest-1
+    ask_limit_on_launch: true
+    ask_tags_on_launch: true
+    ask_credential_on_launch: true
+  - name: Windows // Powershell
+    project: Windows Mgmt
+    playbook: playbooks/pwsh.yml
+    inventory: Cloud Inventory
+    execution_environment: ee-default
+    credentials:
+      - Red Hat Automation Hub
+    job_type: run
+    job_slice_count: 1
+    limit: win-demo-1

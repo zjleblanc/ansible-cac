@@ -1,0 +1,7 @@
+# ansible-playbook pb_aap_config.yml --tags aiops,project --skip-tags common
+---
+eda_projects_aiops:
+  - name: EDA Demos
+    description: A collection of various Event-Driven Ansible demos
+    url: https://github.com/zjleblanc/ansible-eda-demos.git
+    organization: Autodotes

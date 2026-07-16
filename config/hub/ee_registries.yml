@@ -1,0 +1,7 @@
+# ansible-playbook pb_aap_config.yml --tags hub,registries --skip-tags common
+---
+hub_ee_registries_hub:
+  - name: quay_zleblanc
+    url: https://quay.io
+    username: zleblanc
+    password: "{{ quay_password }}"

@@ -1,0 +1,12 @@
+# ansible-playbook pb_aap_config.yml --tags linux,schedules --skip-tags common
+---
+# Commented schedules retained for reference; enable by uncommenting.
+controller_schedules_linux: []
+# - name: Generate Random User Activity Every 6 Hours
+#   description: Login random users to proxmox vms for demo reporting scenarios
+#   unified_job_template: Linux // User Login (Random) Workflow
+#   rrule: DTSTART;TZID=America/Chicago:20241119T123000 RRULE:INTERVAL=6;FREQ=HOURLY
+# - name: Generate User Login Report on Sundays
+#   description: Generate user login report and publish to reports.autodotes.com
+#   unified_job_template: Linux // User Login Report Workflow
+#   rrule: DTSTART;TZID=America/Chicago:20241123T010000 RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=SU

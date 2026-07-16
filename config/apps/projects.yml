@@ -1,0 +1,15 @@
+# ansible-playbook pb_aap_config.yml --tags apps,projects --skip-tags common
+---
+controller_projects_apps:
+  - name: App Mgmt
+    organization: Autodotes
+    scm_type: git
+    scm_url: https://github.com/zjleblanc/ansible-app-mgmt.git
+    scm_branch: master
+    scm_clean: "no"
+    scm_delete_on_update: "no"
+    scm_update_on_launch: "no"
+  - name: CyberArk-Conjur Demo
+    organization: Default
+    scm_type: git
+    scm_url: https://github.com/gregsowell/ansible-cyberark.git

@@ -3,6 +3,7 @@
 .ansible
 staging/
 **/*secrets.yml
+scripts
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

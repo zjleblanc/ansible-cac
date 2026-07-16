@@ -1,0 +1,308 @@
+# ansible-playbook pb_aap_config.yml --tags hashi,job_templates --skip-tags common
+---
+controller_templates_hashi:
+  - name: Terraform // HCP // Azure Web Demo Deploy
+    organization: Autodotes
+    description: Deploy web demo to Azure using terraform modules
+    labels:
+      - Demo
+      - Cloud
+      - HCP
+    project: Terraform Mgmt
+    playbook: azure_create_web_demo_hcp/ansible/tf_ops.yml
+    inventory: Ansible-HCP Inventory
+    execution_environment: ee-cloud
+    credentials:
+      - app.terraform.io/zleblanc/azure-web-demo-dev
+    ask_variables_on_launch: true
+    ask_tags_on_launch: true
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - question_name: SSH Public Key
+          question_description: SSH public key which will enable configuration after provisioning
+          max: 1024
+          min: 0
+          required: true
+          type: password
+          variable: az_ssh_pubkey
+        - question_name: Azure VM Size
+          question_description: size of the Azure VMs
+          max: 30
+          min: 1
+          required: true
+          default: Standard_DS1_v2
+          type: text
+          variable: az_web_vm_size
+        - question_name: AAP Hostname
+          question_description: Used for documentation of job and workflow details
+          max: 100
+          min: 1
+          required: false
+          default: ansible.autodotes.com
+          type: text
+          variable: aap_host
+  - name: Terraform // HCP // Azure Web Demo Configure
+    organization: Autodotes
+    description: Configure webservers provisioned by Terraform
+    labels:
+      - Demo
+      - Cloud
+      - HCP
+    project: Terraform Mgmt
+    playbook: azure_create_web_demo_hcp/ansible/configure_web.yml
+    inventory: Ansible-HCP Inventory
+    execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)
+  - name: Terraform // Azure Web Demo Deploy
+    organization: Autodotes
+    description: Deploy web demo to Azure using terraform modules
+    labels:
+      - Demo
+      - Cloud
+    project: Terraform Mgmt
+    playbook: azure_create_web_demo/ansible/tf_ops.yml
+    inventory: Ansible-Terraform Inventory
+    execution_environment: ee-cloud
+    credentials:
+      - Azure Open Environment Service Principal
+      - Azure Terraform Backend Configuration
+    ask_variables_on_launch: true
+    ask_tags_on_launch: true
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - question_name: SSH Public Key
+          question_description: SSH public key which will enable configuration after provisioning
+          max: 1024
+          min: 0
+          required: true
+          type: password
+          variable: az_ssh_pubkey
+        - question_name: Azure VM Size
+          question_description: size of the Azure VMs
+          max: 30
+          min: 1
+          required: true
+          default: Standard_DS1_v2
+          type: text
+          variable: az_web_vm_size
+  - name: Terraform // Azure Web Demo Configure
+    organization: Autodotes
+    description: Configure webservers provisioned by Terraform
+    labels:
+      - Demo
+      - Cloud
+    project: Terraform Mgmt
+    playbook: azure_create_web_demo/ansible/configure_web.yml
+    inventory: Ansible-Terraform Inventory
+    execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)
+  - name: Terraform // HCP // AWS Web Demo Deploy
+    organization: Autodotes
+    description: Deploy web demo to AWS using terraform modules
+    labels:
+      - Demo
+      - Cloud
+      - HCP
+    project: Terraform Mgmt
+    playbook: aws_create_web_demo_hcp/ansible/tf_ops.yml
+    inventory: Ansible-HCP Inventory
+    execution_environment: ee-cloud
+    credentials:
+      - app.terraform.io/zleblanc/aws-web-demo-dev
+    ask_variables_on_launch: true
+    ask_tags_on_launch: true
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - question_name: Instance Type
+          question_description: ec2 instance type
+          max: 30
+          min: 1
+          required: true
+          default: t3.small
+          type: text
+          variable: aws_ec2_instance_type
+        - question_name: SSH Public Key
+          question_description: SSH public key which will enable configuration after provisioning
+          max: 1024
+          min: 0
+          required: false
+          type: password
+          variable: aws_ssh_pubkey
+        - question_name: AWS Region
+          question_description: aws region
+          max: 30
+          min: 1
+          required: true
+          default: us-east-1
+          type: text
+          variable: aws_region
+  - name: Terraform // HCP // AWS Web Demo Configure
+    organization: Autodotes
+    description: Configure webservers provisioned by Terraform
+    labels:
+      - Demo
+      - Cloud
+      - HCP
+    project: Terraform Mgmt
+    playbook: aws_create_web_demo_hcp/ansible/configure_web.yml
+    inventory: Ansible-HCP Inventory
+    execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)HCP // AWS Web Demo Configur
+  - name: Terraform // GitHub // Azure Web Demo Deploy
+    organization: Autodotes
+    description: Orchestrate a Terraform run based on GitHub action
+    project: Terraform Mgmt
+    playbook: azure_create_web_demo_tfe_aap/ansible/tfe_run.yml
+    inventory: Demo Inventory
+    execution_environment: ee-default
+    credentials:
+      - Terraform (zleblanc)
+    ask_variables_on_launch: true
+  - name: Terraform // GitHub // Azure Web Demo Configure
+    organization: Autodotes
+    description: Configure webservers provisioned by Terraform
+    labels:
+      - Demo
+      - Cloud
+      - HCP
+    project: Terraform Mgmt
+    playbook: azure_create_web_demo_tfe_aap/ansible/configure_web.yml
+    inventory: Ansible-Terraform Inventory
+    execution_environment: ee-default
+    credentials:
+      - AAP (tf)
+  - name: Vault // Install
+    project: Cloud Mgmt
+    playbook: playbooks/vault/install_vault.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)
+    job_type: run
+    job_slice_count: 1
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: vault.autodotes.com
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Vault FQDN
+          required: true
+          type: text
+          variable: vault_fqdn
+        - choices: ""
+          default: 2083
+          max: 10000
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Vault Port
+          required: true
+          type: integer
+          variable: vault_port
+        - choices:
+            - "true"
+            - "false"
+          default: "true"
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: TLS?
+          required: true
+          type: multiplechoice
+          variable: vault_tls
+        - choices:
+            - "true"
+            - "false"
+          default: "true"
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: Secure Logging?
+          required: true
+          type: multiplechoice
+          variable: vault_secure_log
+  - name: Vault // Per-host Credential Lookup
+    project: Cloud Mgmt
+    playbook: demos/vault_per_host.yml
+    inventory: Cloud Inventory
+    execution_environment: ee-default
+    credentials:
+      - HashiCorp Vault Lookup Plugin (root)
+    job_type: run
+    job_slice_count: 1
+    extra_vars:
+      _hosts: linux
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: cubbyhole/ansible
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Secrets Container
+          required: true
+          type: text
+          variable: secret_container
+        - choices:
+            - password
+            - sshkey
+          default: sshkey
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Authentication Method
+          required: true
+          type: multiplechoice
+          variable: method
+        - choices:
+            - "true"
+            - "false"
+          default: "true"
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: Secure Logging?
+          required: true
+          type: multiplechoice
+          variable: vault_secure_logging
+  - name: Legacy // Hashi
+    project: Linux Mgmt
+    playbook: playbooks/legacy_hashi.yml
+    inventory: Autodotes Lab
+    job_type: run
+    job_slice_count: 1
+  - name: Demo // Using ansible-vault
+    project: Linux Mgmt
+    playbook: demos/vault_demo.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
+      - Vault Demo Credential
+    job_type: run
+    job_slice_count: 1

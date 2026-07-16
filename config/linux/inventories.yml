@@ -1,0 +1,9 @@
+# ansible-playbook pb_aap_config.yml --tags linux,inventories --skip-tags common
+---
+controller_inventories_linux:
+  - name: AD LDAP Demo Inventory
+    organization: Autodotes
+    description: Demo using microsoft.ad.ldap inventory plugin
+  - name: Satellite Inventory
+    organization: Autodotes
+    description: Demo using Satellite dynamic inventory plugin

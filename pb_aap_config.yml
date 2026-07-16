@@ -1,0 +1,94 @@
+---
+- name: Apply AAP Configuration-as-Code
+  hosts: localhost
+  gather_facts: false
+  become: false
+  vars:
+    secrets_files:
+      - vars/controller_secrets.yml
+      # - vars/eda_secrets.yml
+      # - vars/platform_secrets.yml
+  pre_tasks:
+    - name: Load secrets
+      ansible.builtin.include_vars:
+        file: "{{ item }}"
+      loop: "{{ secrets_files }}"
+      tags: always
+
+  tasks:
+    # --- common (runs unless explicitly skipped) ---
+    - name: Include common configuration
+      ansible.builtin.include_vars:
+        dir: config/common
+        extensions: [yml, yaml]
+        ignore_unknown_extensions: true
+      tags: [always, common]
+
+    # --- domain subfolders (run when their tag is included) ---
+    - name: Include cloud configuration
+      ansible.builtin.include_vars:
+        dir: config/cloud
+        extensions: [yml, yaml]
+      tags: [cloud, never]
+
+    - name: Include networking configuration
+      ansible.builtin.include_vars:
+        dir: config/networking
+        extensions: [yml, yaml]
+      tags: [networking, never]
+
+    - name: Include linux configuration
+      ansible.builtin.include_vars:
+        dir: config/linux
+        extensions: [yml, yaml]
+      tags: [linux, never]
+
+    - name: Include windows configuration
+      ansible.builtin.include_vars:
+        dir: config/windows
+        extensions: [yml, yaml]
+      tags: [windows, never]
+
+    - name: Include hashi configuration
+      ansible.builtin.include_vars:
+        dir: config/hashi
+        extensions: [yml, yaml]
+      tags: [hashi, never]
+
+    - name: Include aiops configuration
+      ansible.builtin.include_vars:
+        dir: config/aiops
+        extensions: [yml, yaml]
+      tags: [aiops, never]
+
+    - name: Include servicenow configuration
+      ansible.builtin.include_vars:
+        dir: config/servicenow
+        extensions: [yml, yaml]
+      tags: [servicenow, never]
+
+    - name: Include apps configuration
+      ansible.builtin.include_vars:
+        dir: config/apps
+        extensions: [yml, yaml]
+      tags: [apps, never]
+
+    - name: Include aap configuration
+      ansible.builtin.include_vars:
+        dir: config/aap
+        extensions: [yml, yaml]
+      tags: [aap, never]
+
+    - name: Include hub configuration
+      ansible.builtin.include_vars:
+        dir: config/hub
+        extensions: [yml, yaml]
+      tags: [hub, never]
+
+    # --- apply configuration ---
+    - name: Apply configuration via dispatch
+      ansible.builtin.include_role:
+        name: infra.aap_configuration.dispatch
+      vars:
+        dispatch_include_wildcard_vars: true
+      tags: always

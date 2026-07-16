@@ -1,0 +1,46 @@
+# ansible-playbook pb_aap_config.yml --tags linux,inventory_sources --skip-tags common
+---
+controller_inventory_sources_linux:
+  - name: microsoft.ad.ldap plugin source
+    description: ""
+    inventory: AD LDAP Demo Inventory
+    source: scm
+    source_project: Windows Mgmt
+    source_path: inventories/microsoft.ad.ldap.yml
+    source_vars:
+      search_base: OU=Computers,OU=lab,DC=autodotes,DC=local
+    credential: Autodotes AD LDAP Credential
+    execution_environment:
+    overwrite: false
+    overwrite_vars: false
+    update_on_launch: false
+    update_cache_timeout: 0
+    enabled_var: ""
+    enabled_value: ""
+    host_filter: ""
+    limit: ""
+    scm_branch: ""
+    timeout: 0
+    verbosity: 1
+  - name: Satellite (Autodotes)
+    description: ""
+    inventory: Satellite Inventory
+    source: satellite6
+    source_project:
+    source_path: ""
+    source_vars:
+      compose:
+        ansible_host: foreman_ipv4
+    credential: Satellite (Autodotes)
+    execution_environment: ee-default
+    overwrite: true
+    overwrite_vars: true
+    update_on_launch: true
+    update_cache_timeout: 0
+    enabled_var: ""
+    enabled_value: ""
+    host_filter: ""
+    limit: ""
+    scm_branch: ""
+    timeout: 0
+    verbosity: 1

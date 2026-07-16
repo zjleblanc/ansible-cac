@@ -1,6 +1,0 @@
----
-aap_organizations:
-  - name: Autodotes
-    description: Default organization for Autodotes containerized AAP instance
-  - name: Red Hat
-    description: Shared organization for Red Hat collaborators

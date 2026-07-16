@@ -1,0 +1,197 @@
+# ansible-playbook pb_aap_config.yml --tags aiops,job_templates --skip-tags common
+---
+controller_templates_aiops:
+  - name: Demo Ansible Butler Clone
+    labels: ["AIOps"]
+    project: Windows Mgmt
+    playbook: playbooks/no_op.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-default
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true
+    extra_vars:
+      _hosts: localhost
+      _msg: ran from aap
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: ""
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Specify target host(s)
+          required: true
+          type: text
+          variable: _host
+  - name: EDA // Dynatrace Problems
+    labels: ["AIOps"]
+    project: Event-Driven Demos
+    playbook: playbooks/resolve_problem.yml
+    inventory: Cloud Inventory
+    execution_environment: ee-default
+    credentials:
+      - AWS (ec2-user)
+      - Dynatrace Demo Credential
+      - West ServiceNow (ven07621)
+    job_type: run
+    job_slice_count: 1
+    use_fact_cache: true
+    ask_variables_on_launch: true
+  - name: EDA // Linux Remediation
+    labels: ["AIOps"]
+    project: Linux Mgmt
+    playbook: demos/remediate_linux.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)
+      - Controller Credential
+      - West ServiceNow (ven07621)
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true
+  - name: EDA // Linux Remediation Setup
+    labels: ["AIOps"]
+    project: Linux Mgmt
+    playbook: demos/remediate_setup.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)
+    job_type: run
+    job_slice_count: 1
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: rhel8
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: inventory name of the target host (must be in Autodotes Lab Inventory)
+          question_name: Specify target host(s)
+          required: true
+          type: text
+          variable: _hosts
+  - name: EDA // No-Op
+    labels: ["AIOps"]
+    project: Windows Mgmt
+    playbook: playbooks/no_op.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-default
+    credentials:
+      - Windows Server Credential
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true
+    extra_vars:
+      _hosts: localhost
+      _msg: ran from aap
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: ""
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: Specify target host(s)
+          required: false
+          type: text
+          variable: _hosts
+  - name: EDA // OneAgent Restart
+    labels: ["AIOps"]
+    project: Event-Driven Demos
+    playbook: playbooks/remediate_onagent.yml
+    inventory: Cloud Inventory
+    execution_environment: ee-default
+    credentials:
+      - AWS (ec2-user)
+      - AWS Sandbox Credential
+      - West ServiceNow (ven07621)
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true
+  - name: EDA // Remediate High Memory Usage Processes
+    labels: ["AIOps"]
+    project: Event-Driven Demos
+    playbook: playbooks/remediate_memory_usage.yml
+    inventory: Cloud Inventory
+    execution_environment: ee-default
+    credentials:
+      - VMWare (ansible)
+      - VMWare (gf7fr)
+      - West ServiceNow (ven07621)
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true
+    extra_vars:
+      kill_allowlist:
+        - tail
+        - cat
+        - less
+      threshold: 70
+  - name: AIOps // Ticket Enrichment // RHEL
+    labels: ["Demo", "AIOps"]
+    project: Cloud Mgmt
+    playbook: playbooks/aws/pb_ai_rca.yml
+    inventory: Cloud Inventory
+    execution_environment: ee-default
+    credentials:
+      - AWS (ec2-user)
+      - AWS Sandbox Credential
+      - West ServiceNow (ven07621)
+      - Ticket Enrichment API Key
+    ask_variables_on_launch: true
+  - name: EDA // Resize EBS Volume
+    labels: ["AIOps"]
+    project: Cloud Mgmt
+    playbook: playbooks/aws/add_disk_space.yml
+    inventory: Cloud Inventory
+    execution_environment: ee-default
+    credentials:
+      - AWS (ec2-user)
+      - AWS Sandbox Credential
+      - West ServiceNow (ven07621)
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true
+    ask_skip_tags_on_launch: true
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: 120
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Max wait for reboot to complete (seconds)
+          required: false
+          type: integer
+          variable: reboot_timeout
+  - name: EDA // Rollback Demo Site Changes
+    labels: ["AIOps"]
+    project: Event-Driven Demos
+    playbook: playbooks/rollback_nginx_site.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)
+      - Controller Credential
+      - West ServiceNow (ven07621)
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true

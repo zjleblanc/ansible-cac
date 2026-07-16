@@ -1,0 +1,6 @@
+# ansible-playbook pb_aap_config.yml --tags cloud,inventories --skip-tags common
+---
+controller_inventories_cloud:
+  - name: Azure Inventory
+    organization: Autodotes
+    description: Demo using ARM inventory plugin

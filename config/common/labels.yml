@@ -1,0 +1,23 @@
+# ansible-playbook pb_aap_config.yml --tags labels
+---
+controller_labels_common:
+  - name: Network
+    organization: Autodotes
+  - name: Cloud
+    organization: Autodotes
+  - name: HCP
+    organization: Autodotes
+  - name: Demo
+    organization: Autodotes
+  - name: Linux
+    organization: Autodotes
+  - name: Windows
+    organization: Autodotes
+  - name: Apps
+    organization: Autodotes
+  - name: ServiceNow
+    organization: Autodotes
+  - name: OOTB
+    organization: Default
+  - name: AIOps
+    organization: Autodotes

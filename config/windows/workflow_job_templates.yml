@@ -1,0 +1,205 @@
+# ansible-playbook pb_aap_config.yml --tags windows,workflow_job_templates --skip-tags common
+---
+controller_workflows_windows:
+  - name: Proxmox // Setup Windows VM
+    organization: Autodotes
+    description: provision a windows vm and setup winrm
+    inventory: Proxmox Inventory
+    ask_variables_on_launch: true
+    extra_vars:
+      proxmox_ve_configs:
+        - agent: true
+          clone: win11-admin-server-template
+          full: false
+          name: win11-guest-1
+          node: pve
+          tags:
+            - ansible
+            - windows
+            - yaml-config
+    workflow_nodes:
+      - identifier: 0ed93bf5-0e96-4ac1-bd6e-3416623ba509
+        related:
+          success_nodes:
+            - identifier: WinRM // Facts
+        unified_job_template:
+          name: Proxmox // Setup WinRM
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: 4381ec4d-b087-4839-852b-dcc55c1ae395
+        related:
+          success_nodes:
+            - identifier: 2dfe2737-6cdb-44ba-bc2f-2b22cb410ea2
+        unified_job_template:
+          name: Windows Mgmt
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: 2dfe2737-6cdb-44ba-bc2f-2b22cb410ea2
+        related:
+          success_nodes:
+            - identifier: 0ed93bf5-0e96-4ac1-bd6e-3416623ba509
+        unified_job_template:
+          name: Proxmox // Provision Windows VM
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: WinRM // Facts
+        inventory: Proxmox Inventory
+        limit: windows
+        related:
+          success_nodes:
+            - identifier: 3192d55c-4744-4cfb-a585-7eea328589b9
+        unified_job_template:
+          name: Windows // Gather Facts
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: 3192d55c-4744-4cfb-a585-7eea328589b9
+        limit: windows
+        related:
+          success_nodes:
+            - identifier: Kerberos // Facts
+        unified_job_template:
+          name: Windows // Join Domain
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Kerberos // Facts
+        inventory: Proxmox Inventory
+        limit: windows
+        unified_job_template:
+          name: Windows // Gather Facts
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+  - name: Windows // EC2 Domain Setup [Workflow]
+    organization: Autodotes
+    inventory: Windows Inventory
+    workflow_nodes:
+      - identifier: Domain Config
+        related:
+          success_nodes:
+            - identifier: Domain Join
+        unified_job_template:
+          name: Windows // EC2 Domain Configure
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Domain Join
+        related:
+          success_nodes:
+            - identifier: Check Kerberos
+        unified_job_template:
+          name: Windows // EC2 Domain Join
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: c0fd2c48-3387-448e-b39b-38c7f8746ebe
+        related:
+          success_nodes:
+            - identifier: Deploy Infra
+        unified_job_template:
+          name: Windows Mgmt
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: Deploy Infra
+        related:
+          success_nodes:
+            - identifier: 9ea2f3cb-4a72-4ff0-baf4-d2931f5b37ed
+        unified_job_template:
+          name: Windows // EC2 Domain Infra Deploy
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: 9ea2f3cb-4a72-4ff0-baf4-d2931f5b37ed
+        related:
+          success_nodes:
+            - identifier: Domain Config
+        unified_job_template:
+          inventory:
+            name: Windows Inventory
+            organization:
+              name: Autodotes
+              type: organization
+            type: inventory
+          name: Windows EC2 Instances
+          type: inventory_source
+      - identifier: Check Kerberos
+        unified_job_template:
+          name: Windows // EC2 Kerberos Check
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+        verbosity: 5
+  - name: Windows // Install SQL Server (E2E)
+    organization: Autodotes
+    description: Complete installation of microsoft sql server
+    inventory: Proxmox Inventory
+    ask_limit_on_launch: true
+    limit: win11-guest-1
+    workflow_nodes:
+      - identifier: 0ddf88cf-cb2e-4098-98f1-2fb144d02cac
+        related:
+          success_nodes:
+            - identifier: Complete Prereqs
+        unified_job_template:
+          name: Windows Mgmt
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: Complete Prereqs
+        job_tags: prereqs,service_account,fetch_media
+        related:
+          success_nodes:
+            - identifier: Install SQL Server
+        unified_job_template:
+          name: Windows // MSSQL Role
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Install SQL Server
+        job_tags: install
+        related:
+          success_nodes:
+            - identifier: Configure Host
+        unified_job_template:
+          name: Windows // MSSQL Role
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Smoke Test
+        job_tags: test
+        unified_job_template:
+          name: Windows // MSSQL Role
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Configure Host
+        job_tags: configure
+        related:
+          success_nodes:
+            - identifier: Smoke Test
+        unified_job_template:
+          name: Windows // MSSQL Role
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
