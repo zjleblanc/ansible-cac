@@ -1,16 +1,27 @@
 # Changelog
 
+## 2026-07-16 — Auto-generate docs pages for domain config vars
+
+### Added
+- `docs/mkdocs/gen_var_pages.py` (via `mkdocs-gen-files`) to render each `config/<domain>/*.yml` as a docs page with apply one-liner, variable name, resource summary table, and collapsible full YAML
+- `docs/mkdocs/domains.py` and `docs/mkdocs/hooks.py` to discover domains from `config/`, expand Configuration nav with generated var pages, and linkify domain README file tables at build time (repo READMEs stay GitHub-safe)
+
+### Changed
+- Moved MkDocs hooks/assets under `docs/mkdocs/`
+- Widened the content grid to 70rem and tinted/ bordered sidebars so nav and TOC read apart from main content
+- Docs workflow installs `mkdocs-gen-files` and `pyyaml`, and rebuilds when `config/**` changes
+
 ## 2026-07-16 — Align docs site styling with Autodotes brand
 
 ### Changed
 - Switched MkDocs fonts to Dosis and Roboto Mono to match autodotes.com
-- Updated `docs/assets/extra.css` palette to Autodotes navy (`#001157` / `#002d62`), gold accent (`#e2c044`), and soft background (`#faf9fe`)
+- Updated `docs/mkdocs/assets/extra.css` palette to Autodotes navy (`#001157` / `#002d62`), gold accent (`#e2c044`), and soft background (`#faf9fe`)
 
 ## 2026-07-16 — Publish repo docs to GitHub Pages with MkDocs
 
 ### Added
 - `mkdocs.yml` with Material theme, Red Hat fonts/colors, Autodotes logo, and nav over root/config READMEs plus `docs/`
-- `docs/assets/extra.css` and `docs/assets/logo.png` for brand styling
+- `docs/mkdocs/assets/extra.css` and `docs/mkdocs/assets/logo.png` for brand styling
 - `.github/workflows/docs.yml` to build and deploy Pages on `main` (and `workflow_dispatch`)
 
 ## 2026-07-16 — Add ansible-lint pre-commit hook with production profile

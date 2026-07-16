@@ -5,8 +5,8 @@ site_dir: site
 
 theme:
   name: material
-  logo: docs/assets/logo.png
-  favicon: docs/assets/logo.png
+  logo: docs/mkdocs/assets/logo.png
+  favicon: docs/mkdocs/assets/logo.png
   font:
     text: Dosis
     code: Roboto Mono
@@ -33,11 +33,17 @@ theme:
         name: Switch to light mode
 
 extra_css:
-  - docs/assets/extra.css
+  - docs/mkdocs/assets/extra.css
+
+hooks:
+  - docs/mkdocs/hooks.py
 
 plugins:
   - same-dir
   - search
+  - gen-files:
+      scripts:
+        - docs/mkdocs/gen_var_pages.py
 
 markdown_extensions:
   - tables
