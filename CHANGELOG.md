@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-07-16 — Add cac-parser skill for API-to-CaC conversion
+
+### Added
+- `.cursor/skills/cac-parser` agent skill to map AAP API payloads into the correct domain vars file, normalize refs, omit role/module defaults (`infra.aap_configuration` and `ansible.*` from `collections/requirements.yml`), and apply canonical key ordering
+- `collections/requirements.yml` listing Automation Platform collections used by this repo
+
+### Removed
+- `filter_plugins/core.py` export/normalize filters (no longer part of the apply path)
+
 ## 2026-07-16 — Standardize config YAML key ordering
 
 ### Added
