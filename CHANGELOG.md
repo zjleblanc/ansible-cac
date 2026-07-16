@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-16 — Publish repo docs to GitHub Pages with MkDocs
+
+### Added
+- `mkdocs.yml` with Material theme, Red Hat fonts/colors, Autodotes logo, and nav over root/config READMEs plus `docs/`
+- `docs/assets/extra.css` and `docs/assets/logo.png` for brand styling
+- `.github/workflows/docs.yml` to build and deploy Pages on `main` (and `workflow_dispatch`)
+
 ## 2026-07-16 — Add ansible-lint pre-commit hook with production profile
 
 ### Added

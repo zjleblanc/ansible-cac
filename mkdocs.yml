@@ -1,0 +1,79 @@
+site_name: AAP CaC - Autodotes Lab
+site_description: Configuration as Code for Ansible Automation Platform in the Autodotes Lab
+docs_dir: .
+site_dir: site
+
+theme:
+  name: material
+  logo: docs/assets/logo.png
+  favicon: docs/assets/logo.png
+  font:
+    text: Red Hat Text
+    code: Red Hat Mono
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.indexes
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+extra_css:
+  - docs/assets/extra.css
+
+plugins:
+  - same-dir
+  - search
+
+markdown_extensions:
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - admonition
+  - pymdownx.details
+
+nav:
+  - Home: README.md
+  - Configuration:
+      - Overview: config/README.md
+      - Common: config/common/README.md
+      - Cloud: config/cloud/README.md
+      - Networking: config/networking/README.md
+      - Linux: config/linux/README.md
+      - Windows: config/windows/README.md
+      - HashiCorp: config/hashi/README.md
+      - AIOps: config/aiops/README.md
+      - ServiceNow: config/servicenow/README.md
+      - Apps: config/apps/README.md
+      - AAP: config/aap/README.md
+      - Hub: config/hub/README.md
+  - Reference:
+      - Key Ordering: docs/key_ordering.md
+      - LDAP: config/common/LDAP.md
+  - Contributing:
+      - Changelog: CHANGELOG.md
+
+validation:
+  nav:
+    omitted_files: info
+    not_found: warn
+  links:
+    not_found: info
