@@ -1,4 +1,4 @@
-site_name: AAP CaC - Autodotes Lab
+site_name: AAP CaC - Autodotes
 site_description: Configuration as Code for Ansible Automation Platform in the Autodotes Lab
 docs_dir: .
 site_dir: site
