@@ -10,6 +10,8 @@
   --md-default-fg-color: #1a1b1f;
   --md-default-fg-color--light: #43474f;
   --md-typeset-a-color: #002d62;
+  --ad-sidebar-bg: #eef1f8;
+  --ad-sidebar-border: #d5dce8;
 }
 
 /* Dark mode */
@@ -21,6 +23,32 @@
   --md-default-bg-color: #1a1b1f;
   --md-default-bg-color--light: #2f3034;
   --md-typeset-a-color: #d2e4ff;
+  --ad-sidebar-bg: #15161a;
+  --ad-sidebar-border: #2f3034;
+}
+
+/* Wider content grid (Material default is ~61rem) */
+.md-grid {
+  max-width: 70rem;
+}
+
+/* Distinguish left nav and right TOC from main content */
+@media screen and (min-width: 76.25em) {
+  .md-sidebar {
+    background-color: var(--ad-sidebar-bg);
+  }
+
+  .md-sidebar--primary {
+    border-right: 1px solid var(--ad-sidebar-border);
+  }
+
+  .md-sidebar--secondary {
+    border-left: 1px solid var(--ad-sidebar-border);
+  }
+
+  .md-main__inner {
+    margin-top: 0;
+  }
 }
 
 /* Headings and site title use Dosis */

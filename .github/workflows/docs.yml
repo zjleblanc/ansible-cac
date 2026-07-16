@@ -5,8 +5,7 @@ on:
     branches: [main]
     paths:
       - "docs/**"
-      - "config/**/README.md"
-      - "config/**/LDAP.md"
+      - "config/**"
       - "README.md"
       - "CHANGELOG.md"
       - "mkdocs.yml"
@@ -31,7 +30,7 @@ jobs:
         with:
           python-version: "3.x"
 
-      - run: pip install mkdocs-material mkdocs-same-dir
+      - run: pip install mkdocs-material mkdocs-same-dir mkdocs-gen-files pyyaml
 
       - run: mkdocs build --strict
 
