@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-07-16 — Add ansible-lint pre-commit hook with production profile
+
+### Added
+- `ansible-lint` hook in `.pre-commit-config.yaml` (v26.6.0 with `ansible-core>=2.16`)
+- `yaml_extra_tags: ["!unsafe"]` in `.ansible-lint` to support credential type injectors
+
+### Changed
+- Bumped `.ansible-lint` profile from `shared` to `production`
+- Fixed `yaml[line-length]` violations in `config/aap/job_templates.yml`, `config/networking/inventory_groups.yml`, `config/networking/workflow_job_templates.yml`, and `config/windows/credential_types.yml` using `>-` folded scalars
+- Fixed `yaml[colons]` extra-space violation in `config/aiops/credentials.yml`
+- Fixed comment indentation in `config/linux/job_templates.yml`
+
 ## 2026-07-16 — Add cac-parser skill for API-to-CaC conversion
 
 ### Added

@@ -88,7 +88,8 @@ controller_workflows_networking:
           variable: config_repo_name
         - choices: ""
           # noqa: yaml[line-length]
-          default: "interfaces:\n  - description: MANAGEMENT INTERFACE - DON'T TOUCH ME\n    enabled: true\n    name: GigabitEthernet1\n  - description: Port to Fabric (edit 2 -> ansible)\n    enabled: true\n    name: GigabitEthernet2"
+          default: "interfaces:\n  - description: MANAGEMENT INTERFACE - DON'T TOUCH ME\n    enabled: true\n    name: GigabitEthernet1\n  - description: Port to Fabric
+            (edit 2 -> ansible)\n    enabled: true\n    name: GigabitEthernet2"
           max: 1024
           min: 0
           new_question: false

@@ -140,7 +140,11 @@ controller_templates_aap:
           max: 1024
           min: 0
           new_question: true
-          question_description: What version of the repository to check out. This can be the literal string HEAD, a branch name, a tag name. It can also be a SHA-1 hash, in which case refspec needs to be specified if the given revision is not already available.
+          question_description: >-
+            What version of the repository to check out. This can be the
+            literal string HEAD, a branch name, a tag name. It can also be
+            a SHA-1 hash, in which case refspec needs to be specified if
+            the given revision is not already available.
           question_name: Specify the version to pull
           required: false
           type: text

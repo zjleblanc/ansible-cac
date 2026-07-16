@@ -9,4 +9,8 @@ controller_groups_networking:
     variables:
       ansible_ssh_private_key_file: !unsafe "{{ lookup('env', 'SSH_PROXY_KEY') }}"
       ansible_ssh_common_args: !unsafe >-
-        -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null  -i {{ lookup('env', 'SSH_PROXY_KEY') }} -W %h:%p -q {{ ssh_proxy_username }}@{{ ssh_proxy_host }}"
+        -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+        -o ProxyCommand="ssh -o StrictHostKeyChecking=no
+        -o UserKnownHostsFile=/dev/null
+        -i {{ lookup('env', 'SSH_PROXY_KEY') }}
+        -W %h:%p -q {{ ssh_proxy_username }}@{{ ssh_proxy_host }}"

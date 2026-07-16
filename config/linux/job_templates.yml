@@ -164,7 +164,7 @@ controller_templates_linux:
     ask_limit_on_launch: true
     extra_vars:
       mssql_version: 2019
-    # sql_sa_password: REPLACE_ME
+  # sql_sa_password: REPLACE_ME
   - name: RHEL // Register
     description: Register server using subscription-manager
     project: Linux Mgmt

@@ -1,6 +1,6 @@
 ---
 # https://ansible-lint.readthedocs.io/configuring/
-profile: shared
+profile: production
 
 exclude_paths:
   - .cache/
