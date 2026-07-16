@@ -8,8 +8,8 @@ theme:
   logo: docs/assets/logo.png
   favicon: docs/assets/logo.png
   font:
-    text: Red Hat Text
-    code: Red Hat Mono
+    text: Dosis
+    code: Roboto Mono
   features:
     - navigation.sections
     - navigation.expand

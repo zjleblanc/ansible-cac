@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-16 — Align docs site styling with Autodotes brand
+
+### Changed
+- Switched MkDocs fonts to Dosis and Roboto Mono to match autodotes.com
+- Updated `docs/assets/extra.css` palette to Autodotes navy (`#001157` / `#002d62`), gold accent (`#e2c044`), and soft background (`#faf9fe`)
+
 ## 2026-07-16 — Publish repo docs to GitHub Pages with MkDocs
 
 ### Added
