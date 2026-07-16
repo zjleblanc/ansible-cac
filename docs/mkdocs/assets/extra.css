@@ -10,8 +10,8 @@
   --md-default-fg-color: #1a1b1f;
   --md-default-fg-color--light: #43474f;
   --md-typeset-a-color: #002d62;
-  --ad-sidebar-bg: #eef1f8;
-  --ad-sidebar-border: #d5dce8;
+  --ad-header-glass: rgba(0, 17, 87, 0.72);
+  --ad-content-shadow: rgba(0, 17, 87, 0.1);
 }
 
 /* Dark mode */
@@ -23,8 +23,8 @@
   --md-default-bg-color: #1a1b1f;
   --md-default-bg-color--light: #2f3034;
   --md-typeset-a-color: #d2e4ff;
-  --ad-sidebar-bg: #15161a;
-  --ad-sidebar-border: #2f3034;
+  --ad-header-glass: rgba(0, 17, 87, 0.78);
+  --ad-content-shadow: rgba(0, 0, 0, 0.35);
 }
 
 /* Wider content grid (Material default is ~61rem) */
@@ -32,23 +32,68 @@
   max-width: 70rem;
 }
 
-/* Distinguish left nav and right TOC from main content */
+/* Glass navbar */
+.md-header {
+  background-color: var(--ad-header-glass);
+  backdrop-filter: blur(14px) saturate(1.35);
+  -webkit-backdrop-filter: blur(14px) saturate(1.35);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset,
+    0 4px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* Raise main content above the sidebars */
 @media screen and (min-width: 76.25em) {
   .md-sidebar {
-    background-color: var(--ad-sidebar-bg);
-  }
-
-  .md-sidebar--primary {
-    border-right: 1px solid var(--ad-sidebar-border);
-  }
-
-  .md-sidebar--secondary {
-    border-left: 1px solid var(--ad-sidebar-border);
+    background-color: transparent;
   }
 
   .md-main__inner {
     margin-top: 0;
   }
+
+  .md-content {
+    position: relative;
+    z-index: 1;
+    background-color: var(--md-default-bg-color);
+    box-shadow:
+      -12px 0 24px -16px var(--ad-content-shadow),
+      12px 0 24px -16px var(--ad-content-shadow);
+  }
+
+  .md-content__inner {
+    margin-left: 0.8rem;
+    margin-right: 0.8rem;
+  }
+}
+
+/* Sidebars: hide scrollbar unless actively scrolling */
+.md-sidebar__scrollwrap {
+  scrollbar-width: none;
+  scrollbar-color: transparent transparent;
+}
+
+.md-sidebar__scrollwrap::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.md-sidebar__scrollwrap.is-scrolling {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(127, 127, 127, 0.45) transparent;
+}
+
+.md-sidebar__scrollwrap.is-scrolling::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.md-sidebar__scrollwrap.is-scrolling::-webkit-scrollbar-thumb {
+  background-color: rgba(127, 127, 127, 0.45);
+  border-radius: 999px;
+}
+
+.md-sidebar__scrollwrap.is-scrolling::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* Headings and site title use Dosis */
