@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-16 — Polish docs site chrome and side nav
+
+### Added
+- `docs/mkdocs/assets/extra.js` to show sidebar scrollbars only while scrolling
+
+### Changed
+- Replaced tinted/bordered sidebars with transparent chrome and left/right content shadows
+- Applied a frosted glass effect to the Material header
+- Dropped `navigation.expand` so nested side nav starts collapsed and only the active section opens
+
 ## 2026-07-16 — Auto-generate docs pages for domain config vars
 
 ### Added
