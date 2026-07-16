@@ -22,8 +22,6 @@ Configuration is organized by **domain** under `config/`. Shared fundamentals li
 │   └── hub/          # Private Automation Hub
 ├── vars/
 ├── pb_aap_config.yml
-├── pb_controller_export.yml
-└── pb_process_assets.yml
 ```
 
 - **config/common/** — Resources referenced by multiple domains (always applied unless skipped).

@@ -1,0 +1,30 @@
+{#- Path-based breadcrumbs: ansible-cac / config / cloud / ... -#}
+{%- set index_dirs = config.extra.breadcrumb_dirs | default([]) -%}
+<nav class="ad-breadcrumbs" aria-label="Breadcrumb">
+  <a class="ad-breadcrumbs__item" href="{{ config.extra.homepage | d(nav.homepage.url, true) | url }}">ansible-cac</a>
+  {%- if page and page.file and page.file.src_uri and page.file.src_uri not in ["README.md", "index.md"] -%}
+    {%- set segments = page.file.src_uri.split("/") -%}
+    {%- set ns = namespace(accum="") -%}
+    {%- for segment in segments -%}
+      {%- if ns.accum -%}
+        {%- set ns.accum = ns.accum ~ "/" ~ segment -%}
+      {%- else -%}
+        {%- set ns.accum = segment -%}
+      {%- endif -%}
+      {%- set is_index = segment in ["README.md", "index.md"] -%}
+      {%- set next_is_index = loop.nextitem is defined and loop.nextitem in ["README.md", "index.md"] -%}
+      {%- if is_index -%}
+        {#- Directory index filename is not shown; parent segment is the leaf. -#}
+      {%- elif loop.last or next_is_index -%}
+        <span class="ad-breadcrumbs__sep" aria-hidden="true">/</span>
+        <span class="ad-breadcrumbs__item ad-breadcrumbs__item--current" aria-current="page">{{ segment | replace(".md", "") }}</span>
+      {%- elif ns.accum in index_dirs -%}
+        <span class="ad-breadcrumbs__sep" aria-hidden="true">/</span>
+        <a class="ad-breadcrumbs__item" href="{{ (ns.accum ~ '/') | url }}">{{ segment }}</a>
+      {%- else -%}
+        <span class="ad-breadcrumbs__sep" aria-hidden="true">/</span>
+        <span class="ad-breadcrumbs__item">{{ segment }}</span>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+</nav>

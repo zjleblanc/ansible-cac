@@ -46,6 +46,19 @@ def on_config(config):
     return config
 
 
+def on_files(files, config):
+    """Record directories that have an index page for navbar breadcrumbs."""
+    dirs = set()
+    for f in files:
+        src = f.src_uri.replace("\\", "/")
+        if src in ("README.md", "index.md"):
+            dirs.add("")
+        elif src.endswith(("/README.md", "/index.md")):
+            dirs.add(src.rsplit("/", 1)[0])
+    config["extra"]["breadcrumb_dirs"] = dirs
+    return files
+
+
 def on_page_markdown(markdown: str, page, config, files):
     """Link domain README file-table cells to generated var pages at build time."""
     match = _DOMAIN_README.match(page.file.src_uri)
