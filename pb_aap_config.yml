@@ -6,8 +6,8 @@
   vars:
     secrets_files:
       - vars/controller_secrets.yml
-      # - vars/eda_secrets.yml
-      # - vars/platform_secrets.yml
+      - vars/eda_secrets.yml
+      - vars/platform_secrets.yml
   pre_tasks:
     - name: Load secrets
       ansible.builtin.include_vars:
@@ -21,6 +21,7 @@
       ansible.builtin.include_vars:
         dir: config/common
         extensions: [yml, yaml]
+        ignore_files: [README.md]
         ignore_unknown_extensions: true
       tags: [always, common]
 
@@ -29,60 +30,70 @@
       ansible.builtin.include_vars:
         dir: config/cloud
         extensions: [yml, yaml]
+        ignore_files: [README.md]
       tags: [cloud, never]
 
     - name: Include networking configuration
       ansible.builtin.include_vars:
         dir: config/networking
         extensions: [yml, yaml]
+        ignore_files: [README.md]
       tags: [networking, never]
 
     - name: Include linux configuration
       ansible.builtin.include_vars:
         dir: config/linux
         extensions: [yml, yaml]
+        ignore_files: [README.md]
       tags: [linux, never]
 
     - name: Include windows configuration
       ansible.builtin.include_vars:
         dir: config/windows
         extensions: [yml, yaml]
+        ignore_files: [README.md]
       tags: [windows, never]
 
     - name: Include hashi configuration
       ansible.builtin.include_vars:
         dir: config/hashi
         extensions: [yml, yaml]
+        ignore_files: [README.md]
       tags: [hashi, never]
 
     - name: Include aiops configuration
       ansible.builtin.include_vars:
         dir: config/aiops
         extensions: [yml, yaml]
+        ignore_files: [README.md]
       tags: [aiops, never]
 
     - name: Include servicenow configuration
       ansible.builtin.include_vars:
         dir: config/servicenow
         extensions: [yml, yaml]
+        ignore_files: [README.md]
       tags: [servicenow, never]
 
     - name: Include apps configuration
       ansible.builtin.include_vars:
         dir: config/apps
         extensions: [yml, yaml]
+        ignore_files: [README.md]
       tags: [apps, never]
 
     - name: Include aap configuration
       ansible.builtin.include_vars:
         dir: config/aap
         extensions: [yml, yaml]
+        ignore_files: [README.md]
       tags: [aap, never]
 
     - name: Include hub configuration
       ansible.builtin.include_vars:
         dir: config/hub
         extensions: [yml, yaml]
+        ignore_files: [README.md]
       tags: [hub, never]
 
     # --- apply configuration ---

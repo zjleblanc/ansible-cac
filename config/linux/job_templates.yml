@@ -4,7 +4,8 @@ controller_templates_linux:
   - name: Linux // Patching // Dispatcher
     organization: Autodotes
     description: Ingress playbook for patching to schedule downstream patching workflows based on pre-processing nodes
-    labels: ["Demo"]
+    labels:
+      - Linux
     project: Linux Mgmt
     playbook: workflows/patching/dispatcher.yml
     inventory: Cloud Inventory
@@ -69,7 +70,8 @@ controller_templates_linux:
   - name: Linux // Patching // No-Op
     organization: Autodotes
     description: Generic playbook to represent actions in a patching workflow
-    labels: ["Demo"]
+    labels:
+      - Linux
     project: Linux Mgmt
     playbook: workflows/patching/no_op.yml
     inventory: Cloud Inventory
@@ -77,6 +79,8 @@ controller_templates_linux:
     credentials: ["AWS (ec2-user)"]
     ask_variables_on_launch: true
   - name: Linux // Debug
+    labels:
+      - Linux
     project: Linux Mgmt
     playbook: playbooks/debug.yml
     inventory: Autodotes Lab
@@ -89,6 +93,8 @@ controller_templates_linux:
     use_fact_cache: true
     ask_execution_environment_on_launch: true
   - name: Linux // Gather Package Facts
+    labels:
+      - Linux
     project: Linux Mgmt
     playbook: playbooks/r4e_blueprint.yml
     inventory: Autodotes Lab
@@ -99,6 +105,8 @@ controller_templates_linux:
     extra_vars:
       _hosts: rhel8
   - name: Linux // Powershell Test
+    labels:
+      - Linux
     project: Windows Mgmt
     playbook: playbooks/pwsh.yml
     inventory: Autodotes Lab
@@ -107,6 +115,8 @@ controller_templates_linux:
     job_slice_count: 1
     limit: localhost
   - name: Linux // User Login (Random)
+    labels:
+      - Linux
     project: Linux Mgmt
     playbook: playbooks/user_login_random.yml
     inventory: Autodotes Lab
@@ -120,6 +130,8 @@ controller_templates_linux:
     extra_vars:
       last_records_max: 500
   - name: Linux // User Login Report
+    labels:
+      - Linux
     project: Linux Mgmt
     playbook: playbooks/user_login_report.yml
     inventory: Autodotes Lab
@@ -138,6 +150,8 @@ controller_templates_linux:
       report_server: raspi
       report_title: Last Login Report
   - name: Lockdown // RHEL 8 CIS
+    labels:
+      - Linux
     project: Lockdown RHEL8 CIS
     playbook: site.yml
     inventory: Autodotes Lab
@@ -153,6 +167,8 @@ controller_templates_linux:
       rhel8cis_rule_6_2_11: false
   - name: RHEL // Install SQL Server
     description: Install SQL Server on a RHEL box
+    labels:
+      - Linux
     project: Linux Mgmt
     playbook: demos/sqlserver-rhel.yml
     inventory: Proxmox Inventory
@@ -167,6 +183,8 @@ controller_templates_linux:
   # sql_sa_password: REPLACE_ME
   - name: RHEL // Register
     description: Register server using subscription-manager
+    labels:
+      - Linux
     project: Linux Mgmt
     playbook: demos/rhsm.yml
     inventory: Proxmox Inventory
@@ -181,6 +199,8 @@ controller_templates_linux:
       rhsm_repos:
         - !unsafe rhel-{{ ansible_distribution_major_version }}-server-optional-rpms
   - name: Sandbox // Consumer
+    labels:
+      - Linux
     project: Linux Mgmt
     playbook: playbooks/consumer.yml
     inventory: Autodotes Lab
@@ -189,6 +209,8 @@ controller_templates_linux:
     job_slice_count: 1
     ask_variables_on_launch: true
   - name: Sandbox // Producer
+    labels:
+      - Linux
     project: Linux Mgmt
     playbook: playbooks/producer.yml
     inventory: Autodotes Lab

@@ -4,6 +4,8 @@ controller_inventories_windows:
   - name: Windows Inventory
     organization: Autodotes
     description: Isolates Windows hosts in AWS
+    labels:
+      - Windows
     variables:
       ansible_connection: winrm
       ansible_winrm_port: 5986

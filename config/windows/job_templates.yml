@@ -2,6 +2,8 @@
 ---
 controller_templates_windows:
   - name: Proxmox // Decomm VM
+    labels:
+      - Windows
     project: Windows Mgmt
     playbook: demos/decomm_kvm.yml
     inventory: Workshop Inventory
@@ -17,6 +19,8 @@ controller_templates_windows:
       kvm_name: hcl-guest-1
       sys_id: undef
   - name: Proxmox // Manage Instance State
+    labels:
+      - Windows
     project: Linux Mgmt
     playbook: playbooks/proxmox_vm_state.yml
     inventory: Autodotes Lab
@@ -27,6 +31,8 @@ controller_templates_windows:
     job_slice_count: 1
     ask_variables_on_launch: true
   - name: Proxmox // Prep VM for Decomm
+    labels:
+      - Windows
     project: Windows Mgmt
     playbook: demos/decomm_kvm_prep.yml
     inventory: Proxmox Inventory
@@ -42,6 +48,8 @@ controller_templates_windows:
     ask_skip_tags_on_launch: true
   - name: Proxmox // Provision KVM Guest
     description: Create a proxmox kvm guest
+    labels:
+      - Windows
     project: Linux Mgmt
     playbook: demos/proxmox_kvm_guest.yml
     inventory: Proxmox Inventory
@@ -81,6 +89,8 @@ controller_templates_windows:
         rhel9: rhel-baseos-9.1-x86_64-kvm.qcow2
   - name: Proxmox // Provision Windows VM
     description: Provision a VM in Proxmox VE
+    labels:
+      - Windows
     project: Windows Mgmt
     playbook: demos/proxmox_kvm_clone.yml
     inventory: Proxmox Inventory
@@ -210,6 +220,8 @@ controller_templates_windows:
           type: integer
           variable: pve_survey_timeout
   - name: Proxmox // Setup WinRM
+    labels:
+      - Windows
     project: Windows Mgmt
     playbook: demos/setup_winrm.yml
     inventory: Proxmox Inventory
@@ -220,6 +232,8 @@ controller_templates_windows:
     job_type: run
     job_slice_count: 1
   - name: Windows // Bulk Add Users to Group
+    labels:
+      - Windows
     project: Windows Mgmt
     playbook: demos/bulk_add_users_to_group.yml
     inventory: Proxmox Inventory
@@ -264,6 +278,8 @@ controller_templates_windows:
           type: textarea
           variable: user_accounts
   - name: Windows // EC2 Domain Configure
+    labels:
+      - Windows
     project: Windows Mgmt
     playbook: demos/ad_domain/pb_domain_config.yml
     inventory: Windows Inventory
@@ -273,6 +289,8 @@ controller_templates_windows:
     job_type: run
     job_slice_count: 1
   - name: Windows // EC2 Domain Infra Deploy
+    labels:
+      - Windows
     project: Windows Mgmt
     playbook: demos/ad_domain/pb_aws_infra.yml
     inventory: Windows Inventory
@@ -283,6 +301,8 @@ controller_templates_windows:
     job_type: run
     job_slice_count: 1
   - name: Windows // EC2 Domain Join
+    labels:
+      - Windows
     project: Windows Mgmt
     playbook: demos/ad_domain/pb_domain_join.yml
     inventory: Windows Inventory
@@ -292,6 +312,8 @@ controller_templates_windows:
     job_type: run
     job_slice_count: 1
   - name: Windows // EC2 Domain Setup [Monolith]
+    labels:
+      - Windows
     project: Windows Mgmt
     playbook: demos/ad_domain/setup.yml
     inventory: Windows Inventory
@@ -302,6 +324,8 @@ controller_templates_windows:
     job_type: run
     job_slice_count: 1
   - name: Windows // EC2 Kerberos Check
+    labels:
+      - Windows
     project: Windows Mgmt
     playbook: demos/ad_domain/pb_check_krb.yml
     inventory: Windows Inventory
@@ -312,6 +336,8 @@ controller_templates_windows:
     job_slice_count: 1
     ask_verbosity_on_launch: true
   - name: Windows // Gather Facts
+    labels:
+      - Windows
     project: Windows Mgmt
     playbook: playbooks/win_facts.yml
     inventory: Proxmox Inventory
@@ -326,6 +352,8 @@ controller_templates_windows:
     ask_limit_on_launch: true
     ask_credential_on_launch: true
   - name: Windows // Get Folder Stats
+    labels:
+      - Windows
     project: Windows Mgmt
     playbook: playbooks/get_folder_stats.yml
     inventory: Windows Inventory
@@ -339,6 +367,8 @@ controller_templates_windows:
       domain_controller: dc01.autodotes.com
       servers: "winston\nwinthrop"
   - name: Windows // Join Domain
+    labels:
+      - Windows
     project: Windows Mgmt
     playbook: demos/join_domain.yml
     inventory: Proxmox Inventory
@@ -354,6 +384,8 @@ controller_templates_windows:
     extra_vars:
       join_domain: true
   - name: Windows // Leave Domain
+    labels:
+      - Windows
     project: Windows Mgmt
     playbook: demos/leave_domain.yml
     inventory: Proxmox Inventory
@@ -366,6 +398,8 @@ controller_templates_windows:
     job_slice_count: 1
     ask_limit_on_launch: true
   - name: Windows // Long paths - Delete
+    labels:
+      - Windows
     project: Windows Mgmt
     playbook: demos/delete_folder_long_path.yml
     inventory: Proxmox Inventory
@@ -395,6 +429,8 @@ controller_templates_windows:
           type: textarea
           variable: root_folders
   - name: Windows // Long Paths - Setup
+    labels:
+      - Windows
     project: Windows Mgmt
     playbook: demos/delete_folder_long_path.yml
     inventory: Proxmox Inventory
@@ -423,6 +459,8 @@ controller_templates_windows:
           variable: root_folders
   - name: Windows // MSSQL Role
     description: Install a SQL Server instance using DSC
+    labels:
+      - Windows
     project: Windows Mgmt
     playbook: demos/install_mssql_dsc.yml
     inventory: Proxmox Inventory
@@ -437,6 +475,8 @@ controller_templates_windows:
     ask_tags_on_launch: true
     ask_credential_on_launch: true
   - name: Windows // Powershell
+    labels:
+      - Windows
     project: Windows Mgmt
     playbook: playbooks/pwsh.yml
     inventory: Cloud Inventory

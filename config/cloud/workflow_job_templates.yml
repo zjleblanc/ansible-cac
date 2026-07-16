@@ -3,6 +3,8 @@
 controller_workflows_cloud:
   - name: AWS // Decommission Workflow
     organization: Autodotes
+    labels:
+      - Cloud
     allow_simultaneous: true
     ask_variables_on_launch: true
     survey_enabled: true
@@ -48,7 +50,8 @@ controller_workflows_cloud:
           type: job_template
   - name: AWS // Provisioning Workflow
     organization: Autodotes
-    labels: [Demo, Cloud]
+    labels:
+      - Cloud
     allow_simultaneous: true
     ask_variables_on_launch: true
     survey_enabled: true
@@ -159,6 +162,8 @@ controller_workflows_cloud:
             type: organization
           type: job_template
   - name: Cloud // Patch Workflow
+    labels:
+      - Cloud
     inventory: Cloud Inventory
     survey_enabled: true
     survey_spec:

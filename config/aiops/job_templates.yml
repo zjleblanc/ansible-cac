@@ -2,7 +2,8 @@
 ---
 controller_templates_aiops:
   - name: Demo Ansible Butler Clone
-    labels: ["AIOps"]
+    labels:
+      - AIOps
     project: Windows Mgmt
     playbook: playbooks/no_op.yml
     inventory: Proxmox Inventory
@@ -29,7 +30,8 @@ controller_templates_aiops:
           type: text
           variable: _host
   - name: EDA // Dynatrace Problems
-    labels: ["AIOps"]
+    labels:
+      - AIOps
     project: Event-Driven Demos
     playbook: playbooks/resolve_problem.yml
     inventory: Cloud Inventory
@@ -43,7 +45,8 @@ controller_templates_aiops:
     use_fact_cache: true
     ask_variables_on_launch: true
   - name: EDA // Linux Remediation
-    labels: ["AIOps"]
+    labels:
+      - AIOps
     project: Linux Mgmt
     playbook: demos/remediate_linux.yml
     inventory: Autodotes Lab
@@ -56,7 +59,8 @@ controller_templates_aiops:
     job_slice_count: 1
     ask_variables_on_launch: true
   - name: EDA // Linux Remediation Setup
-    labels: ["AIOps"]
+    labels:
+      - AIOps
     project: Linux Mgmt
     playbook: demos/remediate_setup.yml
     inventory: Autodotes Lab
@@ -81,7 +85,8 @@ controller_templates_aiops:
           type: text
           variable: _hosts
   - name: EDA // No-Op
-    labels: ["AIOps"]
+    labels:
+      - AIOps
     project: Windows Mgmt
     playbook: playbooks/no_op.yml
     inventory: Proxmox Inventory
@@ -110,7 +115,8 @@ controller_templates_aiops:
           type: text
           variable: _hosts
   - name: EDA // OneAgent Restart
-    labels: ["AIOps"]
+    labels:
+      - AIOps
     project: Event-Driven Demos
     playbook: playbooks/remediate_onagent.yml
     inventory: Cloud Inventory
@@ -123,7 +129,8 @@ controller_templates_aiops:
     job_slice_count: 1
     ask_variables_on_launch: true
   - name: EDA // Remediate High Memory Usage Processes
-    labels: ["AIOps"]
+    labels:
+      - AIOps
     project: Event-Driven Demos
     playbook: playbooks/remediate_memory_usage.yml
     inventory: Cloud Inventory
@@ -142,7 +149,8 @@ controller_templates_aiops:
         - less
       threshold: 70
   - name: AIOps // Ticket Enrichment // RHEL
-    labels: ["Demo", "AIOps"]
+    labels:
+      - AIOps
     project: Cloud Mgmt
     playbook: playbooks/aws/pb_ai_rca.yml
     inventory: Cloud Inventory
@@ -154,7 +162,8 @@ controller_templates_aiops:
       - Ticket Enrichment API Key
     ask_variables_on_launch: true
   - name: EDA // Resize EBS Volume
-    labels: ["AIOps"]
+    labels:
+      - AIOps
     project: Cloud Mgmt
     playbook: playbooks/aws/add_disk_space.yml
     inventory: Cloud Inventory
@@ -183,7 +192,8 @@ controller_templates_aiops:
           type: integer
           variable: reboot_timeout
   - name: EDA // Rollback Demo Site Changes
-    labels: ["AIOps"]
+    labels:
+      - AIOps
     project: Event-Driven Demos
     playbook: playbooks/rollback_nginx_site.yml
     inventory: Autodotes Lab

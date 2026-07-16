@@ -3,6 +3,8 @@
 controller_workflows_linux:
   - name: Linux // Patching // rhel9_3
     organization: Autodotes
+    labels:
+      - Linux
     allow_simultaneous: true
     ask_variables_on_launch: true
     ask_labels_on_launch: true
@@ -114,6 +116,8 @@ controller_workflows_linux:
             ctask_sys_id: asdas9r70213u1ji321
   - name: Linux // Patching // rhel8_10
     organization: Autodotes
+    labels:
+      - Linux
     allow_simultaneous: true
     ask_variables_on_launch: true
     ask_labels_on_launch: true
@@ -224,6 +228,8 @@ controller_workflows_linux:
             ctask_num: CTASK123
             ctask_sys_id: asdas9r70213u1ji321
   - name: Linux // Debug Workflow
+    labels:
+      - Linux
     inventory: Autodotes Lab
     workflow_nodes:
       - identifier: Debug Variables
@@ -235,6 +241,8 @@ controller_workflows_linux:
           type: job_template
   - name: Linux // User Login (Random) Workflow
     organization: Autodotes
+    labels:
+      - Linux
     workflow_nodes:
       - identifier: Sync Project
         related:
@@ -302,6 +310,8 @@ controller_workflows_linux:
               state: stopped
   - name: Linux // User Login Report Workflow
     organization: Autodotes
+    labels:
+      - Linux
     workflow_nodes:
       - identifier: Project Sync
         related:
@@ -358,6 +368,8 @@ controller_workflows_linux:
   - name: RHEL // Provision RHEL SQL Server Host
     organization: Autodotes
     description: Provision a guest in proxmox, register with subscription-manager, and install sql server
+    labels:
+      - Linux
     inventory: Proxmox Inventory
     limit: "*.rhel-guest"
     workflow_nodes:
@@ -410,6 +422,8 @@ controller_workflows_linux:
   #     success_nodes:
   #     - identifier: Register RHEL Guest
   - name: Sandbox // Produce & Consume
+    labels:
+      - Linux
     workflow_nodes:
       - identifier: 6cac0b40-ab3e-400f-89a7-6d4d8d7f001b
         related:

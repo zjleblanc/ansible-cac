@@ -4,6 +4,8 @@ controller_workflows_windows:
   - name: Proxmox // Setup Windows VM
     organization: Autodotes
     description: provision a windows vm and setup winrm
+    labels:
+      - Windows
     inventory: Proxmox Inventory
     ask_variables_on_launch: true
     extra_vars:
@@ -82,6 +84,8 @@ controller_workflows_windows:
           type: job_template
   - name: Windows // EC2 Domain Setup [Workflow]
     organization: Autodotes
+    labels:
+      - Windows
     inventory: Windows Inventory
     workflow_nodes:
       - identifier: Domain Config
@@ -148,6 +152,8 @@ controller_workflows_windows:
   - name: Windows // Install SQL Server (E2E)
     organization: Autodotes
     description: Complete installation of microsoft sql server
+    labels:
+      - Windows
     inventory: Proxmox Inventory
     ask_limit_on_launch: true
     limit: win11-guest-1

@@ -26,7 +26,7 @@ ansible-playbook pb_aap_config.yml --tags cloud --skip-tags common
 
 ## Scope to a single resource file
 
-Each YAML file has a one-liner comment at the top. Domain + resource tags compose with `infra.aap_configuration.dispatch` tags so only the matching role(s) run after vars load.
+Each YAML file has a one-liner comment at the top. Domain + resource tags filter which var files load (`vars/cac_file_resource_tags.yml`) and which `infra.aap_configuration.dispatch` roles run.
 
 | File | Resource tag | Example |
 |------|--------------|--------|

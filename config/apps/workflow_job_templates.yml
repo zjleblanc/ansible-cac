@@ -3,7 +3,8 @@
 controller_workflows_apps:
   - name: Apps // SSL Certificate Renewal Workflow
     organization: Autodotes
-    labels: ["Demo", "Apps"]
+    labels:
+      - Apps
     allow_simultaneous: true
     ask_variables_on_launch: true
     extra_vars:
@@ -96,6 +97,8 @@ controller_workflows_apps:
           type: job_template
   - name: AAP // Renew & Update AAP certs
     organization: Autodotes
+    labels:
+      - Apps
     inventory: Autodotes Lab
     webhook_service: gitlab
     workflow_nodes:

@@ -4,7 +4,8 @@ controller_templates_servicenow:
   - name: Selenium // Automation Dashboard
     organization: Autodotes
     description: Demonstrate using Selenium to create application screen captures
-    labels: ["Demo", "ServiceNow"]
+    labels:
+      - ServiceNow
     project: Cloud Mgmt
     playbook: demos/selenium_automation_dashboard.yml
     inventory: Autodotes Lab
@@ -29,7 +30,8 @@ controller_templates_servicenow:
   - name: Selenium // Screen Capture
     organization: Autodotes
     description: Demonstrate using Selenium to create application screen captures
-    labels: ["Demo", "ServiceNow"]
+    labels:
+      - ServiceNow
     project: Cloud Mgmt
     playbook: demos/selenium_screen_capture.yml
     inventory: Autodotes Lab
@@ -39,7 +41,8 @@ controller_templates_servicenow:
   - name: ServiceNow // Create CIs
     organization: Autodotes
     description: Create cmdb_ci_vm_instance items
-    labels: ["Demo", "ServiceNow"]
+    labels:
+      - ServiceNow
     project: Cloud Mgmt
     playbook: playbooks/snow/manage_ci.yml
     inventory: Cloud Inventory
@@ -65,7 +68,8 @@ controller_templates_servicenow:
   - name: ServiceNow // Delete CIs
     organization: Autodotes
     description: Delete cmdb_ci_vm_instance items
-    labels: ["Demo", "ServiceNow"]
+    labels:
+      - ServiceNow
     project: Cloud Mgmt
     playbook: playbooks/snow/manage_ci.yml
     inventory: Cloud Inventory
@@ -88,6 +92,8 @@ controller_templates_servicenow:
           question_name: Specify target host(s)
           question_description: pattern for the playbook hosts key
   - name: Service Now // Create Incident
+    labels:
+      - ServiceNow
     project: Cloud Mgmt
     playbook: playbooks/snow/create_incident.yml
     inventory: Autodotes Lab
@@ -97,6 +103,8 @@ controller_templates_servicenow:
     job_type: run
     job_slice_count: 1
   - name: Service Now // Mock Decomm VM
+    labels:
+      - ServiceNow
     project: Windows Mgmt
     playbook: demos/snow_no_op.yml
     inventory: Autodotes Lab
@@ -107,6 +115,8 @@ controller_templates_servicenow:
     job_slice_count: 1
     ask_variables_on_launch: true
   - name: Service Now // Update Incident
+    labels:
+      - ServiceNow
     project: Cloud Mgmt
     playbook: playbooks/snow/update_incident.yml
     inventory: Autodotes Lab
@@ -117,6 +127,8 @@ controller_templates_servicenow:
   - name: ServiceNow // Manage Resources
     organization: Autodotes
     description: Generic template to interface with supported ServiceNow Table API operations
+    labels:
+      - ServiceNow
     project: Cloud Mgmt
     playbook: playbooks/snow/manage_resource.yml
     execution_environment: ee-default

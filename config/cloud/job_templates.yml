@@ -2,7 +2,8 @@
 ---
 controller_templates_cloud:
   - name: GCP // CLI Test
-    labels: ["Cloud"]
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/gcp/gcloud_cli_test.yml
     inventory: Cloud Inventory
@@ -10,7 +11,8 @@ controller_templates_cloud:
     credentials:
       - GCP Sandbox Credential
   - name: GCP // Convert RHEL License
-    labels: ["Cloud"]
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/gcp/gcp_convert_license.yml
     inventory: Cloud Inventory
@@ -41,7 +43,8 @@ controller_templates_cloud:
   - name: AWS // Delete VM
     organization: Autodotes
     description: Terminate virtual machine(s) in AWS
-    labels: ["Demo", "AWS"]
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/aws/delete_vm.yml
     inventory: Service Now Inventory
@@ -63,7 +66,8 @@ controller_templates_cloud:
   - name: AWS // Create VM
     organization: Autodotes
     description: Create virtual machine(s) in AWS
-    labels: ["Demo", "AWS"]
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/aws/create_vm.yml
     inventory: Cloud Inventory
@@ -128,7 +132,8 @@ controller_templates_cloud:
   - name: AWS // Install Agents
     organization: Autodotes
     description: Install agents on cloud infrastructure
-    labels: ["Demo", "AWS"]
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/aws/install_agents.yml
     inventory: Cloud Inventory
@@ -169,7 +174,8 @@ controller_templates_cloud:
   - name: AWS // Install Applications
     organization: Autodotes
     description: Install applications on cloud infrastructure
-    labels: ["Demo", "AWS"]
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/aws/install_apps.yml
     inventory: Cloud Inventory
@@ -210,7 +216,8 @@ controller_templates_cloud:
   - name: AWS // Patch VM
     organization: Autodotes
     description: Patch an EC2 instance with ServiceNow integration
-    labels: ["Demo", "AWS"]
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/aws/patch_vm.yml
     inventory: Cloud Inventory
@@ -233,6 +240,8 @@ controller_templates_cloud:
           question_name: Specify target host(s)
           question_description: pattern for the playbook hosts key
   - name: Azure // Create Disks
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/azure/snapshot_mgmt/create_disks.yml
     inventory: Azure Inventory
@@ -243,12 +252,16 @@ controller_templates_cloud:
     job_slice_count: 1
   - name: Azure // Delete Snapshots
     description: delete snapshots in azure based on tagged retention date
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/azure/snapshot_mgmt/delete_snapshots.yml
     inventory: Autodotes Lab
     job_type: run
     job_slice_count: 1
   - name: Azure // Provisioning Callback
+    labels:
+      - Cloud
     project: Linux Mgmt
     playbook: playbooks/azure_vm_setup.yml
     inventory: Satellite Inventory
@@ -262,6 +275,8 @@ controller_templates_cloud:
     host_config_key: "{{ controller_credential_callback_host_config_key }}"
   - name: Azure // Scan Snapshots
     description: scan snapshots in azure based on tagged retention date
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/azure/snapshot_mgmt/scan_snapshots.yml
     inventory: Cloud Inventory
@@ -287,6 +302,8 @@ controller_templates_cloud:
           type: integer
           variable: scan_offset_days
   - name: Azure // Snapshot Disks
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/azure/snapshot_mgmt/snapshot_disks.yml
     inventory: Azure Inventory
@@ -296,6 +313,8 @@ controller_templates_cloud:
     job_type: run
     job_slice_count: 1
   - name: Cloud // EC2 Process Report
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/aws/ec2_process_report.yml
     inventory: Cloud Inventory
@@ -341,6 +360,8 @@ controller_templates_cloud:
           type: text
           variable: autodotes_report_server_user
   - name: Cloud // Patch EC2
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/aws/patch_vm.yml
     inventory: Cloud Inventory
@@ -351,6 +372,8 @@ controller_templates_cloud:
     job_slice_count: 1
     ask_variables_on_launch: true
   - name: Cloud // Restore EC2
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/aws/restore_from_snapshot.yml
     inventory: Cloud Inventory
@@ -361,6 +384,8 @@ controller_templates_cloud:
     job_slice_count: 1
     ask_variables_on_launch: true
   - name: Cloud // Snapshot EC2
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/aws/snapshot_vm.yml
     inventory: Cloud Inventory
@@ -371,6 +396,8 @@ controller_templates_cloud:
     job_slice_count: 1
     ask_variables_on_launch: true
   - name: VMWare // Gather Facts
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/vmware/no_op.yml
     inventory: Cloud Inventory
@@ -384,6 +411,8 @@ controller_templates_cloud:
     limit: new_guest
     ask_limit_on_launch: true
   - name: VMWare // Gather Info
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/vmware/info.yml
     inventory: Cloud Inventory
@@ -393,6 +422,8 @@ controller_templates_cloud:
     job_type: run
     job_slice_count: 1
   - name: VMWare // Power State
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/vmware/power.yml
     inventory: Autodotes Lab
@@ -432,6 +463,8 @@ controller_templates_cloud:
           type: multiplechoice
           variable: vm_desired_state
   - name: VMWare // Provision Guest
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/vmware/deploy.yml
     inventory: Cloud Inventory
@@ -518,6 +551,8 @@ controller_templates_cloud:
           type: textarea
           variable: vmware_public_key
   - name: VMWare // Snapshot
+    labels:
+      - Cloud
     project: Cloud Mgmt
     playbook: playbooks/vmware/snapshot.yml
     inventory: Autodotes Lab
