@@ -1,0 +1,410 @@
+# ansible-playbook pb_aap_config.yml --tags aap,job_templates --skip-tags common
+---
+controller_templates_aap:
+  - name: AAP // Backup Platform
+    project: Cloud Mgmt
+    playbook: playbooks/aap/backup_platform.yml
+    inventory: Autodotes Lab
+    credentials:
+      - AAP (id_rsa)
+      - West ServiceNow (ven07621)
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: manager
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: Target host
+          required: true
+          type: text
+          variable: _host
+        - choices: ""
+          default: /home/zach/ansible-automation-platform-setup-2.4-7
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: Installation directory
+          required: true
+          type: text
+          variable: ansible_installation_dir
+        - choices: ""
+          default: /home/zach/aap-backups
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Backup Directory
+          required: true
+          type: text
+          variable: ansible_backups_dir
+        - choices: ""
+          default: us-east-2
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: AWS Region
+          required: true
+          type: text
+          variable: aws_region
+        - choices: ""
+          default: autodotes-app-backups
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: AWS S3 Bucket
+          required: true
+          type: text
+          variable: aws_s3_bucket
+        - choices:
+            - "true"
+            - "false"
+          default: "true"
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Cleanup existing backups?
+          required: true
+          type: multiplechoice
+          variable: cleanup_backups_dir
+        - choices:
+            - "true"
+            - "false"
+          default: "false"
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Skip Backup?
+          required: true
+          type: multiplechoice
+          variable: skip_backup
+        - choices:
+            - "true"
+            - "false"
+          default: "true"
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Upload to S3?
+          required: true
+          type: multiplechoice
+          variable: upload_backup_to_s3
+  - name: AAP // Build EE for Offline
+    project: Execution Environment Builds [Legacy]
+    playbook: ansible/build-ee.yml
+    inventory: Autodotes Lab
+    credentials:
+      - AAP (id_rsa)
+      - "EE Utilities (Destination: Quay)"
+      - Red Hat Automation Hub
+    job_type: run
+    job_slice_count: 1
+    ask_skip_tags_on_launch: true
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: fedora
+          max: 100
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: Specify the build host
+          required: false
+          type: text
+          variable: build_host
+        - choices: ""
+          default: ""
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: should match the folder containing an execution environment definition file
+          question_name: Specify the EE name
+          required: true
+          type: text
+          variable: ee_name
+        - choices: ""
+          default: ""
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: >-
+            What version of the repository to check out. This can be the
+            literal string HEAD, a branch name, a tag name. It can also be
+            a SHA-1 hash, in which case refspec needs to be specified if
+            the given revision is not already available.
+          question_name: Specify the version to pull
+          required: false
+          type: text
+          variable: commit_hash
+        - choices: ""
+          default: raspi
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Specify the artfacts host
+          required: false
+          type: text
+          variable: artifacts_host
+        - choices: ""
+          default: /var/www/artifacts.autodotes.com/ansible-execution-environments
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: Specify the artifact destination directory
+          required: false
+          type: text
+          variable: artifacts_dir
+  - name: AAP // EE Builder
+    project: Execution Environment Builder
+    playbook: pb_build_ees.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)
+      - Controller Credential
+      - "EE Utilities (Destination: Quay)"
+      - Private Automation Hub [builder]
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true
+    ask_verbosity_on_launch: true
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: builder
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: Must match name in Inventory
+          question_name: Specify the build host
+          required: false
+          type: text
+          variable: build_host
+        - choices: ""
+          default: OVERRIDE_ME
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: Recommended to use the commit hash
+          question_name: Specify the Execution Environment(s) version
+          required: true
+          type: text
+          variable: ee_tag
+        - choices:
+            - "0"
+            - "1"
+            - "2"
+            - "3"
+          default: "0"
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: Specify verbosity
+          required: false
+          type: multiplechoice
+          variable: ee_verbosity
+        - choices:
+            - "true"
+            - "false"
+          default: "true"
+          max: 5
+          min: 4
+          new_question: true
+          question_description: ""
+          question_name: Clean up build directory?
+          required: false
+          type: multiplechoice
+          variable: ee_builder_dir_clean
+  - name: AAP // Health Check
+    project: Linux Mgmt
+    playbook: playbooks/aap_health_check.yml
+    inventory: Autodotes Lab
+    execution_environment: Control Plane Execution Environment
+    credentials:
+      - AAP (id_rsa)
+      - Controller Credential
+    job_type: run
+    job_slice_count: 1
+  - name: AAP // Publish Org Host Metrics Report
+    project: Autodotes
+    playbook: playbooks/reports/org_host_metrics.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)
+      - Controller Credential
+    job_type: run
+    job_slice_count: 1
+  - name: AAP // Refresh AH Token
+    project: Cloud Mgmt
+    playbook: playbooks/aap/refresh_rh_token.yml
+    inventory: Autodotes Lab
+    credentials:
+      - Red Hat Automation Hub
+    job_type: run
+    job_slice_count: 1
+  - name: AAP // Test Lookup Plugin(s)
+    project: Cloud Mgmt
+    playbook: playbooks/aap/test_lookup_plugin.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    job_type: run
+    job_slice_count: 1
+    verbosity: 3
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: ""
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Azure Key Vault URL
+          required: false
+          type: text
+          variable: az_vault_url
+        - choices: ""
+          default: ""
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: Azure Key Vault Secret Name
+          required: false
+          type: text
+          variable: az_kv_secret_name
+        - choices: ""
+          default: ""
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: AZ_TENANT_ID
+          required: false
+          type: text
+          variable: az_tenant_id
+        - choices: ""
+          default: ""
+          max: 1024
+          min: 0
+          new_question: false
+          question_description: ""
+          question_name: AZ_CLIENT_ID
+          required: false
+          type: text
+          variable: az_client_id
+        - choices: ""
+          default: ""
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: ""
+          question_name: AZ_CLIENT_SECRET
+          required: false
+          type: password
+          variable: az_client_secret
+  - name: AAP // Update AAP Certs
+    description: copy certs from reverse proxy to dest on aap nodes
+    project: Autodotes
+    playbook: playbooks/acme/update_aap_certs.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)
+    job_type: run
+    job_slice_count: 1
+    job_tags: controller,hub,eda
+    ask_verbosity_on_launch: true
+    ask_tags_on_launch: true
+  - name: AAP // Update PAH Local User
+    project: Cloud Mgmt
+    playbook: playbooks/aap/ah_update_local_user_pw.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    job_type: run
+    job_slice_count: 1
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - choices: ""
+          default: ""
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: The user name to receive password update
+          question_name: User name
+          required: true
+          type: text
+          variable: pah_username
+        - choices: ""
+          default: ""
+          max: 1024
+          min: 0
+          new_question: true
+          question_description: User's password as a clear string. The password must contain at least 9 characters with numbers or special characters.
+          question_name: New password for user
+          required: true
+          type: password
+          variable: pah_new_password
+  - name: EE // Build
+    project: EE Builds
+    playbook: builder.yml
+    inventory: Autodotes Lab
+    credentials:
+      - AAP (awx)
+      - Execution Environment Builds
+    job_type: run
+    job_slice_count: 1
+    extra_vars:
+      _host: controller
+  - name: PAH // Sync Repositories
+    project: Cloud Mgmt
+    playbook: playbooks/aap/pah_sync_repositories.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
+      - Private Automation Hub [hubber]
+    job_type: run
+    job_slice_count: 1
+    extra_vars:
+      ah_collection_repositories:
+        - name: rh-certified
+          wait: false
+        - name: validated
+          wait: false
+        - name: community
+          wait: false
+  - name: AAP // Create Label
+    organization: Autodotes
+    description: Create a Label in Ansible Automation Platform for tagging resources
+    project: Cloud Mgmt
+    playbook: playbooks/aap/create_label.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
+      - Controller Credential
+    ask_variables_on_launch: true

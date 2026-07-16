@@ -1,0 +1,37 @@
+# ansible-playbook pb_aap_config.yml --tags projects
+---
+controller_projects_common:
+  - name: Autodotes
+    organization: Autodotes
+    scm_type: git
+    scm_url: git@gitlab.com:zachleblanc/ansible-autodotes.git
+    scm_branch: main
+    scm_clean: "no"
+    scm_delete_on_update: "no"
+    scm_update_on_launch: "no"
+    credential: Gitlab - Autodotes
+  - name: Cloud Mgmt
+    organization: Autodotes
+    scm_type: git
+    scm_url: https://github.com/zjleblanc/ansible-cloud-mgmt.git
+    scm_branch: master
+    scm_clean: "no"
+    scm_delete_on_update: "no"
+    scm_update_on_launch: "no"
+  - name: Linux Mgmt
+    organization: Autodotes
+    scm_type: git
+    scm_url: https://github.com/zjleblanc/ansible-linux-mgmt.git
+    scm_branch: master
+    scm_clean: "no"
+    scm_delete_on_update: "no"
+    scm_update_on_launch: "no"
+  - name: Windows Mgmt
+    organization: Autodotes
+    scm_type: git
+    scm_url: https://github.com/zjleblanc/ansible-windows-mgmt.git
+    scm_branch: master
+    scm_clean: "no"
+    scm_delete_on_update: "no"
+    scm_update_on_launch: "no"
+    default_environment: ee-windows

@@ -1,0 +1,9 @@
+# ansible-playbook pb_aap_config.yml --tags teams
+---
+aap_teams_common:
+  - name: redhat
+    description: Red Hatters with access to Autodotest
+    organization: Autodotes
+  - name: lab
+    description: lab users
+    organization: Autodotes

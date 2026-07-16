@@ -1,0 +1,31 @@
+# ansible-playbook pb_aap_config.yml --tags hub,users --skip-tags common
+---
+ah_users_hub:
+  - username: altuve
+    password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=10) }}"
+    email: altuve@astros.com
+    first_name: Jose
+    last_name: Altuve
+    groups:
+      - astros
+    append: true
+    is_superuser: true
+  - username: biggio
+    password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=10) }}"
+    email: biggio@astros.com
+    first_name: Craig
+    last_name: Biggio
+    groups:
+      - astros
+    append: true
+    is_superuser: false
+  - username: verlander
+    password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=10) }}"
+    email: verlander@astros.com
+    first_name: Justin
+    last_name: Verlander
+    groups:
+      - astros
+      - pitching_staff
+    append: true
+    is_superuser: false

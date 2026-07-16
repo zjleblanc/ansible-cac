@@ -1,0 +1,8 @@
+# ansible-playbook pb_aap_config.yml --tags hub,repos --skip-tags common
+---
+hub_ee_repositories_hub:
+  - name: ee-default
+    description: My default execution environment with all the automation stuff
+    registry: quay_zleblanc
+    upstream_name: zleblanc/ee-default
+    readme: "# zleblanc default execution environment"

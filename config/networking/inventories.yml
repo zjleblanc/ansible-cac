@@ -1,0 +1,15 @@
+# ansible-playbook pb_aap_config.yml --tags networking,inventories --skip-tags common
+---
+controller_inventories_networking:
+  - name: Cisco Lab
+    organization: Autodotes
+    description: Static inventory representing Cisco always-on sandbox devices
+    variables:
+      ansible_network_cli_ssh_type: paramiko
+      ansible_paramiko_host_key_checking: false
+      ansible_paramiko_look_for_keys: false
+      report_server: reports.autodotes.com
+      web_path: /var/www/reports.autodotes.com/networking
+  - name: Palo Alto Demo Inventory
+    organization: Autodotes
+    description: Used with Palo Alto Firewall demo based on AWS EC2 infrastructure

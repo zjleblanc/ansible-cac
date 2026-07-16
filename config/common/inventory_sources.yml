@@ -1,0 +1,111 @@
+# ansible-playbook pb_aap_config.yml --tags inventory_sources
+---
+controller_inventory_sources_common:
+  - name: Autodotes Lab Machines
+    description: ansible-autodotes > inventories > autodotes-lab
+    inventory: Autodotes Lab
+    source: scm
+    source_project: Autodotes
+    source_path: ./inventories/autodotes-lab
+    source_vars:
+    credential:
+    execution_environment: ee-default
+    overwrite: false
+    overwrite_vars: false
+    update_on_launch: false
+    update_cache_timeout: 0
+    enabled_var: ""
+    enabled_value: ""
+    host_filter: ""
+    limit: ""
+    scm_branch: ""
+    timeout: 0
+    verbosity: 1
+  - name: AWS EC2 Instances
+    description: ""
+    inventory: Cloud Inventory
+    source: ec2
+    source_project:
+    source_path: ""
+    source_vars:
+      aws_region: us-east-2
+      compose:
+        ansible_host: public_ip_address
+        ansible_platform: platform
+        ansible_user: ec2-user
+        distro: ansible_distribution
+      groups:
+        linux: "'windows' not in platform_details.lower()"
+        windows: "'windows' in platform_details.lower()"
+      hostnames:
+        - tag:Name
+      keyed_groups:
+        - key: platform
+          prefix: platform
+    credential: AWS Sandbox Credential
+    execution_environment: ee-default
+    overwrite: true
+    overwrite_vars: false
+    update_on_launch: false
+    update_cache_timeout: 0
+    enabled_var: ""
+    enabled_value: ""
+    host_filter: ""
+    limit: ""
+    scm_branch: ""
+    timeout: 0
+    verbosity: 1
+  - name: VMWare Sandbox Hosts
+    description: ""
+    inventory: Cloud Inventory
+    source: vmware
+    source_project:
+    source_path: ""
+    source_vars:
+      compose:
+        ansible_host: public_ip | default(guest.ipAddress)
+      groups:
+        vmware: true
+      hostnames:
+        - config.name
+      resources:
+        - datacenter:
+            - SDDC-Datacenter
+          resources:
+            - folder:
+                - sandbox-w7gqh
+      skip_keys: declaredalarmstate,disabledmethod,dynamicproperty,dynamictype,environmentbrowser,managedby,childtype,resourceconfig
+    credential: VMWare (gf7fr)
+    execution_environment: ee-default
+    overwrite: true
+    overwrite_vars: true
+    update_on_launch: false
+    update_cache_timeout: 0
+    enabled_var: ""
+    enabled_value: ""
+    host_filter: ""
+    limit: ""
+    scm_branch: ""
+    timeout: 0
+    verbosity: 1
+  - name: servicenow.itsm.now
+    description: ""
+    inventory: Service Now Inventory
+    source: scm
+    source_project: Cloud Mgmt
+    source_path: inventories/snow/now.yml
+    source_vars:
+      target_env: test
+    credential: West ServiceNow (ven07621)
+    execution_environment: ee-default
+    overwrite: false
+    overwrite_vars: false
+    update_on_launch: false
+    update_cache_timeout: 0
+    enabled_var: ""
+    enabled_value: ""
+    host_filter: ""
+    limit: ""
+    scm_branch: ""
+    timeout: 0
+    verbosity: 1

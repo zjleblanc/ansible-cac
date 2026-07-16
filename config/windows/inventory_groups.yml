@@ -1,0 +1,32 @@
+# ansible-playbook pb_aap_config.yml --tags windows,host_groups --skip-tags common
+---
+controller_groups_windows:
+  - name: windows
+    inventory: Windows Inventory
+    description: windows hosts in the Windows Inventory
+    preserve_existing_hosts: true
+    preserve_existing_children: true
+    variables:
+      ansible_connection: winrm
+      ansible_winrm_port: 5986
+      ansible_winrm_server_cert_validation: ignore
+      domain_controller: dc01.autodotes.com
+  - name: control
+    inventory: Proxmox Inventory
+    description: control hosts in the Proxmox Inventory
+    preserve_existing_hosts: true
+    preserve_existing_children: true
+    variables:
+      ansible_connection: local
+      ansible_python_interpreter: /usr/bin/python3
+  - name: windows
+    inventory: Proxmox Inventory
+    description: windows hosts in the Proxmox Inventory
+    preserve_existing_hosts: true
+    preserve_existing_children: true
+    variables:
+      ansible_connection: winrm
+      ansible_port: 5985
+      ansible_winrm_transport: kerberos
+      ansible_winrm_server_cert_validation: ignore
+      ansible_winrm_kerberos_delegation: true

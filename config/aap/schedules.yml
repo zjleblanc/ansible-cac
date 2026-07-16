@@ -1,0 +1,7 @@
+# ansible-playbook pb_aap_config.yml --tags aap,schedules --skip-tags common
+---
+controller_schedules_aap:
+  - name: Sync Automation Hub Repositories Every Sunday @ 0100 CST
+    description: Sync automation hub repositories to update available content
+    unified_job_template: PAH // Sync Repositories
+    rrule: DTSTART;TZID=America/Chicago:20240310T010000 RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=SU

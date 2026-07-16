@@ -1,0 +1,13 @@
+# ansible-playbook pb_aap_config.yml --tags hashi,inventories --skip-tags common
+---
+controller_inventories_hashi:
+  - name: Ansible-Terraform Inventory
+    organization: Autodotes
+    description: Demo using Ansible and Terraform
+    labels:
+      - Cloud
+  - name: Ansible-HCP Inventory
+    organization: Autodotes
+    description: Demo using Ansible and Terraform Enterprise (HCP)
+    labels:
+      - Cloud
