@@ -33,8 +33,52 @@ Configuration is organized by **domain** under `config/`. Shared fundamentals li
 
 ### Prerequisites
 
-- Ansible with collections that provide `infra.aap_configuration.dispatch` (and related modules/roles used by your AAP version).
-- Access to the target controller / platform / EDA / hub APIs (typically via environment variables or credentials configured for those roles—see your collection documentation).
+- Python 3 with `venv`
+- Network access to the target AAP gateway / controller (and hub / EDA if you apply those resources)
+
+### Local environment (venv and API env vars)
+
+Create and activate a virtualenv, then install Ansible and the collections this repo uses:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+
+pip install --upgrade pip
+pip install ansible-core
+ansible-galaxy collection install -r collections/requirements.yml
+```
+
+`.venv/` is gitignored. Reactivate the venv in each new shell before running playbooks.
+
+Authenticate to AAP with environment variables (preferred for local runs). Use a token **or** username/password:
+
+```bash
+export AAP_HOSTNAME="https://aap.example.com"
+export AAP_VALIDATE_CERTS=true
+
+# Option A — OAuth token (preferred)
+export AAP_TOKEN="your-token"
+
+# Option B — username / password
+export AAP_USERNAME="admin"
+export AAP_PASSWORD="your-password"
+
+# Vault password file (if not set in ansible.cfg or elsewhere)
+export ANSIBLE_VAULT_PASSWORD_FILE="$HOME/.ansible/ansible-cac-vault-pass"
+```
+
+| Variable | Purpose |
+|----------|---------|
+| `AAP_HOSTNAME` | AAP gateway / platform URL |
+| `AAP_TOKEN` | OAuth2 token (preferred over password) |
+| `AAP_USERNAME` / `AAP_PASSWORD` | Basic auth when not using a token |
+| `AAP_VALIDATE_CERTS` | TLS verification (`true` / `false`) |
+| `ANSIBLE_VAULT_PASSWORD_FILE` | Path to a file containing the vault password for `vars/*_secrets.yml` (skip if you already configure vault via `ansible.cfg`, `--vault-password-file`, or another mechanism) |
+
+The underlying collections also accept legacy `CONTROLLER_*` and `GATEWAY_*` names as fallbacks; `AAP_*` works across controller and gateway modules. Do not commit real tokens, passwords, or vault password files—keep them in your shell, a private path outside the repo, or a secrets manager.
+
+Vaulted values under `vars/` (credential inputs, etc.) are separate from these API login variables—see [Secrets](#secrets).
 
 ### Apply configuration
 
@@ -42,28 +86,23 @@ Configuration is organized by **domain** under `config/`. Shared fundamentals li
 
 ```bash
 # Apply only common fundamentals
-ansible-playbook pb_aap_config.yml --ask-vault-pass
+ansible-playbook pb_aap_config.yml
 
 # Apply common + networking
-ansible-playbook pb_aap_config.yml --tags networking --ask-vault-pass
+ansible-playbook pb_aap_config.yml --tags networking
 
 # Apply common + multiple domains
-ansible-playbook pb_aap_config.yml --tags networking,cloud --ask-vault-pass
+ansible-playbook pb_aap_config.yml --tags networking,cloud
 
 # Apply common + networking, but only projects and credentials
-ansible-playbook pb_aap_config.yml --tags networking,projects,credentials --ask-vault-pass
+ansible-playbook pb_aap_config.yml --tags networking,projects,credentials
 
 # Apply everything
 ansible-playbook pb_aap_config.yml \
-  --tags cloud,networking,linux,windows,hashi,aiops,servicenow,apps,aap,hub \
-  --ask-vault-pass
+  --tags cloud,networking,linux,windows,hashi,aiops,servicenow,apps,aap,hub
 ```
 
-Use `--vault-password-file` instead of `--ask-vault-pass` in CI or scripted runs.
-
-### Controller export
-
-To pull configuration from a source controller, normalize it, and turn it into YAML you can commit under `config/` for `pb_aap_config.yml` on a destination instance, see [Export Documentation](./README_EXPORT.md).
+If `ANSIBLE_VAULT_PASSWORD_FILE` (or another vault config) is not set, add `--ask-vault-pass` or `--vault-password-file <path>` when encrypted `vars/` files are required.
 
 ### Pre-commit
 

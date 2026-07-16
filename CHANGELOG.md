@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-16 — Document local venv and AAP env vars in README
+
+### Added
+- README "Local environment" section for creating a `.venv`, installing `ansible-core` and `collections/requirements.yml`, and setting `AAP_*` API auth variables plus optional `ANSIBLE_VAULT_PASSWORD_FILE`
+
+### Changed
+- Apply examples assume vault is configured via env/`ansible.cfg`; document `--ask-vault-pass` / `--vault-password-file` as fallbacks
+
+### Removed
+- Controller export pointer from the README (still covered in `README_EXPORT.md`)
+
 ## 2026-07-16 — Refine docs breadcrumbs and var page presentation
 
 ### Added
