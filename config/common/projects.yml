@@ -3,35 +3,35 @@
 controller_projects_common:
   - name: Autodotes
     organization: Autodotes
+    scm_type: git
+    scm_url: git@gitlab.com:zachleblanc/ansible-autodotes.git
     scm_branch: main
     scm_clean: "no"
     scm_delete_on_update: "no"
-    scm_type: git
     scm_update_on_launch: "no"
-    scm_url: git@gitlab.com:zachleblanc/ansible-autodotes.git
     credential: Gitlab - Autodotes
   - name: Cloud Mgmt
     organization: Autodotes
+    scm_type: git
+    scm_url: https://github.com/zjleblanc/ansible-cloud-mgmt.git
     scm_branch: master
     scm_clean: "no"
     scm_delete_on_update: "no"
-    scm_type: git
     scm_update_on_launch: "no"
-    scm_url: https://github.com/zjleblanc/ansible-cloud-mgmt.git
   - name: Linux Mgmt
     organization: Autodotes
+    scm_type: git
+    scm_url: https://github.com/zjleblanc/ansible-linux-mgmt.git
     scm_branch: master
     scm_clean: "no"
     scm_delete_on_update: "no"
-    scm_type: git
     scm_update_on_launch: "no"
-    scm_url: https://github.com/zjleblanc/ansible-linux-mgmt.git
   - name: Windows Mgmt
     organization: Autodotes
+    scm_type: git
+    scm_url: https://github.com/zjleblanc/ansible-windows-mgmt.git
     scm_branch: master
     scm_clean: "no"
     scm_delete_on_update: "no"
-    scm_type: git
     scm_update_on_launch: "no"
-    scm_url: https://github.com/zjleblanc/ansible-windows-mgmt.git
     default_environment: ee-windows

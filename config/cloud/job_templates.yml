@@ -3,20 +3,20 @@
 controller_templates_cloud:
   - name: GCP // CLI Test
     labels: ["Cloud"]
-    playbook: playbooks/gcp/gcloud_cli_test.yml
     project: Cloud Mgmt
+    playbook: playbooks/gcp/gcloud_cli_test.yml
+    inventory: Cloud Inventory
     execution_environment: ee-cloud
     credentials:
       - GCP Sandbox Credential
-    inventory: Cloud Inventory
   - name: GCP // Convert RHEL License
     labels: ["Cloud"]
-    playbook: playbooks/gcp/gcp_convert_license.yml
     project: Cloud Mgmt
+    playbook: playbooks/gcp/gcp_convert_license.yml
+    inventory: Cloud Inventory
     execution_environment: ee-cloud
     credentials:
       - GCP Sandbox Credential
-    inventory: Cloud Inventory
     survey_enabled: true
     survey_spec:
       name: ""
@@ -39,12 +39,12 @@ controller_templates_cloud:
           variable: instance_target_type
           required: true
   - name: AWS // Delete VM
+    organization: Autodotes
     description: Terminate virtual machine(s) in AWS
     labels: ["Demo", "AWS"]
     project: Cloud Mgmt
-    organization: Autodotes
-    inventory: Service Now Inventory
     playbook: playbooks/aws/delete_vm.yml
+    inventory: Service Now Inventory
     execution_environment: ee-default
     credentials:
       - AWS Sandbox Credential
@@ -61,16 +61,17 @@ controller_templates_cloud:
           variable: aws_ec2_names_list
           required: true
   - name: AWS // Create VM
+    organization: Autodotes
     description: Create virtual machine(s) in AWS
     labels: ["Demo", "AWS"]
     project: Cloud Mgmt
-    organization: Autodotes
-    inventory: Cloud Inventory
     playbook: playbooks/aws/create_vm.yml
+    inventory: Cloud Inventory
     execution_environment: ee-default
     credentials:
       - AWS Sandbox Credential
       - Dynatrace Demo Credential
+    allow_simultaneous: true
     extra_vars:
       aws_vpc_name: aws-demo-vpc
       aws_owner_tag: default
@@ -83,7 +84,6 @@ controller_templates_cloud:
       aws_rt_name: aws-demo-rt
       aws_region: us-east-2
       aws_key_name: demo-keypair
-    allow_simultaneous: true
     survey_enabled: true
     survey_spec:
       name: ""
@@ -126,17 +126,17 @@ controller_templates_cloud:
           question_name: SSH Public Key
           question_description: Used to create key pair if provided
   - name: AWS // Install Agents
+    organization: Autodotes
     description: Install agents on cloud infrastructure
     labels: ["Demo", "AWS"]
     project: Cloud Mgmt
-    organization: Autodotes
-    inventory: Cloud Inventory
-    ask_inventory_on_launch: true
     playbook: playbooks/aws/install_agents.yml
+    inventory: Cloud Inventory
     execution_environment: ee-default
     credentials:
       - AWS (ec2-user)
       - DataDog Demo Credential
+    ask_inventory_on_launch: true
     survey_enabled: true
     survey_spec:
       description: ""
@@ -167,16 +167,16 @@ controller_templates_cloud:
           question_name: Target Platform
           question_description: target platform (maps to pre-selected AMI)
   - name: AWS // Install Applications
+    organization: Autodotes
     description: Install applications on cloud infrastructure
     labels: ["Demo", "AWS"]
     project: Cloud Mgmt
-    organization: Autodotes
-    inventory: Cloud Inventory
-    ask_inventory_on_launch: true
     playbook: playbooks/aws/install_apps.yml
+    inventory: Cloud Inventory
     execution_environment: ee-default
     credentials:
       - AWS (ec2-user)
+    ask_inventory_on_launch: true
     survey_enabled: true
     survey_spec:
       description: ""
@@ -208,17 +208,17 @@ controller_templates_cloud:
           question_name: Name of demo topic
           question_description: The kafka role will create a demo topic after install if specified
   - name: AWS // Patch VM
+    organization: Autodotes
     description: Patch an EC2 instance with ServiceNow integration
     labels: ["Demo", "AWS"]
     project: Cloud Mgmt
-    organization: Autodotes
-    inventory: Cloud Inventory
-    ask_inventory_on_launch: true
     playbook: playbooks/aws/patch_vm.yml
+    inventory: Cloud Inventory
     execution_environment: ee-default
     credentials:
       - AWS (ec2-user)
       - West ServiceNow (ven07621)
+    ask_inventory_on_launch: true
     survey_enabled: true
     survey_spec:
       description: ""
@@ -232,45 +232,45 @@ controller_templates_cloud:
           variable: _hosts
           question_name: Specify target host(s)
           question_description: pattern for the playbook hosts key
-  - credentials:
-      - Ansible Service Account (Minimal Sub)
-    execution_environment: ee-default
-    inventory: Azure Inventory
-    job_slice_count: 1
-    job_type: run
-    name: Azure // Create Disks
+  - name: Azure // Create Disks
+    project: Cloud Mgmt
     playbook: playbooks/azure/snapshot_mgmt/create_disks.yml
-    project: Cloud Mgmt
-  - description: delete snapshots in azure based on tagged retention date
-    inventory: Autodotes Lab
-    job_slice_count: 1
+    inventory: Azure Inventory
+    execution_environment: ee-default
+    credentials:
+      - Ansible Service Account (Minimal Sub)
     job_type: run
-    name: Azure // Delete Snapshots
-    playbook: playbooks/azure/snapshot_mgmt/delete_snapshots.yml
+    job_slice_count: 1
+  - name: Azure // Delete Snapshots
+    description: delete snapshots in azure based on tagged retention date
     project: Cloud Mgmt
-  - credentials:
+    playbook: playbooks/azure/snapshot_mgmt/delete_snapshots.yml
+    inventory: Autodotes Lab
+    job_type: run
+    job_slice_count: 1
+  - name: Azure // Provisioning Callback
+    project: Linux Mgmt
+    playbook: playbooks/azure_vm_setup.yml
+    inventory: Satellite Inventory
+    execution_environment: Default execution environment
+    credentials:
       - Satellite (Autodotes)
       - Satellite Provisioner
-    execution_environment: Default execution environment
-    host_config_key: "{{ controller_credential_callback_host_config_key }}"
-    inventory: Satellite Inventory
-    job_slice_count: 1
     job_type: run
-    name: Azure // Provisioning Callback
-    playbook: playbooks/azure_vm_setup.yml
-    project: Linux Mgmt
+    job_slice_count: 1
     use_fact_cache: true
-  - credentials:
+    host_config_key: "{{ controller_credential_callback_host_config_key }}"
+  - name: Azure // Scan Snapshots
+    description: scan snapshots in azure based on tagged retention date
+    project: Cloud Mgmt
+    playbook: playbooks/azure/snapshot_mgmt/scan_snapshots.yml
+    inventory: Cloud Inventory
+    execution_environment: ee-default
+    credentials:
       - Ansible Service Account (Minimal Sub)
       - Gmail SMTP
-    description: scan snapshots in azure based on tagged retention date
-    execution_environment: ee-default
-    inventory: Cloud Inventory
-    job_slice_count: 1
     job_type: run
-    name: Azure // Scan Snapshots
-    playbook: playbooks/azure/snapshot_mgmt/scan_snapshots.yml
-    project: Cloud Mgmt
+    job_slice_count: 1
     survey_enabled: true
     survey_spec:
       description: ""
@@ -286,25 +286,25 @@ controller_templates_cloud:
           required: true
           type: integer
           variable: scan_offset_days
-  - credentials:
-      - Ansible Service Account (Minimal Sub)
-    execution_environment: ee-default
-    inventory: Azure Inventory
-    job_slice_count: 1
-    job_type: run
-    name: Azure // Snapshot Disks
-    playbook: playbooks/azure/snapshot_mgmt/snapshot_disks.yml
+  - name: Azure // Snapshot Disks
     project: Cloud Mgmt
-  - ask_verbosity_on_launch: true
+    playbook: playbooks/azure/snapshot_mgmt/snapshot_disks.yml
+    inventory: Azure Inventory
+    execution_environment: ee-default
+    credentials:
+      - Ansible Service Account (Minimal Sub)
+    job_type: run
+    job_slice_count: 1
+  - name: Cloud // EC2 Process Report
+    project: Cloud Mgmt
+    playbook: playbooks/aws/ec2_process_report.yml
+    inventory: Cloud Inventory
+    execution_environment: ee-default
     credentials:
       - AWS (ec2-user)
-    execution_environment: ee-default
-    inventory: Cloud Inventory
-    job_slice_count: 1
     job_type: run
-    name: Cloud // EC2 Process Report
-    playbook: playbooks/aws/ec2_process_report.yml
-    project: Cloud Mgmt
+    job_slice_count: 1
+    ask_verbosity_on_launch: true
     survey_enabled: true
     survey_spec:
       description: ""
@@ -340,67 +340,67 @@ controller_templates_cloud:
           required: true
           type: text
           variable: autodotes_report_server_user
-  - ask_variables_on_launch: true
-    credentials:
-      - AWS (ec2-user)
-    execution_environment: ee-windows
-    inventory: Cloud Inventory
-    job_slice_count: 1
-    job_type: run
-    name: Cloud // Patch EC2
+  - name: Cloud // Patch EC2
+    project: Cloud Mgmt
     playbook: playbooks/aws/patch_vm.yml
-    project: Cloud Mgmt
-  - ask_variables_on_launch: true
+    inventory: Cloud Inventory
+    execution_environment: ee-windows
     credentials:
       - AWS (ec2-user)
-      - AWS Sandbox Credential
-    inventory: Cloud Inventory
-    job_slice_count: 1
     job_type: run
-    name: Cloud // Restore EC2
+    job_slice_count: 1
+    ask_variables_on_launch: true
+  - name: Cloud // Restore EC2
+    project: Cloud Mgmt
     playbook: playbooks/aws/restore_from_snapshot.yml
-    project: Cloud Mgmt
-  - ask_variables_on_launch: true
+    inventory: Cloud Inventory
     credentials:
       - AWS (ec2-user)
       - AWS Sandbox Credential
-    inventory: Cloud Inventory
-    job_slice_count: 1
     job_type: run
-    name: Cloud // Snapshot EC2
-    playbook: playbooks/aws/snapshot_vm.yml
+    job_slice_count: 1
+    ask_variables_on_launch: true
+  - name: Cloud // Snapshot EC2
     project: Cloud Mgmt
-  - ask_limit_on_launch: true
+    playbook: playbooks/aws/snapshot_vm.yml
+    inventory: Cloud Inventory
+    credentials:
+      - AWS (ec2-user)
+      - AWS Sandbox Credential
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true
+  - name: VMWare // Gather Facts
+    project: Cloud Mgmt
+    playbook: playbooks/vmware/no_op.yml
+    inventory: Cloud Inventory
+    execution_environment: ee-default
     credentials:
       - VMWare (ansible)
       - VMWare Bastion (gf7fr)
-    execution_environment: ee-default
-    inventory: Cloud Inventory
-    job_slice_count: 1
     job_type: run
-    limit: new_guest
-    name: VMWare // Gather Facts
-    playbook: playbooks/vmware/no_op.yml
-    project: Cloud Mgmt
+    job_slice_count: 1
     verbosity: 4
-  - credentials:
-      - VMWare (gf7fr)
-    execution_environment: ee-default
-    inventory: Cloud Inventory
-    job_slice_count: 1
-    job_type: run
-    name: VMWare // Gather Info
+    limit: new_guest
+    ask_limit_on_launch: true
+  - name: VMWare // Gather Info
+    project: Cloud Mgmt
     playbook: playbooks/vmware/info.yml
-    project: Cloud Mgmt
-  - credentials:
-      - VMWare (gf7fr)
+    inventory: Cloud Inventory
     execution_environment: ee-default
-    inventory: Autodotes Lab
-    job_slice_count: 1
+    credentials:
+      - VMWare (gf7fr)
     job_type: run
-    name: VMWare // Power State
-    playbook: playbooks/vmware/power.yml
+    job_slice_count: 1
+  - name: VMWare // Power State
     project: Cloud Mgmt
+    playbook: playbooks/vmware/power.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
+      - VMWare (gf7fr)
+    job_type: run
+    job_slice_count: 1
     survey_enabled: true
     survey_spec:
       description: ""
@@ -431,20 +431,21 @@ controller_templates_cloud:
           required: true
           type: multiplechoice
           variable: vm_desired_state
-  - ask_variables_on_launch: true
-    ask_verbosity_on_launch: true
+  - name: VMWare // Provision Guest
+    project: Cloud Mgmt
+    playbook: playbooks/vmware/deploy.yml
+    inventory: Cloud Inventory
+    execution_environment: ee-default
     credentials:
       - VMWare (ansible)
       - VMWare Bastion (gf7fr)
       - VMWare (gf7fr)
       - West ServiceNow (ven07621)
-    execution_environment: ee-default
-    inventory: Cloud Inventory
-    job_slice_count: 1
     job_type: run
-    name: VMWare // Provision Guest
-    playbook: playbooks/vmware/deploy.yml
-    project: Cloud Mgmt
+    job_slice_count: 1
+    verbosity: 4
+    ask_variables_on_launch: true
+    ask_verbosity_on_launch: true
     survey_enabled: true
     survey_spec:
       description: ""
@@ -516,17 +517,16 @@ controller_templates_cloud:
           required: false
           type: textarea
           variable: vmware_public_key
-    verbosity: 4
-  - ask_variables_on_launch: true
+  - name: VMWare // Snapshot
+    project: Cloud Mgmt
+    playbook: playbooks/vmware/snapshot.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
     credentials:
       - VMWare (gf7fr)
-    execution_environment: ee-default
-    inventory: Autodotes Lab
-    job_slice_count: 1
     job_type: run
-    name: VMWare // Snapshot
-    playbook: playbooks/vmware/snapshot.yml
-    project: Cloud Mgmt
+    job_slice_count: 1
+    ask_variables_on_launch: true
     survey_enabled: true
     survey_spec:
       description: ""

@@ -8,12 +8,12 @@ controller_projects_linux:
     default_environment: ee-default
   - name: RH Gov Samples
     organization: Default
-    scm_branch: product-demos
     scm_type: git
     scm_url: https://github.com/RedHatGov/ansible-tower-samples
+    scm_branch: product-demos
   - name: "[Ext] aap.dailydemos.linux"
     organization: Autodotes
-    scm_branch: main
     scm_type: git
     scm_url: https://github.com/ericcames/aap.dailydemo.linux.git
+    scm_branch: main
     default_environment: ee-default

@@ -95,8 +95,8 @@ controller_workflows_apps:
             type: organization
           type: job_template
   - name: AAP // Renew & Update AAP certs
-    inventory: Autodotes Lab
     organization: Autodotes
+    inventory: Autodotes Lab
     webhook_service: gitlab
     workflow_nodes:
       - identifier: Sync Project

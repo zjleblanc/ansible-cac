@@ -1,21 +1,12 @@
 # ansible-playbook pb_aap_config.yml --tags windows,inventory_sources --skip-tags common
 ---
 controller_inventory_sources_windows:
-  - credential: AWS Sandbox Credential
+  - name: Windows EC2 Instances
     description: ""
-    enabled_value: ""
-    enabled_var: ""
-    execution_environment: ee-default
-    host_filter: ""
     inventory: Windows Inventory
-    limit: ""
-    name: Windows EC2 Instances
-    overwrite: true
-    overwrite_vars: true
-    scm_branch: ""
     source: ec2
-    source_path: ""
     source_project:
+    source_path: ""
     source_vars:
       aws_region: us-east-2
       compose:
@@ -29,7 +20,16 @@ controller_inventory_sources_windows:
       keyed_groups:
         - key: tags['role']
           prefix: role
-    timeout: 0
-    update_cache_timeout: 0
+    credential: AWS Sandbox Credential
+    execution_environment: ee-default
+    overwrite: true
+    overwrite_vars: true
     update_on_launch: false
+    update_cache_timeout: 0
+    enabled_var: ""
+    enabled_value: ""
+    host_filter: ""
+    limit: ""
+    scm_branch: ""
+    timeout: 0
     verbosity: 1

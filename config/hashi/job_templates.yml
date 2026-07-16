@@ -2,20 +2,20 @@
 ---
 controller_templates_hashi:
   - name: Terraform // HCP // Azure Web Demo Deploy
+    organization: Autodotes
     description: Deploy web demo to Azure using terraform modules
     labels:
       - Demo
       - Cloud
       - HCP
     project: Terraform Mgmt
-    organization: Autodotes
-    inventory: Ansible-HCP Inventory
     playbook: azure_create_web_demo_hcp/ansible/tf_ops.yml
+    inventory: Ansible-HCP Inventory
     execution_environment: ee-cloud
     credentials:
       - app.terraform.io/zleblanc/azure-web-demo-dev
-    ask_tags_on_launch: true
     ask_variables_on_launch: true
+    ask_tags_on_launch: true
     survey_enabled: true
     survey_spec:
       description: ""
@@ -45,33 +45,33 @@ controller_templates_hashi:
           type: text
           variable: aap_host
   - name: Terraform // HCP // Azure Web Demo Configure
+    organization: Autodotes
     description: Configure webservers provisioned by Terraform
     labels:
       - Demo
       - Cloud
       - HCP
     project: Terraform Mgmt
-    organization: Autodotes
-    inventory: Ansible-HCP Inventory
     playbook: azure_create_web_demo_hcp/ansible/configure_web.yml
+    inventory: Ansible-HCP Inventory
     execution_environment: ee-default
     credentials:
       - AAP (id_rsa)
   - name: Terraform // Azure Web Demo Deploy
+    organization: Autodotes
     description: Deploy web demo to Azure using terraform modules
     labels:
       - Demo
       - Cloud
     project: Terraform Mgmt
-    organization: Autodotes
-    inventory: Ansible-Terraform Inventory
     playbook: azure_create_web_demo/ansible/tf_ops.yml
+    inventory: Ansible-Terraform Inventory
     execution_environment: ee-cloud
     credentials:
       - Azure Open Environment Service Principal
       - Azure Terraform Backend Configuration
-    ask_tags_on_launch: true
     ask_variables_on_launch: true
+    ask_tags_on_launch: true
     survey_enabled: true
     survey_spec:
       description: ""
@@ -93,32 +93,32 @@ controller_templates_hashi:
           type: text
           variable: az_web_vm_size
   - name: Terraform // Azure Web Demo Configure
+    organization: Autodotes
     description: Configure webservers provisioned by Terraform
     labels:
       - Demo
       - Cloud
     project: Terraform Mgmt
-    organization: Autodotes
-    inventory: Ansible-Terraform Inventory
     playbook: azure_create_web_demo/ansible/configure_web.yml
+    inventory: Ansible-Terraform Inventory
     execution_environment: ee-default
     credentials:
       - AAP (id_rsa)
   - name: Terraform // HCP // AWS Web Demo Deploy
+    organization: Autodotes
     description: Deploy web demo to AWS using terraform modules
     labels:
       - Demo
       - Cloud
       - HCP
     project: Terraform Mgmt
-    organization: Autodotes
-    inventory: Ansible-HCP Inventory
     playbook: aws_create_web_demo_hcp/ansible/tf_ops.yml
+    inventory: Ansible-HCP Inventory
     execution_environment: ee-cloud
     credentials:
       - app.terraform.io/zleblanc/aws-web-demo-dev
-    ask_tags_on_launch: true
     ask_variables_on_launch: true
+    ask_tags_on_launch: true
     survey_enabled: true
     survey_spec:
       description: ""
@@ -148,50 +148,50 @@ controller_templates_hashi:
           type: text
           variable: aws_region
   - name: Terraform // HCP // AWS Web Demo Configure
+    organization: Autodotes
     description: Configure webservers provisioned by Terraform
     labels:
       - Demo
       - Cloud
       - HCP
     project: Terraform Mgmt
-    organization: Autodotes
-    inventory: Ansible-HCP Inventory
     playbook: aws_create_web_demo_hcp/ansible/configure_web.yml
+    inventory: Ansible-HCP Inventory
     execution_environment: ee-default
     credentials:
       - AAP (id_rsa)HCP // AWS Web Demo Configur
   - name: Terraform // GitHub // Azure Web Demo Deploy
+    organization: Autodotes
     description: Orchestrate a Terraform run based on GitHub action
     project: Terraform Mgmt
-    organization: Autodotes
-    inventory: Demo Inventory
     playbook: azure_create_web_demo_tfe_aap/ansible/tfe_run.yml
+    inventory: Demo Inventory
     execution_environment: ee-default
-    ask_variables_on_launch: true
     credentials:
       - Terraform (zleblanc)
+    ask_variables_on_launch: true
   - name: Terraform // GitHub // Azure Web Demo Configure
+    organization: Autodotes
     description: Configure webservers provisioned by Terraform
     labels:
       - Demo
       - Cloud
       - HCP
     project: Terraform Mgmt
-    organization: Autodotes
-    inventory: Ansible-Terraform Inventory
     playbook: azure_create_web_demo_tfe_aap/ansible/configure_web.yml
+    inventory: Ansible-Terraform Inventory
     execution_environment: ee-default
     credentials:
       - AAP (tf)
-  - credentials:
-      - AAP (id_rsa)
-    execution_environment: ee-default
-    inventory: Autodotes Lab
-    job_slice_count: 1
-    job_type: run
-    name: Vault // Install
-    playbook: playbooks/vault/install_vault.yml
+  - name: Vault // Install
     project: Cloud Mgmt
+    playbook: playbooks/vault/install_vault.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)
+    job_type: run
+    job_slice_count: 1
     survey_enabled: true
     survey_spec:
       description: ""
@@ -241,17 +241,17 @@ controller_templates_hashi:
           required: true
           type: multiplechoice
           variable: vault_secure_log
-  - credentials:
-      - HashiCorp Vault Lookup Plugin (root)
+  - name: Vault // Per-host Credential Lookup
+    project: Cloud Mgmt
+    playbook: demos/vault_per_host.yml
+    inventory: Cloud Inventory
     execution_environment: ee-default
+    credentials:
+      - HashiCorp Vault Lookup Plugin (root)
+    job_type: run
+    job_slice_count: 1
     extra_vars:
       _hosts: linux
-    inventory: Cloud Inventory
-    job_slice_count: 1
-    job_type: run
-    name: Vault // Per-host Credential Lookup
-    playbook: demos/vault_per_host.yml
-    project: Cloud Mgmt
     survey_enabled: true
     survey_spec:
       description: ""
@@ -291,18 +291,18 @@ controller_templates_hashi:
           required: true
           type: multiplechoice
           variable: vault_secure_logging
-  - inventory: Autodotes Lab
-    job_slice_count: 1
-    job_type: run
-    name: Legacy // Hashi
+  - name: Legacy // Hashi
+    project: Linux Mgmt
     playbook: playbooks/legacy_hashi.yml
-    project: Linux Mgmt
-  - credentials:
-      - Vault Demo Credential
-    execution_environment: ee-default
     inventory: Autodotes Lab
-    job_slice_count: 1
     job_type: run
-    name: Demo // Using ansible-vault
-    playbook: demos/vault_demo.yml
+    job_slice_count: 1
+  - name: Demo // Using ansible-vault
     project: Linux Mgmt
+    playbook: demos/vault_demo.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
+      - Vault Demo Credential
+    job_type: run
+    job_slice_count: 1

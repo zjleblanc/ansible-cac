@@ -1,34 +1,35 @@
 # ansible-playbook pb_aap_config.yml --tags networking,job_templates --skip-tags common
 ---
 controller_templates_networking:
-  - credentials:
-      - AAP (zach)
-    inventory: Cisco Lab
-    job_slice_count: 1
-    job_type: run
-    name: Networking // Cisco Compliance
+  - name: Networking // Cisco Compliance
+    project: Network Mgmt
     playbook: workshop-addons/cisco_compliance.yml
-    project: Network Mgmt
-  - credentials:
-      - AAP (zach)
-    execution_environment: ee-networking
     inventory: Cisco Lab
-    job_slice_count: 1
+    credentials:
+      - AAP (zach)
     job_type: run
-    name: Networking // Cisco EOX Lifecycle
-    playbook: workshop-addons/cisco_lifecycle.yml
+    job_slice_count: 1
+  - name: Networking // Cisco EOX Lifecycle
     project: Network Mgmt
-  - ask_limit_on_launch: true
+    playbook: workshop-addons/cisco_lifecycle.yml
+    inventory: Cisco Lab
+    execution_environment: ee-networking
+    credentials:
+      - AAP (zach)
+    job_type: run
+    job_slice_count: 1
+  - name: Networking // Cisco Upgrade (ios)
+    project: Network Mgmt
+    playbook: workshop-addons/cisco_upgrade.yml
+    inventory: Cisco Lab
+    execution_environment: Control Plane Execution Environment
     credentials:
       - Eve-NG (admin)
-    execution_environment: Control Plane Execution Environment
-    inventory: Cisco Lab
-    job_slice_count: 1
     job_type: run
+    job_slice_count: 1
+    verbosity: 3
     limit: router_two
-    name: Networking // Cisco Upgrade (ios)
-    playbook: workshop-addons/cisco_upgrade.yml
-    project: Network Mgmt
+    ask_limit_on_launch: true
     survey_spec:
       description: ""
       name: ""
@@ -43,33 +44,32 @@ controller_templates_networking:
           required: true
           type: text
           variable: _hosts
-    verbosity: 3
-  - execution_environment: ee-networking
-    inventory: Cisco Lab
-    job_slice_count: 1
-    job_type: run
-    name: Networking // Cisco VLAN ACLs
-    playbook: workshop-addons/cisco_vlan_acls.yml
+  - name: Networking // Cisco VLAN ACLs
     project: Network Mgmt
-  - ask_variables_on_launch: true
+    playbook: workshop-addons/cisco_vlan_acls.yml
+    inventory: Cisco Lab
+    execution_environment: ee-networking
+    job_type: run
+    job_slice_count: 1
+  - name: Networking // Dynatrace -> ServiceNow CMDB
+    project: Network Mgmt
+    playbook: playbooks/dynatrace_snow_cmdb.yml
+    inventory: Proxmox Inventory
+    execution_environment: Default execution environment
     credentials:
       - West ServiceNow (ven07621)
-    execution_environment: Default execution environment
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true
     extra_vars:
       record_limit: 5
-    inventory: Proxmox Inventory
-    job_slice_count: 1
-    job_type: run
-    name: Networking // Dynatrace -> ServiceNow CMDB
-    playbook: playbooks/dynatrace_snow_cmdb.yml
+  - name: Networking // Golden Configs
     project: Network Mgmt
-  - execution_environment: ee-networking
-    inventory: Cisco Lab
-    job_slice_count: 1
-    job_type: run
-    name: Networking // Golden Configs
     playbook: playbooks/network_config.yml
-    project: Network Mgmt
+    inventory: Cisco Lab
+    execution_environment: ee-networking
+    job_type: run
+    job_slice_count: 1
     survey_enabled: true
     survey_spec:
       description: ""
@@ -85,57 +85,57 @@ controller_templates_networking:
           required: true
           type: text
           variable: _hosts
-  - execution_environment: ee-networking
-    inventory: Cisco Lab
-    job_slice_count: 1
-    job_type: run
-    name: Networking // Label CDP Neighbors
+  - name: Networking // Label CDP Neighbors
+    project: Network Mgmt
     playbook: playbooks/label_cdp_neighbors.yml
-    project: Network Mgmt
-  - execution_environment: ee-networking
     inventory: Cisco Lab
-    job_slice_count: 1
+    execution_environment: ee-networking
     job_type: run
-    name: Networking // MS O365 ACLs
+    job_slice_count: 1
+  - name: Networking // MS O365 ACLs
+    project: Network Mgmt
     playbook: playbooks/o365_acls.yml
-    project: Network Mgmt
+    inventory: Cisco Lab
+    execution_environment: ee-networking
+    job_type: run
+    job_slice_count: 1
   - name: Palo Alto // Configure Firewall
-    playbook: demos/panos/pb_firewall_configure.yml
     project: Network Mgmt
-    ask_variables_on_launch: true
+    playbook: demos/panos/pb_firewall_configure.yml
+    inventory: Palo Alto Demo Inventory
+    execution_environment: ee-default
     credentials:
       - Palo Alto Demo Vault
       - Palo Alto Firewall (admin)
-    execution_environment: ee-default
-    inventory: Palo Alto Demo Inventory
-    job_slice_count: 1
     job_type: run
-  - name: Palo Alto // Firewall Security Rule
-    playbook: demos/panos/pb_panos_security_rule.yml
-    project: Network Mgmt
+    job_slice_count: 1
     ask_variables_on_launch: true
+  - name: Palo Alto // Firewall Security Rule
+    project: Network Mgmt
+    playbook: demos/panos/pb_panos_security_rule.yml
+    inventory: Palo Alto Demo Inventory
+    execution_environment: ee-default
     credentials:
       - Palo Alto Firewall (admin)
       - West ServiceNow (ven07621)
-    execution_environment: ee-default
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true
     extra_vars:
       panos_commit: false
-    inventory: Palo Alto Demo Inventory
-    job_slice_count: 1
-    job_type: run
   - name: Palo Alto // Setup Infrastructure
-    playbook: demos/panos/pb_infra_setup.yml
     project: Network Mgmt
+    playbook: demos/panos/pb_infra_setup.yml
+    inventory: Palo Alto Demo Inventory
+    execution_environment: ee-default
     credentials:
       - AWS Sandbox Credential
       - Controller Credential
       - Palo Alto Bastion
       - Palo Alto Demo Vault
       - West ServiceNow (ven07621)
-    execution_environment: ee-default
-    inventory: Palo Alto Demo Inventory
-    job_slice_count: 1
     job_type: run
+    job_slice_count: 1
     survey_enabled: true
     survey_spec:
       description: ""
@@ -164,39 +164,46 @@ controller_templates_networking:
           type: multiplechoice
           variable: skip_fw_password
   - name: Palo Alto // Tear Down Infrastructure
-    playbook: demos/panos/pb_infra_teardown.yml
     project: Network Mgmt
+    playbook: demos/panos/pb_infra_teardown.yml
+    inventory: Palo Alto Demo Inventory
+    execution_environment: ee-default
     credentials:
       - AWS Sandbox Credential
-    execution_environment: ee-default
+    job_type: run
+    job_slice_count: 1
     extra_vars:
       aws_region: us-east-2
+  - name: Palo Alto // Web Server Setup
+    project: Network Mgmt
+    playbook: demos/panos/pb_webserver_setup.yml
     inventory: Palo Alto Demo Inventory
-    job_slice_count: 1
-    job_type: run
-  - ask_variables_on_launch: true
+    execution_environment: ee-default
     credentials:
       - Palo Alto Bastion
-    execution_environment: ee-default
-    inventory: Palo Alto Demo Inventory
-    job_slice_count: 1
     job_type: run
-    name: Palo Alto // Web Server Setup
-    playbook: demos/panos/pb_webserver_setup.yml
+    job_slice_count: 1
+    ask_variables_on_launch: true
+  - name: Summit Connect // Apply Network CaC
     project: Network Mgmt
-  - ask_variables_on_launch: true
+    playbook: summit-connect/playbooks/network_apply_cac.yml
+    inventory: Cisco Lab
+    execution_environment: ee-networking
     credentials:
       - Git Role Credential
-    execution_environment: ee-networking
-    inventory: Cisco Lab
-    job_slice_count: 1
     job_type: run
-    name: Summit Connect // Apply Network CaC
-    playbook: summit-connect/playbooks/network_apply_cac.yml
-    project: Network Mgmt
-  - ask_limit_on_launch: true
+    job_slice_count: 1
     ask_variables_on_launch: true
+  - name: Summit Connect //  Network Apply Configs
+    project: Network Mgmt
+    playbook: summit-connect/playbooks/network_apply_config.yml
+    inventory: Cisco Lab
     execution_environment: ee-networking
+    job_type: run
+    job_slice_count: 1
+    limit: sandbox-iosxe-latest-1.cisco.com
+    ask_variables_on_launch: true
+    ask_limit_on_launch: true
     extra_vars:
       network_configs:
         interfaces:
@@ -206,13 +213,6 @@ controller_templates_networking:
           - description: Port to Fabric (edit 2 -> ansible)
             enabled: true
             name: GigabitEthernet2
-    inventory: Cisco Lab
-    job_slice_count: 1
-    job_type: run
-    limit: sandbox-iosxe-latest-1.cisco.com
-    name: Summit Connect //  Network Apply Configs
-    playbook: summit-connect/playbooks/network_apply_config.yml
-    project: Network Mgmt
     survey_enabled: true
     survey_spec:
       description: ""
@@ -228,18 +228,18 @@ controller_templates_networking:
           required: true
           type: text
           variable: _hosts
-  - ask_variables_on_launch: true
+  - name: Summit Connect // Network Backup
+    project: Network Mgmt
+    playbook: summit-connect/playbooks/network_backup.yml
+    inventory: Cisco Lab
     credentials:
       - Controller Credential
       - Git Role Credential
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true
     extra_vars:
       config_repo_name: ansible-network-configs
-    inventory: Cisco Lab
-    job_slice_count: 1
-    job_type: run
-    name: Summit Connect // Network Backup
-    playbook: summit-connect/playbooks/network_backup.yml
-    project: Network Mgmt
     survey_enabled: true
     survey_spec:
       description: ""
@@ -255,19 +255,19 @@ controller_templates_networking:
           required: true
           type: text
           variable: _hosts
-  - ask_variables_on_launch: true
+  - name: Summit Connect // Network Restore
+    project: Network Mgmt
+    playbook: summit-connect/playbooks/network_restore.yml
+    inventory: Cisco Lab
+    execution_environment: ee-networking
     credentials:
       - Controller Credential
       - Git Role Credential
-    execution_environment: ee-networking
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true
     extra_vars:
       config_repo_name: ansible-network-configs
-    inventory: Cisco Lab
-    job_slice_count: 1
-    job_type: run
-    name: Summit Connect // Network Restore
-    playbook: summit-connect/playbooks/network_restore.yml
-    project: Network Mgmt
     survey_enabled: true
     survey_spec:
       description: Prompt user for restore point based on backup configs available in git
@@ -327,24 +327,24 @@ controller_templates_networking:
           required: true
           type: multiplechoice
           variable: backup_config_tag
-  - ask_variables_on_launch: true
+  - name: Summit Connect // Setup
+    project: Network Mgmt
+    playbook: summit-connect/setup.yml
+    inventory: Cisco Lab
+    execution_environment: ee-networking
     credentials:
       - Controller Credential
-    execution_environment: ee-networking
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true
     extra_vars:
       input_slack_token: REPLACE_ME
-    inventory: Cisco Lab
-    job_slice_count: 1
-    job_type: run
-    name: Summit Connect // Setup
-    playbook: summit-connect/setup.yml
+  - name: Summit Connect // Slack Notification
     project: Network Mgmt
-  - ask_variables_on_launch: true
+    playbook: summit-connect/playbooks/slack_notification.yml
+    inventory: Cisco Lab
     credentials:
       - Personal Slack Token
-    inventory: Cisco Lab
-    job_slice_count: 1
     job_type: run
-    name: Summit Connect // Slack Notification
-    playbook: summit-connect/playbooks/slack_notification.yml
-    project: Network Mgmt
+    job_slice_count: 1
+    ask_variables_on_launch: true

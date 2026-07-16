@@ -1,50 +1,56 @@
 # ansible-playbook pb_aap_config.yml --tags windows,job_templates --skip-tags common
 ---
 controller_templates_windows:
-  - ask_variables_on_launch: true
+  - name: Proxmox // Decomm VM
+    project: Windows Mgmt
+    playbook: demos/decomm_kvm.yml
+    inventory: Workshop Inventory
+    execution_environment: ee-windows
     credentials:
       - West ServiceNow (ven07621)
       - Windows Kerberos Credential
-    execution_environment: ee-windows
+    job_type: run
+    job_slice_count: 1
+    skip_tags: dns_delete,kvm_delete,ad_delete
+    ask_variables_on_launch: true
     extra_vars:
       kvm_name: hcl-guest-1
       sys_id: undef
-    inventory: Workshop Inventory
-    job_slice_count: 1
-    job_type: run
-    name: Proxmox // Decomm VM
-    playbook: demos/decomm_kvm.yml
-    project: Windows Mgmt
-    skip_tags: dns_delete,kvm_delete,ad_delete
-  - ask_variables_on_launch: true
+  - name: Proxmox // Manage Instance State
+    project: Linux Mgmt
+    playbook: playbooks/proxmox_vm_state.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
     credentials:
       - Proxmox API
-    execution_environment: ee-default
-    inventory: Autodotes Lab
-    job_slice_count: 1
     job_type: run
-    name: Proxmox // Manage Instance State
-    playbook: playbooks/proxmox_vm_state.yml
-    project: Linux Mgmt
-  - ask_skip_tags_on_launch: true
+    job_slice_count: 1
     ask_variables_on_launch: true
+  - name: Proxmox // Prep VM for Decomm
+    project: Windows Mgmt
+    playbook: demos/decomm_kvm_prep.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-windows
     credentials:
       - Autodotes[local] Admin
       - West ServiceNow (ven07621)
       - Windows Kerberos Credential
-    execution_environment: ee-windows
-    inventory: Proxmox Inventory
-    job_slice_count: 1
     job_type: run
-    name: Proxmox // Prep VM for Decomm
-    playbook: demos/decomm_kvm_prep.yml
-    project: Windows Mgmt
+    job_slice_count: 1
     skip_tags: kvm_snapshot,ad_disable,kvm_stop
-  - ask_variables_on_launch: true
+    ask_variables_on_launch: true
+    ask_skip_tags_on_launch: true
+  - name: Proxmox // Provision KVM Guest
+    description: Create a proxmox kvm guest
+    project: Linux Mgmt
+    playbook: demos/proxmox_kvm_guest.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-default
     credentials:
       - AAP (root)
-    description: Create a proxmox kvm guest
-    execution_environment: ee-default
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true
     extra_vars:
       proxmox_vm_configs:
         - cores: 2
@@ -73,18 +79,19 @@ controller_templates_windows:
         rhel7: rhel-server-7.9-x86_64-kvm.qcow2
         rhel8: rhel-8.7-x86_64-kvm.qcow2
         rhel9: rhel-baseos-9.1-x86_64-kvm.qcow2
+  - name: Proxmox // Provision Windows VM
+    description: Provision a VM in Proxmox VE
+    project: Windows Mgmt
+    playbook: demos/proxmox_kvm_clone.yml
     inventory: Proxmox Inventory
-    job_slice_count: 1
-    job_type: run
-    name: Proxmox // Provision KVM Guest
-    playbook: demos/proxmox_kvm_guest.yml
-    project: Linux Mgmt
-  - ask_variables_on_launch: true
+    execution_environment: ee-windows
     credentials:
       - Controller Credential
       - Proxmox Windows Default Credential
-    description: Provision a VM in Proxmox VE
-    execution_environment: ee-windows
+    job_type: run
+    job_slice_count: 1
+    verbosity: 3
+    ask_variables_on_launch: true
     extra_vars:
       proxmox_ve_configs:
         - agent: true
@@ -98,12 +105,6 @@ controller_templates_windows:
             - ansible
             - windows
             - yaml-config
-    inventory: Proxmox Inventory
-    job_slice_count: 1
-    job_type: run
-    name: Proxmox // Provision Windows VM
-    playbook: demos/proxmox_kvm_clone.yml
-    project: Windows Mgmt
     survey_spec:
       description: ""
       name: ""
@@ -208,26 +209,25 @@ controller_templates_windows:
           required: false
           type: integer
           variable: pve_survey_timeout
-    verbosity: 3
-  - credentials:
+  - name: Proxmox // Setup WinRM
+    project: Windows Mgmt
+    playbook: demos/setup_winrm.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-windows
+    credentials:
       - Controller Credential
       - Proxmox Windows Default Credential
-    execution_environment: ee-windows
-    inventory: Proxmox Inventory
-    job_slice_count: 1
     job_type: run
-    name: Proxmox // Setup WinRM
-    playbook: demos/setup_winrm.yml
+    job_slice_count: 1
+  - name: Windows // Bulk Add Users to Group
     project: Windows Mgmt
-  - credentials:
-      - Autodotes[local] Admin
-    execution_environment: ee-windows
-    inventory: Proxmox Inventory
-    job_slice_count: 1
-    job_type: run
-    name: Windows // Bulk Add Users to Group
     playbook: demos/bulk_add_users_to_group.yml
-    project: Windows Mgmt
+    inventory: Proxmox Inventory
+    execution_environment: ee-windows
+    credentials:
+      - Autodotes[local] Admin
+    job_type: run
+    job_slice_count: 1
     survey_enabled: true
     survey_spec:
       description: ""
@@ -263,121 +263,121 @@ controller_templates_windows:
           required: true
           type: textarea
           variable: user_accounts
-  - credentials:
-      - Ansible Vault
-    execution_environment: ee-windows
-    inventory: Windows Inventory
-    job_slice_count: 1
-    job_type: run
-    name: Windows // EC2 Domain Configure
+  - name: Windows // EC2 Domain Configure
+    project: Windows Mgmt
     playbook: demos/ad_domain/pb_domain_config.yml
-    project: Windows Mgmt
-  - credentials:
-      - Ansible Vault
-      - AWS Sandbox Credential
-    execution_environment: ee-default
     inventory: Windows Inventory
-    job_slice_count: 1
+    execution_environment: ee-windows
+    credentials:
+      - Ansible Vault
     job_type: run
-    name: Windows // EC2 Domain Infra Deploy
+    job_slice_count: 1
+  - name: Windows // EC2 Domain Infra Deploy
+    project: Windows Mgmt
     playbook: demos/ad_domain/pb_aws_infra.yml
-    project: Windows Mgmt
-  - credentials:
-      - Ansible Vault
-    execution_environment: ee-windows
     inventory: Windows Inventory
-    job_slice_count: 1
-    job_type: run
-    name: Windows // EC2 Domain Join
-    playbook: demos/ad_domain/pb_domain_join.yml
-    project: Windows Mgmt
-  - credentials:
+    execution_environment: ee-default
+    credentials:
       - Ansible Vault
       - AWS Sandbox Credential
-    execution_environment: ee-windows
-    inventory: Windows Inventory
-    job_slice_count: 1
     job_type: run
-    name: Windows // EC2 Domain Setup [Monolith]
-    playbook: demos/ad_domain/setup.yml
+    job_slice_count: 1
+  - name: Windows // EC2 Domain Join
     project: Windows Mgmt
-  - ask_verbosity_on_launch: true
+    playbook: demos/ad_domain/pb_domain_join.yml
+    inventory: Windows Inventory
+    execution_environment: ee-windows
+    credentials:
+      - Ansible Vault
+    job_type: run
+    job_slice_count: 1
+  - name: Windows // EC2 Domain Setup [Monolith]
+    project: Windows Mgmt
+    playbook: demos/ad_domain/setup.yml
+    inventory: Windows Inventory
+    execution_environment: ee-windows
+    credentials:
+      - Ansible Vault
+      - AWS Sandbox Credential
+    job_type: run
+    job_slice_count: 1
+  - name: Windows // EC2 Kerberos Check
+    project: Windows Mgmt
+    playbook: demos/ad_domain/pb_check_krb.yml
+    inventory: Windows Inventory
+    execution_environment: ee-windows
     credentials:
       - Windows Kerberos Credential
-    execution_environment: ee-windows
-    inventory: Windows Inventory
-    job_slice_count: 1
     job_type: run
-    name: Windows // EC2 Kerberos Check
-    playbook: demos/ad_domain/pb_check_krb.yml
+    job_slice_count: 1
+    ask_verbosity_on_launch: true
+  - name: Windows // Gather Facts
     project: Windows Mgmt
-  - ask_credential_on_launch: true
-    ask_inventory_on_launch: true
-    ask_limit_on_launch: true
-    ask_variables_on_launch: true
+    playbook: playbooks/win_facts.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-windows
     credentials:
       - Windows Server Credential
-    execution_environment: ee-windows
-    inventory: Proxmox Inventory
-    job_slice_count: 1
     job_type: run
-    name: Windows // Gather Facts
-    playbook: playbooks/win_facts.yml
-    project: Windows Mgmt
+    job_slice_count: 1
     use_fact_cache: true
-  - ask_variables_on_launch: true
+    ask_variables_on_launch: true
+    ask_inventory_on_launch: true
+    ask_limit_on_launch: true
+    ask_credential_on_launch: true
+  - name: Windows // Get Folder Stats
+    project: Windows Mgmt
+    playbook: playbooks/get_folder_stats.yml
+    inventory: Windows Inventory
+    execution_environment: ee-windows
     credentials:
       - Windows Kerberos Credential
-    execution_environment: ee-windows
+    job_type: run
+    job_slice_count: 1
+    ask_variables_on_launch: true
     extra_vars:
       domain_controller: dc01.autodotes.com
       servers: "winston\nwinthrop"
-    inventory: Windows Inventory
-    job_slice_count: 1
-    job_type: run
-    name: Windows // Get Folder Stats
-    playbook: playbooks/get_folder_stats.yml
+  - name: Windows // Join Domain
     project: Windows Mgmt
-  - ask_limit_on_launch: true
+    playbook: demos/join_domain.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-windows
     credentials:
       - Autodotes[local] Admin
       - Controller Credential
       - Windows Server Credential
-    execution_environment: ee-windows
+    job_type: run
+    job_slice_count: 1
+    limit: windows
+    ask_limit_on_launch: true
     extra_vars:
       join_domain: true
-    inventory: Proxmox Inventory
-    job_slice_count: 1
-    job_type: run
-    limit: windows
-    name: Windows // Join Domain
-    playbook: demos/join_domain.yml
+  - name: Windows // Leave Domain
     project: Windows Mgmt
-  - ask_limit_on_launch: true
+    playbook: demos/leave_domain.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-windows
     credentials:
       - Autodotes[local] Admin
       - Controller Credential
       - Windows Server Credential
-    execution_environment: ee-windows
-    inventory: Proxmox Inventory
-    job_slice_count: 1
     job_type: run
-    name: Windows // Leave Domain
-    playbook: demos/leave_domain.yml
+    job_slice_count: 1
+    ask_limit_on_launch: true
+  - name: Windows // Long paths - Delete
     project: Windows Mgmt
-  - ask_variables_on_launch: true
+    playbook: demos/delete_folder_long_path.yml
+    inventory: Proxmox Inventory
+    execution_environment: ee-windows
     credentials:
       - Windows Kerberos Credential
-    execution_environment: ee-windows
-    extra_vars:
-      _hosts: win11-guest-2.autodotes.local
-    inventory: Proxmox Inventory
+    job_type: run
     job_slice_count: 1
     job_tags: delete
-    job_type: run
-    name: Windows // Long paths - Delete
-    playbook: demos/delete_folder_long_path.yml
-    project: Windows Mgmt
+    ask_variables_on_launch: true
+    extra_vars:
+      _hosts: win11-guest-2.autodotes.local
     survey_enabled: true
     survey_spec:
       description: ""
@@ -385,8 +385,7 @@ controller_templates_windows:
       spec:
         - choices: ""
           # noqa: yaml[line-length]
-          default: "\\\\win11-guest-1\\c$\\Users\\Administrator\\superlongfolder\n\\\\win11-guest-1\\c$\\Users\\Administrator\\anotherlongone\n\\\\win11-guest-1\\\
-            c$\\Users\\Administrator\\whyarethesenamessolong"
+          default: "\\\\win11-guest-1\\c$\\Users\\Administrator\\superlongfolder\n\\\\win11-guest-1\\c$\\Users\\Administrator\\anotherlongone\n\\\\win11-guest-1\\c$\\Users\\Administrator\\whyarethesenamessolong"
           max: 1024
           min: 0
           new_question: false
@@ -395,18 +394,18 @@ controller_templates_windows:
           required: true
           type: textarea
           variable: root_folders
-  - credentials:
-      - Windows Kerberos Credential
-    execution_environment: ee-windows
-    extra_vars:
-      _hosts: win11-guest-1.autodotes.local
+  - name: Windows // Long Paths - Setup
+    project: Windows Mgmt
+    playbook: demos/delete_folder_long_path.yml
     inventory: Proxmox Inventory
+    execution_environment: ee-windows
+    credentials:
+      - Windows Kerberos Credential
+    job_type: run
     job_slice_count: 1
     job_tags: setup
-    job_type: run
-    name: Windows // Long Paths - Setup
-    playbook: demos/delete_folder_long_path.yml
-    project: Windows Mgmt
+    extra_vars:
+      _hosts: win11-guest-1.autodotes.local
     survey_enabled: true
     survey_spec:
       description: ""
@@ -422,28 +421,28 @@ controller_templates_windows:
           required: true
           type: textarea
           variable: root_folders
-  - ask_credential_on_launch: true
-    ask_limit_on_launch: true
-    ask_tags_on_launch: true
+  - name: Windows // MSSQL Role
+    description: Install a SQL Server instance using DSC
+    project: Windows Mgmt
+    playbook: demos/install_mssql_dsc.yml
+    inventory: Proxmox Inventory
     credentials:
       - Autodotes[local] Admin
       - Demo SQL Service Account Credentials
       - Windows Server Credential
-    description: Install a SQL Server instance using DSC
-    inventory: Proxmox Inventory
-    job_slice_count: 1
     job_type: run
+    job_slice_count: 1
     limit: win11-guest-1
-    name: Windows // MSSQL Role
-    playbook: demos/install_mssql_dsc.yml
+    ask_limit_on_launch: true
+    ask_tags_on_launch: true
+    ask_credential_on_launch: true
+  - name: Windows // Powershell
     project: Windows Mgmt
-  - credentials:
-      - Red Hat Automation Hub
-    execution_environment: ee-default
-    inventory: Cloud Inventory
-    job_slice_count: 1
-    job_type: run
-    limit: win-demo-1
-    name: Windows // Powershell
     playbook: playbooks/pwsh.yml
-    project: Windows Mgmt
+    inventory: Cloud Inventory
+    execution_environment: ee-default
+    credentials:
+      - Red Hat Automation Hub
+    job_type: run
+    job_slice_count: 1
+    limit: win-demo-1

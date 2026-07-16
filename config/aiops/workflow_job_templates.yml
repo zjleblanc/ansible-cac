@@ -1,10 +1,10 @@
 # ansible-playbook pb_aap_config.yml --tags aiops,workflow_job_templates --skip-tags common
 ---
 controller_workflows_aiops:
-  - ask_variables_on_launch: true
-    name: EDA // Remediation Workflow // Disk Space
-    labels: ["AIOps"]
+  - name: EDA // Remediation Workflow // Disk Space
     organization: Autodotes
+    labels: ["AIOps"]
+    ask_variables_on_launch: true
     workflow_nodes:
       - identifier: Sync Project
         related:
@@ -67,11 +67,11 @@ controller_workflows_aiops:
             name: Autodotes
             type: organization
           type: job_template
-  - ask_variables_on_launch: true
-    inventory: Cloud Inventory
-    name: EDA // Remediation Workflow // High Memory Usage
-    labels: ["AIOps"]
+  - name: EDA // Remediation Workflow // High Memory Usage
     organization: Autodotes
+    labels: ["AIOps"]
+    inventory: Cloud Inventory
+    ask_variables_on_launch: true
     workflow_nodes:
       - identifier: 78e2549e-0834-4def-aa33-85a5ba1259d4
         related:
@@ -130,10 +130,10 @@ controller_workflows_aiops:
             name: Autodotes
             type: organization
           type: job_template
-  - ask_variables_on_launch: true
-    name: EDA // Remediation Workflow // OneAgent
-    labels: ["AIOps"]
+  - name: EDA // Remediation Workflow // OneAgent
     organization: Autodotes
+    labels: ["AIOps"]
+    ask_variables_on_launch: true
     workflow_nodes:
       - identifier: cf69755d-be79-4432-b67d-1aad633a9576
         related:

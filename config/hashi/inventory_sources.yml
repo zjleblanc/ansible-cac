@@ -4,26 +4,22 @@ controller_inventory_sources_hashi:
   - name: Azure Open Environment
     description: Azure VMs in open environment (all resource groups)
     inventory: Ansible-Terraform Inventory
-    credential: Azure Open Environment Service Principal
-    execution_environment: ee-cloud
-    overwrite: true
-    overwrite_vars: true
     source: azure_rm
     source_vars:
       keyed_groups:
         - prefix: tag
           key: tags
-    timeout: 0
-    update_cache_timeout: 0
+    credential: Azure Open Environment Service Principal
+    execution_environment: ee-cloud
+    overwrite: true
+    overwrite_vars: true
     update_on_launch: false
+    update_cache_timeout: 0
+    timeout: 0
     verbosity: 1
   - name: app.terraform.io/zleblanc/azure-web-demo-dev/state
-    inventory: Ansible-HCP Inventory
-    credential: app.terraform.io/zleblanc/azure-web-demo-dev/backend
     description: Terraform backend configuration from HCP workspace
-    execution_environment: ee-cloud
-    overwrite: true
-    overwrite_vars: true
+    inventory: Ansible-HCP Inventory
     source: terraform
     source_vars:
       backend_type: remote
@@ -35,17 +31,17 @@ controller_inventory_sources_hashi:
       keyed_groups:
         - key: tags
           prefix: tag
-    timeout: 0
-    update_cache_timeout: 0
+    credential: app.terraform.io/zleblanc/azure-web-demo-dev/backend
+    execution_environment: ee-cloud
+    overwrite: true
+    overwrite_vars: true
     update_on_launch: false
+    update_cache_timeout: 0
+    timeout: 0
     verbosity: 1
   - name: app.terraform.io/zleblanc/aws-web-demo-dev/state
-    inventory: Ansible-HCP Inventory
-    credential: app.terraform.io/zleblanc/aws-web-demo-dev/backend
     description: Terraform backend configuration from HCP workspace
-    execution_environment: ee-cloud
-    overwrite: true
-    overwrite_vars: true
+    inventory: Ansible-HCP Inventory
     source: terraform
     source_vars:
       backend_type: remote
@@ -57,7 +53,11 @@ controller_inventory_sources_hashi:
       keyed_groups:
         - key: tags
           prefix: tag
-    timeout: 0
-    update_cache_timeout: 0
+    credential: app.terraform.io/zleblanc/aws-web-demo-dev/backend
+    execution_environment: ee-cloud
+    overwrite: true
+    overwrite_vars: true
     update_on_launch: false
+    update_cache_timeout: 0
+    timeout: 0
     verbosity: 1

@@ -67,6 +67,14 @@ Use the same pattern for other resource keys, for example:
 
 Do **not** define the unsuffixed base list (e.g. `controller_templates:`) in config files when using wildcards.
 
+## Key ordering (required)
+
+Every list entry under a config variable must follow the canonical key order for its resource type.
+The full specification with per-type orderings is in [`docs/key_ordering.md`](./docs/key_ordering.md).
+
+The general principle: **identity first** (`name`, `organization`, `description`), then type/classification,
+then behavioral config, then complex nested structures last (e.g. `survey_spec`, `workflow_nodes`, `inputs`, `injectors`).
+
 ## Placement rules (no cross-dependencies)
 
 Before adding or moving a resource, ask: **is this definition referenced by job templates / workflows / inventory sources in more than one domain?**

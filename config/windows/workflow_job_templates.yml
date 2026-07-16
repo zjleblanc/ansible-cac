@@ -1,8 +1,11 @@
 # ansible-playbook pb_aap_config.yml --tags windows,workflow_job_templates --skip-tags common
 ---
 controller_workflows_windows:
-  - ask_variables_on_launch: true
+  - name: Proxmox // Setup Windows VM
+    organization: Autodotes
     description: provision a windows vm and setup winrm
+    inventory: Proxmox Inventory
+    ask_variables_on_launch: true
     extra_vars:
       proxmox_ve_configs:
         - agent: true
@@ -14,9 +17,6 @@ controller_workflows_windows:
             - ansible
             - windows
             - yaml-config
-    inventory: Proxmox Inventory
-    name: Proxmox // Setup Windows VM
-    organization: Autodotes
     workflow_nodes:
       - identifier: 0ed93bf5-0e96-4ac1-bd6e-3416623ba509
         related:
@@ -80,9 +80,9 @@ controller_workflows_windows:
             name: Autodotes
             type: organization
           type: job_template
-  - inventory: Windows Inventory
-    name: Windows // EC2 Domain Setup [Workflow]
+  - name: Windows // EC2 Domain Setup [Workflow]
     organization: Autodotes
+    inventory: Windows Inventory
     workflow_nodes:
       - identifier: Domain Config
         related:
@@ -145,12 +145,12 @@ controller_workflows_windows:
             type: organization
           type: job_template
         verbosity: 5
-  - ask_limit_on_launch: true
+  - name: Windows // Install SQL Server (E2E)
+    organization: Autodotes
     description: Complete installation of microsoft sql server
     inventory: Proxmox Inventory
+    ask_limit_on_launch: true
     limit: win11-guest-1
-    name: Windows // Install SQL Server (E2E)
-    organization: Autodotes
     workflow_nodes:
       - identifier: 0ddf88cf-cb2e-4098-98f1-2fb144d02cac
         related:

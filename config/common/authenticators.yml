@@ -34,8 +34,8 @@ gateway_authenticators_common:
     type: ansible_base.authentication.authenticator_plugins.saml
     slug: ansible_base-authentication-authenticator_plugins-saml__okta
     order: 3
-    create_objects: true
     enabled: true
+    create_objects: true
     remove_users: false
     configuration:
       ADDITIONAL_UNVERIFIED_ARGS:

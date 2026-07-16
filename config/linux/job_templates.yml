@@ -2,12 +2,12 @@
 ---
 controller_templates_linux:
   - name: Linux // Patching // Dispatcher
+    organization: Autodotes
     description: Ingress playbook for patching to schedule downstream patching workflows based on pre-processing nodes
     labels: ["Demo"]
     project: Linux Mgmt
-    organization: Autodotes
-    inventory: Cloud Inventory
     playbook: workflows/patching/dispatcher.yml
+    inventory: Cloud Inventory
     execution_environment: ee-default
     credentials:
       - AWS (ec2-user)
@@ -67,61 +67,67 @@ controller_templates_linux:
           question_name: Change Window Time Zone
           question_description: ""
   - name: Linux // Patching // No-Op
+    organization: Autodotes
     description: Generic playbook to represent actions in a patching workflow
     labels: ["Demo"]
     project: Linux Mgmt
-    organization: Autodotes
-    inventory: Cloud Inventory
     playbook: workflows/patching/no_op.yml
+    inventory: Cloud Inventory
     execution_environment: ee-default
     credentials: ["AWS (ec2-user)"]
     ask_variables_on_launch: true
-  - ask_execution_environment_on_launch: true
+  - name: Linux // Debug
+    project: Linux Mgmt
+    playbook: playbooks/debug.yml
+    inventory: Autodotes Lab
     credentials:
       - AAP (zach)
-    inventory: Autodotes Lab
-    job_slice_count: 1
     job_type: run
-    limit: localhost
-    name: Linux // Debug
-    playbook: playbooks/debug.yml
-    project: Linux Mgmt
-    use_fact_cache: true
+    job_slice_count: 1
     verbosity: 4
-  - credentials:
+    limit: localhost
+    use_fact_cache: true
+    ask_execution_environment_on_launch: true
+  - name: Linux // Gather Package Facts
+    project: Linux Mgmt
+    playbook: playbooks/r4e_blueprint.yml
+    inventory: Autodotes Lab
+    credentials:
       - AAP (id_rsa)
+    job_type: run
+    job_slice_count: 1
     extra_vars:
       _hosts: rhel8
-    inventory: Autodotes Lab
-    job_slice_count: 1
-    job_type: run
-    name: Linux // Gather Package Facts
-    playbook: playbooks/r4e_blueprint.yml
-    project: Linux Mgmt
-  - execution_environment: ee-windows
-    inventory: Autodotes Lab
-    job_slice_count: 1
-    job_type: run
-    limit: localhost
-    name: Linux // Powershell Test
-    playbook: playbooks/pwsh.yml
+  - name: Linux // Powershell Test
     project: Windows Mgmt
-  - credentials:
+    playbook: playbooks/pwsh.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-windows
+    job_type: run
+    job_slice_count: 1
+    limit: localhost
+  - name: Linux // User Login (Random)
+    project: Linux Mgmt
+    playbook: playbooks/user_login_random.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
       - AAP (id_rsa)
       - Camper Vault
-    execution_environment: ee-default
+    job_type: run
+    job_slice_count: 1
+    limit: camp:fedora
     extra_vars:
       last_records_max: 500
-    inventory: Autodotes Lab
-    job_slice_count: 1
-    job_type: run
-    limit: camp:fedora
-    name: Linux // User Login (Random)
-    playbook: playbooks/user_login_random.yml
+  - name: Linux // User Login Report
     project: Linux Mgmt
-  - credentials:
-      - AAP (id_rsa)
+    playbook: playbooks/user_login_report.yml
+    inventory: Autodotes Lab
     execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)
+    job_type: run
+    job_slice_count: 1
     extra_vars:
       _hosts:
         - camp
@@ -131,67 +137,61 @@ controller_templates_linux:
       report_dest: /var/www/reports.autodotes.com/roles/table_per_host.last_login.html
       report_server: raspi
       report_title: Last Login Report
+  - name: Lockdown // RHEL 8 CIS
+    project: Lockdown RHEL8 CIS
+    playbook: site.yml
     inventory: Autodotes Lab
-    job_slice_count: 1
-    job_type: run
-    name: Linux // User Login Report
-    playbook: playbooks/user_login_report.yml
-    project: Linux Mgmt
-  - ask_limit_on_launch: true
+    execution_environment: ee-default
     credentials:
       - AAP (id_rsa)
-    execution_environment: ee-default
+    job_type: check
+    job_slice_count: 1
+    limit: rhel8
+    ask_limit_on_launch: true
     extra_vars:
       rhel8cis_rule_6_1_15: false
       rhel8cis_rule_6_2_11: false
-    inventory: Autodotes Lab
-    job_slice_count: 1
-    job_type: check
-    limit: rhel8
-    name: Lockdown // RHEL 8 CIS
-    playbook: site.yml
-    project: Lockdown RHEL8 CIS
-  - ask_limit_on_launch: true
+  - name: RHEL // Install SQL Server
+    description: Install SQL Server on a RHEL box
+    project: Linux Mgmt
+    playbook: demos/sqlserver-rhel.yml
+    inventory: Proxmox Inventory
     credentials:
       - AAP (cloud-user)
-    description: Install SQL Server on a RHEL box
+    job_type: run
+    job_slice_count: 1
+    limit: "*.rhel-guest"
+    ask_limit_on_launch: true
     extra_vars:
       mssql_version: 2019
     # sql_sa_password: REPLACE_ME
-    inventory: Proxmox Inventory
-    job_slice_count: 1
-    job_type: run
-    limit: "*.rhel-guest"
-    name: RHEL // Install SQL Server
-    playbook: demos/sqlserver-rhel.yml
+  - name: RHEL // Register
+    description: Register server using subscription-manager
     project: Linux Mgmt
-  - ask_limit_on_launch: true
+    playbook: demos/rhsm.yml
+    inventory: Proxmox Inventory
     credentials:
       - AAP (cloud-user)
       - RHSM (zachleblanc)
-    description: Register server using subscription-manager
+    job_type: run
+    job_slice_count: 1
+    limit: "*.rhel-guest"
+    ask_limit_on_launch: true
     extra_vars:
       rhsm_repos:
         - !unsafe rhel-{{ ansible_distribution_major_version }}-server-optional-rpms
-    inventory: Proxmox Inventory
-    job_slice_count: 1
-    job_type: run
-    limit: "*.rhel-guest"
-    name: RHEL // Register
-    playbook: demos/rhsm.yml
+  - name: Sandbox // Consumer
     project: Linux Mgmt
-  - ask_variables_on_launch: true
-    execution_environment: ee-default
-    inventory: Autodotes Lab
-    job_slice_count: 1
-    job_type: run
-    name: Sandbox // Consumer
     playbook: playbooks/consumer.yml
-    project: Linux Mgmt
-  - execution_environment: ee-default
     inventory: Autodotes Lab
-    job_slice_count: 1
+    execution_environment: ee-default
     job_type: run
-    name: Sandbox // Producer
-    playbook: playbooks/producer.yml
+    job_slice_count: 1
+    ask_variables_on_launch: true
+  - name: Sandbox // Producer
     project: Linux Mgmt
+    playbook: playbooks/producer.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    job_type: run
+    job_slice_count: 1

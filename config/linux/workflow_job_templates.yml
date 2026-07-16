@@ -223,8 +223,8 @@ controller_workflows_linux:
             action: update_ctask
             ctask_num: CTASK123
             ctask_sys_id: asdas9r70213u1ji321
-  - inventory: Autodotes Lab
-    name: Linux // Debug Workflow
+  - name: Linux // Debug Workflow
+    inventory: Autodotes Lab
     workflow_nodes:
       - identifier: Debug Variables
         unified_job_template:
@@ -355,11 +355,11 @@ controller_workflows_linux:
             - node: nuc
               name: camp
               state: stopped
-  - description: Provision a guest in proxmox, register with subscription-manager, and install sql server
+  - name: RHEL // Provision RHEL SQL Server Host
+    organization: Autodotes
+    description: Provision a guest in proxmox, register with subscription-manager, and install sql server
     inventory: Proxmox Inventory
     limit: "*.rhel-guest"
-    name: RHEL // Provision RHEL SQL Server Host
-    organization: Autodotes
     workflow_nodes:
       - identifier: 4cfd736f-cc84-4a0c-90b6-7e7e83c6dea8
         related:
