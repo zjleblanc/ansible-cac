@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags aap,schedules --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=aap" -e "skip_common=true" --tags schedules
 ---
 controller_schedules_aap:
   - name: Sync Automation Hub Repositories Every Sunday @ 0100 CST

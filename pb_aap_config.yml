@@ -8,7 +8,14 @@
       - vars/controller_secrets.yml
       - vars/eda_secrets.yml
       - vars/platform_secrets.yml
+    domains: []
+    skip_common: false
   pre_tasks:
+    - name: Normalize domains into a list
+      ansible.builtin.set_fact:
+        selected_domains: "{{ domains if domains is not string else (domains.split(',') | map('trim') | list) }}"
+      tags: always
+
     - name: Load secrets
       ansible.builtin.include_vars:
         file: "{{ item }}"
@@ -16,92 +23,102 @@
       tags: always
 
   tasks:
-    # --- common (runs unless explicitly skipped) ---
     - name: Include common configuration
       ansible.builtin.include_vars:
         dir: config/common
         extensions: [yml, yaml]
         ignore_files: [README.md]
         ignore_unknown_extensions: true
-      tags: [always, common]
+      when: not (skip_common | bool)
+      tags: always
 
-    # --- domain subfolders (run when their tag is included) ---
     - name: Include cloud configuration
       ansible.builtin.include_vars:
         dir: config/cloud
         extensions: [yml, yaml]
         ignore_files: [README.md]
-      tags: [cloud, never]
+      when: "'cloud' in selected_domains"
+      tags: always
 
     - name: Include networking configuration
       ansible.builtin.include_vars:
         dir: config/networking
         extensions: [yml, yaml]
         ignore_files: [README.md]
-      tags: [networking, never]
+      when: "'networking' in selected_domains"
+      tags: always
 
     - name: Include linux configuration
       ansible.builtin.include_vars:
         dir: config/linux
         extensions: [yml, yaml]
         ignore_files: [README.md]
-      tags: [linux, never]
+      when: "'linux' in selected_domains"
+      tags: always
 
     - name: Include windows configuration
       ansible.builtin.include_vars:
         dir: config/windows
         extensions: [yml, yaml]
         ignore_files: [README.md]
-      tags: [windows, never]
+      when: "'windows' in selected_domains"
+      tags: always
 
     - name: Include hashi configuration
       ansible.builtin.include_vars:
         dir: config/hashi
         extensions: [yml, yaml]
         ignore_files: [README.md]
-      tags: [hashi, never]
+      when: "'hashi' in selected_domains"
+      tags: always
 
     - name: Include aiops configuration
       ansible.builtin.include_vars:
         dir: config/aiops
         extensions: [yml, yaml]
         ignore_files: [README.md]
-      tags: [aiops, never]
+      when: "'aiops' in selected_domains"
+      tags: always
 
     - name: Include servicenow configuration
       ansible.builtin.include_vars:
         dir: config/servicenow
         extensions: [yml, yaml]
         ignore_files: [README.md]
-      tags: [servicenow, never]
+      when: "'servicenow' in selected_domains"
+      tags: always
 
     - name: Include apps configuration
       ansible.builtin.include_vars:
         dir: config/apps
         extensions: [yml, yaml]
         ignore_files: [README.md]
-      tags: [apps, never]
+      when: "'apps' in selected_domains"
+      tags: always
 
     - name: Include aap configuration
       ansible.builtin.include_vars:
         dir: config/aap
         extensions: [yml, yaml]
         ignore_files: [README.md]
-      tags: [aap, never]
+      when: "'aap' in selected_domains"
+      tags: always
 
     - name: Include hub configuration
       ansible.builtin.include_vars:
         dir: config/hub
         extensions: [yml, yaml]
         ignore_files: [README.md]
-      tags: [hub, never]
+      when: "'hub' in selected_domains"
+      tags: always
 
     - name: Include business configuration
       ansible.builtin.include_vars:
         dir: config/business
         extensions: [yml, yaml]
         ignore_files: [README.md]
-      tags: [business, never]
+      when: "'business' in selected_domains"
+      tags: always
 
     # --- apply configuration ---
     - name: Apply configuration via dispatch

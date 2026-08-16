@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags linux,workflow_job_templates --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=linux" -e "skip_common=true" --tags workflow_job_templates
 ---
 controller_workflows_linux:
   - name: Linux // Patching // rhel9_3

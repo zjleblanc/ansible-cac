@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags linux,schedules --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=linux" -e "skip_common=true" --tags schedules
 ---
 # Commented schedules retained for reference; enable by uncommenting.
 controller_schedules_linux: []

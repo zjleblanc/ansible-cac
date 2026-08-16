@@ -149,7 +149,7 @@ If the user asks to apply: append the entry to the correct list in the vars file
 - Domain: `<domain>`
 - File: `config/<domain>/<file>.yml`
 - Variable: `<prefix>_<domain>`
-- Apply: `ansible-playbook pb_aap_config.yml --tags ...`
+- Apply: `ansible-playbook pb_aap_config.yml -e "domains=<domain>" -e "skip_common=true" --tags <resource_tag>` (common files: `ansible-playbook pb_aap_config.yml --tags <resource_tag>`)
 
 ## Rationale
 <why this domain / file>

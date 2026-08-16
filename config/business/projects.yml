@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags business,projects --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=business" -e "skip_common=true" --tags projects
 ---
 controller_projects_business:
   - name: Business Process

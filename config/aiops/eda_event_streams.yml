@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags aiops,event_stream --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags event_stream
 ---
 eda_event_streams_aiops:
   - name: DataDog Event Stream

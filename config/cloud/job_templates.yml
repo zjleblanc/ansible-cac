@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags cloud,job_templates --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=cloud" -e "skip_common=true" --tags job_templates
 ---
 controller_templates_cloud:
   - name: GCP // CLI Test

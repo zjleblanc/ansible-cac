@@ -6,10 +6,10 @@ Business process automation (BPA) resources.
 
 Add `--ask-vault-pass` or `--vault-password-file <path>` when vaulted secrets in `vars/` are required for the resources you are applying.
 
-The `business` tag loads this folder. `common` still loads unless you pass `--skip-tags common`.
+Set `business` in the `domains` extra-var to load this folder. `common` still loads unless you set `skip_common=true`.
 
 ```bash
-ansible-playbook pb_aap_config.yml --tags business
+ansible-playbook pb_aap_config.yml -e "domains=business"
 ```
 
 ## What lives here
@@ -21,16 +21,16 @@ ansible-playbook pb_aap_config.yml --tags business
 
 ## Scope to a single resource file
 
-File-scoped one-liners use `--skip-tags common` so only this domain's vars are loaded for that resource type (common still loads on full-domain applies).
+File-scoped one-liners set `skip_common=true` so only this domain's vars are loaded for that resource type (common still loads on full-domain applies).
 
-Each YAML file has a one-liner comment at the top. Domain + resource tags filter which var files load (`vars/cac_file_resource_tags.yml`) and which `infra.aap_configuration.dispatch` roles run.
+Each YAML file has a one-liner comment at the top. The `domains` extra-var (plus `skip_common`) controls which var files load; resource tags (`--tags`) control which `infra.aap_configuration.dispatch` roles run.
 
 | File | Resource tag | Example |
 |------|--------------|--------|
-| `credential_types.yml` | `credential_types` | `ansible-playbook pb_aap_config.yml --tags business,credential_types --skip-tags common` |
-| `credentials.yml` | `credentials` | `ansible-playbook pb_aap_config.yml --tags business,credentials --skip-tags common` |
-| `job_templates.yml` | `job_templates` | `ansible-playbook pb_aap_config.yml --tags business,job_templates --skip-tags common` |
-| `projects.yml` | `projects` | `ansible-playbook pb_aap_config.yml --tags business,projects --skip-tags common` |
-| `schedules.yml` | `schedules` | `ansible-playbook pb_aap_config.yml --tags business,schedules --skip-tags common` |
+| `credential_types.yml` | `credential_types` | `ansible-playbook pb_aap_config.yml -e "domains=business" -e "skip_common=true" --tags credential_types` |
+| `credentials.yml` | `credentials` | `ansible-playbook pb_aap_config.yml -e "domains=business" -e "skip_common=true" --tags credentials` |
+| `job_templates.yml` | `job_templates` | `ansible-playbook pb_aap_config.yml -e "domains=business" -e "skip_common=true" --tags job_templates` |
+| `projects.yml` | `projects` | `ansible-playbook pb_aap_config.yml -e "domains=business" -e "skip_common=true" --tags projects` |
+| `schedules.yml` | `schedules` | `ansible-playbook pb_aap_config.yml -e "domains=business" -e "skip_common=true" --tags schedules` |
 
 See also [config/README.md](../README.md).

@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags aiops,workflow_job_templates --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags workflow_job_templates
 ---
 controller_workflows_aiops:
   - name: EDA // Remediation Workflow // Disk Space

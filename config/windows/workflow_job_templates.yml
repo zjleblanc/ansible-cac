@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags windows,workflow_job_templates --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=windows" -e "skip_common=true" --tags workflow_job_templates
 ---
 controller_workflows_windows:
   - name: Proxmox // Setup Windows VM

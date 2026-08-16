@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-08-15 — Refactor domain selection to use extra-vars instead of tags
+
+Decouple domain loading from Ansible tags to ensure resource-type tags (like `job_templates` or `credentials`)
+compose correctly during dynamic inclusion. Domain inclusion is now controlled by the `domains` list and
+`skip_common` boolean, while `--tags` remains reserved for filtering `dispatch` resource types.
+
+### Changed
+- `pb_aap_config.yml`: replaced tag-based domain inclusions with `when` conditions gated by the `domains` list and `skip_common` variable.
+- Updated 85 files across `config/` folders to reflect the new `ansible-playbook` invocation pattern in READMEs and one-liner file headers.
+- Updated `AGENTS.md`, `README.md`, and the `cac-parser` agent skill to reflect domain selection via extra-vars.
+
 ## 2026-08-15 — Add OpenFlake AWS provision and decommission CaC
 
 AWS lifecycle demos that create or tear down EC2 instances and register or remove matching CMDB CIs in OpenFlake (ServiceNow-compatible), then sync inventory from the OpenFlake CMDB for patch and agent steps.
