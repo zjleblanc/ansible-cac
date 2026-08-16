@@ -1,5 +1,27 @@
 # Changelog
 
+## 2026-08-15 — Add OpenFlake AWS provision and decommission CaC
+
+AWS lifecycle demos that create or tear down EC2 instances and register or remove matching CMDB CIs in OpenFlake (ServiceNow-compatible), then sync inventory from the OpenFlake CMDB for patch and agent steps.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Credential | OpenFlake | for integrating with ServiceNow using servicenow.itsm collection | common | [🕵️](config/common/credentials.yml#L174-L181) |
+| Inventory | OpenFlake Inventory | OpenFlake CMDB via servicenow.itsm.now inventory plugin | cloud | [🕵️](config/cloud/inventories.yml#L9-L13) |
+| Inventory source | openflake.servicenow.itsm.now | SCM sync of OpenFlake CMDB hosts via servicenow.itsm.now | cloud | [🕵️](config/cloud/inventory_sources.yml#L24-L32) |
+| Job template | OpenFlake // Create CIs | Create cmdb_ci_vm_instance items in OpenFlake | servicenow | [🕵️](config/servicenow/job_templates.yml#L68-L94) |
+| | OpenFlake // Delete CIs | Delete cmdb_ci_vm_instance items in OpenFlake | servicenow | [🕵️](config/servicenow/job_templates.yml#L121-L146) |
+| Workflow job template | AWS // Decommission Workflow // OpenFlake | AWS decommission using the OpenFlake ServiceNow credential | cloud | [🕵️](config/cloud/workflow_job_templates.yml#L51-L98) |
+| | AWS // Provisioning Workflow // OpenFlake | AWS provisioning using the OpenFlake ServiceNow credential | cloud | [🕵️](config/cloud/workflow_job_templates.yml#L212-L325) |
+
+### Secrets
+
+| Component | Variable | Credential |
+|-----------|----------|------------|
+| Controller | controller_credential_servicenow_openflake | [OpenFlake](config/common/credentials.yml#L174-L181) |
+
 ## 2026-07-16 — Add Vault OIDC demo CaC to hashi
 
 ### Added
