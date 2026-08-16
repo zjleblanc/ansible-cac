@@ -65,6 +65,33 @@ controller_templates_servicenow:
           variable: _hosts
           question_name: Specify target host(s)
           question_description: pattern for the playbook hosts key
+  - name: OpenFlake // Create CIs
+    organization: Autodotes
+    description: Create cmdb_ci_vm_instance items in OpenFlake
+    labels:
+      - ServiceNow
+    project: Cloud Mgmt
+    playbook: playbooks/snow/manage_ci.yml
+    inventory: Cloud Inventory
+    execution_environment: ee-default
+    credentials:
+      - AWS (ec2-user)
+      - OpenFlake
+    extra_vars:
+      action: create
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - max: 1024
+          min: 1
+          type: text
+          default: OVERRIDE_ME
+          required: true
+          variable: _hosts
+          question_name: Specify target host(s)
+          question_description: pattern for the playbook hosts key
   - name: ServiceNow // Delete CIs
     organization: Autodotes
     description: Delete cmdb_ci_vm_instance items
@@ -76,6 +103,32 @@ controller_templates_servicenow:
     execution_environment: ee-default
     credentials:
       - West ServiceNow (ven07621)
+    extra_vars:
+      action: delete
+    survey_enabled: true
+    survey_spec:
+      description: ""
+      name: ""
+      spec:
+        - max: 1024
+          min: 1
+          type: text
+          default: OVERRIDE_ME
+          required: true
+          variable: _hosts
+          question_name: Specify target host(s)
+          question_description: pattern for the playbook hosts key
+  - name: OpenFlake // Delete CIs
+    organization: Autodotes
+    description: Delete cmdb_ci_vm_instance items in OpenFlake
+    labels:
+      - ServiceNow
+    project: Cloud Mgmt
+    playbook: playbooks/snow/manage_ci.yml
+    inventory: Cloud Inventory
+    execution_environment: ee-default
+    credentials:
+      - OpenFlake
     extra_vars:
       action: delete
     survey_enabled: true
