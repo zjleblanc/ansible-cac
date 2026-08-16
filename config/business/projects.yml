@@ -1,0 +1,8 @@
+# ansible-playbook pb_aap_config.yml --tags business,projects --skip-tags common
+---
+controller_projects_business:
+  - name: Business Process
+    organization: Autodotes
+    scm_type: git
+    scm_url: https://github.com/zjleblanc/ansible-business-process.git
+    default_environment: ee-default

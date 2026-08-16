@@ -16,7 +16,7 @@ ansible-playbook pb_aap_config.yml --tags aiops
 
 - Event-Driven Demos project and AIOps-labeled job templates / workflows
 - EDA projects, credentials, event streams, and rulebook activations
-- Ticket enrichment / OpenAI credential types used by AIOps demos
+- Ticket enrichment credential using the shared `OpenAI Config` credential type (`config/common/credential_types.yml`)
 
 ## Scope to a single resource file
 
@@ -26,7 +26,6 @@ Each YAML file has a one-liner comment at the top. Domain + resource tags filter
 
 | File | Resource tag | Example |
 |------|--------------|--------|
-| `credential_types.yml` | `credential_types` | `ansible-playbook pb_aap_config.yml --tags aiops,credential_types --skip-tags common` |
 | `credentials.yml` | `credentials` | `ansible-playbook pb_aap_config.yml --tags aiops,credentials --skip-tags common` |
 | `eda_credentials.yml` | `credential` | `ansible-playbook pb_aap_config.yml --tags aiops,credential --skip-tags common` |
 | `eda_event_streams.yml` | `event_stream` | `ansible-playbook pb_aap_config.yml --tags aiops,event_stream --skip-tags common` |

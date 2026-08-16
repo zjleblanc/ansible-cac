@@ -1,0 +1,20 @@
+# ansible-playbook pb_aap_config.yml --tags business,job_templates --skip-tags common
+---
+controller_templates_business:
+  - name: BPA // Account Task Updater
+    organization: Autodotes
+    labels:
+      - Business
+    project: Business Process
+    playbook: playbooks/pb_update_account_tasks.yml
+    inventory: Autodotes Lab
+    credentials:
+      - Account Task Summarizer API Key
+      - Google OAuth Client (zleblanc-ansible)
+    extra_vars:
+      gmail_label: RHSC/Tasks Report
+      gsheet_id: 1YK1pLz_mDmM7mvFbMtCSjbwwkaaOMnGZJ8uA3hLauy8
+      gsheet_sheet: Data
+      gsheet_account_range: "A2:A14"
+      gsheet_total_opps_cell: D17
+      gsheet_total_tasks_cell: E17

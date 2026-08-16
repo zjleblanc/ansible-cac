@@ -1,0 +1,7 @@
+# ansible-playbook pb_aap_config.yml --tags business,schedules --skip-tags common
+---
+controller_schedules_business:
+  - name: BPA // Account Task Updater // Nightly
+    description: This schedule is used to process RHSC report email and update account dashbord.
+    unified_job_template: BPA // Account Task Updater
+    rrule: "DTSTART;TZID=America/Chicago:20260813T100000 RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR;BYHOUR=23;BYMINUTE=45"
