@@ -21,3 +21,12 @@ controller_inventory_sources_cloud:
     scm_branch: ""
     timeout: 0
     verbosity: 1
+  - name: openflake.servicenow.itsm.now
+    inventory: OpenFlake Inventory
+    source: scm
+    source_project: Cloud Mgmt
+    source_path: inventories/snow/now.yml
+    source_vars:
+      target_env: test
+    credential: OpenFlake
+    execution_environment: ee-default

@@ -6,3 +6,8 @@ controller_inventories_cloud:
     description: Demo using ARM inventory plugin
     labels:
       - Cloud
+  - name: OpenFlake Inventory
+    organization: Autodotes
+    description: OpenFlake CMDB via servicenow.itsm.now inventory plugin
+    labels:
+      - Cloud
