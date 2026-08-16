@@ -96,6 +96,13 @@
         ignore_files: [README.md]
       tags: [hub, never]
 
+    - name: Include business configuration
+      ansible.builtin.include_vars:
+        dir: config/business
+        extensions: [yml, yaml]
+        ignore_files: [README.md]
+      tags: [business, never]
+
     # --- apply configuration ---
     - name: Apply configuration via dispatch
       ansible.builtin.include_role:

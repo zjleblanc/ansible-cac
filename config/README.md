@@ -15,6 +15,7 @@ Apply with [`pb_aap_config.yml`](../pb_aap_config.yml) from the repository root.
 | [windows](./windows/README.md) | `windows` | Windows, AD, Proxmox |
 | [hashi](./hashi/README.md) | `hashi` | HashiCorp Terraform/HCP and Vault |
 | [aiops](./aiops/README.md) | `aiops` | AIOps + Event-Driven Ansible |
+| [business](./business/README.md) | `business` | Business process automation (BPA) |
 | [servicenow](./servicenow/README.md) | `servicenow` | ServiceNow ITSM and Selenium demos |
 | [apps](./apps/README.md) | `apps` | SSL/ACME, Kasa, CyberArk, policy demos |
 | [aap](./aap/README.md) | `aap` | AAP self-management and EE builds |
@@ -36,7 +37,7 @@ ansible-playbook pb_aap_config.yml --tags networking,job_templates
 
 # everything
 ansible-playbook pb_aap_config.yml \
-  --tags cloud,networking,linux,windows,hashi,aiops,servicenow,apps,aap,hub
+  --tags cloud,networking,linux,windows,hashi,aiops,business,servicenow,apps,aap,hub
 ```
 
 Each domain README lists the files in that folder and the exact tag combinations to scope to a single file. Each YAML var file also has a matching one-liner comment at the top.
