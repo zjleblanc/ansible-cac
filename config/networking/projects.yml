@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags networking,projects --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=networking" -e "skip_common=true" --tags projects
 ---
 controller_projects_networking:
   - name: Network Mgmt

@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags hub,repos --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=hub" -e "skip_common=true" --tags repos
 ---
 hub_ee_repositories_hub:
   - name: ee-default

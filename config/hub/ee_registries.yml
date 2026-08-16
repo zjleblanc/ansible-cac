@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags hub,registries --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=hub" -e "skip_common=true" --tags registries
 ---
 hub_ee_registries_hub:
   - name: quay_zleblanc

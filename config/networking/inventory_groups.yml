@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags networking,host_groups --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=networking" -e "skip_common=true" --tags host_groups
 ---
 controller_groups_networking:
   - name: role_webserver

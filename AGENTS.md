@@ -7,26 +7,28 @@ Prefer [README.md](./README.md) and [config/README.md](./config/README.md) for h
 ## Mental model
 
 ```text
-config/<domain>/*.yml  →  include_vars (by tag)  →  dispatch_include_wildcard_vars: true
-                                                    merges controller_*_<suffix> → controller_*
+config/<domain>/*.yml  →  include_vars (when domain in `domains` list)  →  dispatch_include_wildcard_vars: true
+                                                                          merges controller_*_<suffix> → controller_*
 ```
 
 - Domains are **logical product areas**, not AAP components (controller vs hub vs eda).
 - `config/common/` holds fundamentals and anything referenced by **more than one** domain.
 - Each other domain depends only on **itself + common**. No cross-domain references to definitions that live in another domain folder.
 - Entry playbook: [`pb_aap_config.yml`](./pb_aap_config.yml).
+- Domain selection uses the `domains` extra-var (list or comma-separated string) plus `skip_common`, **not** Ansible tags — see [Applying configuration](#applying-configuration). Ansible tags are reserved for **resource types** (`job_templates`, `credentials`, …) so they compose cleanly with any domain selection.
 
 ## Domains
 
-| Folder | Tag | Contents |
-|--------|-----|----------|
-| `common` | `always` + `common` (omit with `--skip-tags common`) | Orgs, users, teams, authenticators, EEs, labels, notifications, multi-domain projects/credentials/inventories/sources |
+| Folder | `domains` value | Contents |
+|--------|-----------------|----------|
+| `common` | n/a — loaded by default, omit with `skip_common=true` | Orgs, users, teams, authenticators, EEs, labels, notifications, multi-domain projects/credentials/inventories/sources |
 | `cloud` | `cloud` | AWS / Azure / GCP / VMware exclusive resources |
 | `networking` | `networking` | Cisco / Palo Alto / Summit Connect |
 | `linux` | `linux` | Linux/RHEL, lockdown, satellite-related exclusive resources |
 | `windows` | `windows` | Windows / AD / Proxmox exclusive resources |
 | `hashi` | `hashi` | HashiCorp Terraform / HCP / Vault |
 | `aiops` | `aiops` | EDA controller JTs/workflows + EDA component vars (`eda_*_aiops`) |
+| `business` | `business` | Business process automation (BPA) |
 | `servicenow` | `servicenow` | ServiceNow / Selenium JTs (deps usually in common) |
 | `apps` | `apps` | SSL/ACME, Kasa, CyberArk, policy demos |
 | `aap` | `aap` | AAP self-mgmt, EE builds, PAH sync templates |
@@ -35,14 +37,14 @@ config/<domain>/*.yml  →  include_vars (by tag)  →  dispatch_include_wildcar
 Domain docs:
 
 - [config/README.md](./config/README.md) — index of domains with short descriptions and links
-- `config/<domain>/README.md` — how to apply that domain and file-scoped tag examples
+- `config/<domain>/README.md` — how to apply that domain and file-scoped examples
 
 ## Wildcard variable naming (required)
 
 Every list variable **must** use a domain suffix matching the folder:
 
 ```yaml
-# ansible-playbook pb_aap_config.yml --tags cloud,job_templates --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=cloud" -e "skip_common=true" --tags job_templates
 ---
 controller_templates_cloud:
   - name: AWS // Create VM
@@ -146,10 +148,10 @@ Every YAML var file under `config/` must start with a comment one-liner for appl
 **Domain files** (not `common`):
 
 ```yaml
-# ansible-playbook pb_aap_config.yml --tags <domain>,<resource_tag> --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=<domain>" -e "skip_common=true" --tags <resource_tag>
 ```
 
-**Common files** (do not use a `common` tag in `--tags`; other domains already use `never`):
+**Common files**:
 
 ```yaml
 # ansible-playbook pb_aap_config.yml --tags <resource_tag>
@@ -158,7 +160,7 @@ Every YAML var file under `config/` must start with a comment one-liner for appl
 Rules:
 
 - Do **not** put `--ask-vault-pass` on var-file one-liners. Domain / config READMEs may mention vault flags as optional.
-- `--skip-tags common` on domain file one-liners skips loading `config/common` for that scoped run (common `include_vars` is tagged `[always, common]`).
+- `-e "skip_common=true"` on domain file one-liners skips loading `config/common` for that scoped run (common `include_vars` runs by default; `skip_common` opts out).
 - Keep the one-liner in sync when renaming files or changing resource tags.
 - When adding/removing YAML files in a domain, update that domain’s `README.md` file table.
 
@@ -166,28 +168,37 @@ Resource tags match `infra.aap_configuration.dispatch` (examples: `projects`, `c
 
 ## Applying configuration
 
+Domain selection is a **variable** (`domains`), not an Ansible tag — this lets it compose freely with resource
+tags without the two colliding. `common` loads by default; set `skip_common=true` to omit it.
+
 ```bash
 # common only
 ansible-playbook pb_aap_config.yml
 
 # common + one domain
-ansible-playbook pb_aap_config.yml --tags networking
+ansible-playbook pb_aap_config.yml -e "domains=networking"
 
-# domain file scope (matches var-file one-liners)
-ansible-playbook pb_aap_config.yml --tags networking,job_templates --skip-tags common
+# common + multiple domains (comma-separated string, or -e '{"domains": ["networking","cloud"]}')
+ansible-playbook pb_aap_config.yml -e "domains=networking,cloud"
+
+# domain file scope (matches var-file one-liners): one domain, no common, one resource type
+ansible-playbook pb_aap_config.yml -e "domains=networking" -e "skip_common=true" --tags job_templates
 
 # compose domain + resource tags (common still loaded)
-ansible-playbook pb_aap_config.yml --tags networking,projects,credentials
+ansible-playbook pb_aap_config.yml -e "domains=networking" --tags projects,credentials
 ```
 
 Vault is optional at the CLI: add `--ask-vault-pass` or `--vault-password-file <path>` when secrets in `vars/` are required.
 
-Tag layers:
+Two independent layers:
 
-1. **Domain tags** — which folders’ vars are loaded (`never` = opt-in; `common` is `always` unless skipped).
-2. **Resource tags** — which dispatch roles run (`projects`, `credentials`, `job_templates`, …).
+1. **Domain selection** (`domains` var + `skip_common`) — which folders’ vars are loaded.
+2. **Resource tags** (`--tags`) — which `infra.aap_configuration.dispatch` roles actually run (`projects`, `credentials`, `job_templates`, …). With no `--tags` passed, every dispatch role runs for whatever vars got loaded.
 
-`dispatch` is tagged `always` so it runs after the selected vars are loaded.
+Every `include_vars` task in `pb_aap_config.yml` (secrets, common, each domain) is tagged `always` so it is
+unaffected by `--tags`/`--skip-tags` filtering; only the `when:` condition on `domains`/`skip_common` decides
+whether it runs. `dispatch` itself is also tagged `always` so it always executes after vars are loaded — it's the
+sub-roles `dispatch` includes internally (one per resource type) that resource tags filter.
 
 ## Adding a new resource (checklist)
 
@@ -199,7 +210,7 @@ Tag layers:
 6. For labelable resources (job templates, workflows, inventories) outside `common`, set `labels` to exactly the domain label (see **Domain labels**). Ensure that label exists in `config/common/labels.yml`.
 7. Do not put secrets in config YAML. Reference vaulted vars from `vars/*_secrets.yml` (see redacted examples). Never commit real `*secrets.yml` files.
 8. If you add a **new domain folder**:
-   - Add `include_vars` in `pb_aap_config.yml` with `tags: [<domain>, never]`
+   - Add an `include_vars` task in `pb_aap_config.yml` with `when: "'<domain>' in selected_domains"` and `tags: always`
    - Add the domain label to `config/common/labels.yml`
    - Add `config/<domain>/README.md` (apply instructions + file table)
    - Link it from [config/README.md](./config/README.md)

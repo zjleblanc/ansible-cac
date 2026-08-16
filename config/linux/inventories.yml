@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags linux,inventories --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=linux" -e "skip_common=true" --tags inventories
 ---
 controller_inventories_linux:
   - name: AD LDAP Demo Inventory

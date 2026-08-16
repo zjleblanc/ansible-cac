@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags networking,workflow_job_templates --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=networking" -e "skip_common=true" --tags workflow_job_templates
 ---
 controller_workflows_networking:
   - name: Palo Alto // Provision Firewall Demo Workflow

@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags hashi,inventories --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=hashi" -e "skip_common=true" --tags inventories
 ---
 controller_inventories_hashi:
   - name: Ansible-Terraform Inventory

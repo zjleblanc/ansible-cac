@@ -4,7 +4,7 @@ Configuration as Code for Ansible Automation Platform.
 
 ## Repository structure
 
-Configuration is organized by **domain** under `config/`. Shared fundamentals live in `config/common/`; domain folders hold resources exclusive to that domain. Wildcard variable suffixes (e.g. `controller_templates_cloud`) are merged by `infra.aap_configuration.dispatch` when `dispatch_include_wildcard_vars` is enabled. See [config/README.md](./config/README.md) for domain descriptions and per-domain apply instructions.
+Configuration is organized by **domain** under `config/`. Shared fundamentals live in `config/common/`; domain folders hold resources exclusive to that domain. Wildcard variable suffixes (e.g. `controller_templates_cloud`) are merged by `infra.aap_configuration.dispatch` when `dispatch_include_wildcard_vars` is enabled. Domains are selected with the `domains` extra-var. See [config/README.md](./config/README.md) for domain descriptions and per-domain apply instructions.
 
 ```text
 .
@@ -28,7 +28,7 @@ Configuration is organized by **domain** under `config/`. Shared fundamentals li
 - **config/common/** — Resources referenced by multiple domains (always applied unless skipped).
 - **config/\<domain\>/** — Domain-specific resources; no cross-dependencies between domains.
 - **vars/** — Vaulted variables and in-repo `*_secrets.redacted.yml` examples (see [Secrets](#secrets)).
-- `pb_aap_config.yml` — Component-agnostic playbook; select domains via Ansible tags.
+- `pb_aap_config.yml` — Component-agnostic playbook; select domains via the `domains` extra-var.
 
 ## Usage
 
@@ -83,24 +83,27 @@ Vaulted values under `vars/` (credential inputs, etc.) are separate from these A
 
 ### Apply configuration
 
-`common` is tagged `always` and loads on every run. Domain folders are opt-in via `--tags` (each domain tag is paired with `never`). Resource-specific tags from `infra.aap_configuration` (e.g. `projects`, `credentials`, `job_templates`) still work as a second layer of filtering.
+`common` loads on every run by default; set `skip_common=true` to omit it. Domain folders are opt-in via the
+`domains` extra-var (a comma-separated string or a YAML/JSON list). Resource-specific tags from
+`infra.aap_configuration` (e.g. `projects`, `credentials`, `job_templates`) are a fully independent second layer
+of filtering — pass them via `--tags` and they compose with any `domains` selection without conflict.
 
 ```bash
 # Apply only common fundamentals
 ansible-playbook pb_aap_config.yml
 
 # Apply common + networking
-ansible-playbook pb_aap_config.yml --tags networking
+ansible-playbook pb_aap_config.yml -e "domains=networking"
 
 # Apply common + multiple domains
-ansible-playbook pb_aap_config.yml --tags networking,cloud
+ansible-playbook pb_aap_config.yml -e "domains=networking,cloud"
 
 # Apply common + networking, but only projects and credentials
-ansible-playbook pb_aap_config.yml --tags networking,projects,credentials
+ansible-playbook pb_aap_config.yml -e "domains=networking" --tags projects,credentials
 
 # Apply everything
 ansible-playbook pb_aap_config.yml \
-  --tags cloud,networking,linux,windows,hashi,aiops,business,servicenow,apps,aap,hub
+  -e "domains=cloud,networking,linux,windows,hashi,aiops,business,servicenow,apps,aap,hub"
 ```
 
 If `ANSIBLE_VAULT_PASSWORD_FILE` (or another vault config) is not set, add `--ask-vault-pass` or `--vault-password-file <path>` when encrypted `vars/` files are required.

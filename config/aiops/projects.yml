@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags aiops,projects --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags projects
 ---
 controller_projects_aiops:
   - name: Event-Driven Demos

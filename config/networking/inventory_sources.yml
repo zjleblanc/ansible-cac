@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags networking,inventory_sources --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=networking" -e "skip_common=true" --tags inventory_sources
 ---
 controller_inventory_sources_networking:
   - name: EC2 Inventory Source

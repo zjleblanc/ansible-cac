@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags linux,inventory_sources --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=linux" -e "skip_common=true" --tags inventory_sources
 ---
 controller_inventory_sources_linux:
   - name: microsoft.ad.ldap plugin source

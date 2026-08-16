@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags hashi,inventory_sources --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=hashi" -e "skip_common=true" --tags inventory_sources
 ---
 controller_inventory_sources_hashi:
   - name: Azure Open Environment

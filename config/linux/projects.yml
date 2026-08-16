@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags linux,projects --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=linux" -e "skip_common=true" --tags projects
 ---
 controller_projects_linux:
   - name: Lockdown RHEL8 CIS

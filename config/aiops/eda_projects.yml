@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags aiops,project --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags project
 ---
 eda_projects_aiops:
   - name: EDA Demos

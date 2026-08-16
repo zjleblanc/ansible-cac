@@ -2,13 +2,13 @@
 
 AAP Configuration as Code is split into **domain** folders under `config/`. Shared definitions live in [`common/`](./common/README.md). Every other domain depends only on itself plus `common` (no cross-domain definitions).
 
-Apply with [`pb_aap_config.yml`](../pb_aap_config.yml) from the repository root. Wildcard variable suffixes (e.g. `controller_templates_cloud`) are merged by `infra.aap_configuration.dispatch` when `dispatch_include_wildcard_vars: true`.
+Apply with [`pb_aap_config.yml`](../pb_aap_config.yml) from the repository root. Wildcard variable suffixes (e.g. `controller_templates_cloud`) are merged by `infra.aap_configuration.dispatch` when `dispatch_include_wildcard_vars: true`. Domains are selected with the `domains` extra-var (comma-separated string or list) — resource-type tags (`job_templates`, `credentials`, …) remain a separate, composable filtering layer applied via `--tags`.
 
 ## Domains
 
-| Domain | Tag | Description |
-|--------|-----|-------------|
-| [common](./common/README.md) | `always` (skip with `--skip-tags common`) | Platform fundamentals and multi-domain shared resources |
+| Domain | `domains` value | Description |
+|--------|------------------|-------------|
+| [common](./common/README.md) | n/a — loaded by default, skip with `skip_common=true` | Platform fundamentals and multi-domain shared resources |
 | [cloud](./cloud/README.md) | `cloud` | AWS, Azure, GCP, VMware |
 | [networking](./networking/README.md) | `networking` | Cisco, Palo Alto, Summit Connect |
 | [linux](./linux/README.md) | `linux` | Linux/RHEL management and patching |
@@ -30,14 +30,14 @@ Add `--ask-vault-pass` or `--vault-password-file <path>` when vaulted secrets in
 ansible-playbook pb_aap_config.yml
 
 # common + one domain
-ansible-playbook pb_aap_config.yml --tags networking
+ansible-playbook pb_aap_config.yml -e "domains=networking"
 
 # common + domain, single resource type
-ansible-playbook pb_aap_config.yml --tags networking,job_templates
+ansible-playbook pb_aap_config.yml -e "domains=networking" --tags job_templates
 
 # everything
 ansible-playbook pb_aap_config.yml \
-  --tags cloud,networking,linux,windows,hashi,aiops,business,servicenow,apps,aap,hub
+  -e "domains=cloud,networking,linux,windows,hashi,aiops,business,servicenow,apps,aap,hub"
 ```
 
-Each domain README lists the files in that folder and the exact tag combinations to scope to a single file. Each YAML var file also has a matching one-liner comment at the top.
+Each domain README lists the files in that folder and the exact commands to scope to a single file. Each YAML var file also has a matching one-liner comment at the top.

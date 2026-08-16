@@ -6,16 +6,16 @@ Platform fundamentals and resources shared across two or more domains.
 
 Add `--ask-vault-pass` or `--vault-password-file <path>` when vaulted secrets in `vars/` are required for the resources you are applying.
 
-`common` is tagged `always` in `pb_aap_config.yml`, so it loads on every run. Running with no domain tags applies only common vars (other domains use `never` and are opt-in).
+`common` loads by default in `pb_aap_config.yml` on every run. Running with no `domains` extra-var applies only common vars (other domains are opt-in via `domains`).
 
 ```bash
 ansible-playbook pb_aap_config.yml
 ```
 
-To run other domains **without** common (rare):
+To run other domains **without** common (rare), set `skip_common=true`:
 
 ```bash
-ansible-playbook pb_aap_config.yml --tags cloud --skip-tags common
+ansible-playbook pb_aap_config.yml -e "domains=cloud" -e "skip_common=true"
 ```
 
 ## What lives here
@@ -26,7 +26,7 @@ ansible-playbook pb_aap_config.yml --tags cloud --skip-tags common
 
 ## Scope to a single resource file
 
-Each YAML file has a one-liner comment at the top. Domain + resource tags filter which var files load (`vars/cac_file_resource_tags.yml`) and which `infra.aap_configuration.dispatch` roles run.
+Each YAML file has a one-liner comment at the top. Resource tags (`--tags`) control which `infra.aap_configuration.dispatch` roles run.
 
 | File | Resource tag | Example |
 |------|--------------|--------|

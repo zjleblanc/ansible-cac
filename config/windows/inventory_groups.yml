@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags windows,host_groups --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=windows" -e "skip_common=true" --tags host_groups
 ---
 controller_groups_windows:
   - name: windows

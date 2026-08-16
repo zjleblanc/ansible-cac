@@ -1,4 +1,4 @@
-# ansible-playbook pb_aap_config.yml --tags hashi,workflow_job_templates --skip-tags common
+# ansible-playbook pb_aap_config.yml -e "domains=hashi" -e "skip_common=true" --tags workflow_job_templates
 ---
 controller_workflows_hashi:
   - name: Terraform // Azure Deploy and Configure Workflow
