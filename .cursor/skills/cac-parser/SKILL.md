@@ -77,6 +77,20 @@ Transform Controller/Gateway/EDA/Hub API objects into the flat dict shape used i
 - **Drop API-only noise:** `id`, `url`, `related`, `summary_fields` (after extracting names), `created`, `modified`, `uuid`, `natural_key`, capability flags, counts, `type` (API type string), `redirect_*`, encrypted `$encrypted$` placeholders when the CaC entry should use vault vars instead.
 - **Surveys:** keep `survey_enabled` + `survey_spec` when present and meaningful; drop empty survey shells if survey is disabled and spec is empty.
 - **Workflows:** keep `workflow_nodes` structure expected by `infra.aap_configuration` (identifier / related / unified_job_template with name+type+organization), not raw API graph dumps with numeric IDs only — resolve names when the payload provides them.
+  - **Node overrides need a matching `ask_*_on_launch` flag on the target JT**, or the override is silently ignored at runtime. Whenever a workflow node sets any of `credentials`, `inventory`, `extra_data`, `limit`, `job_tags`, `skip_tags`, `labels`, `execution_environment`, look up the target job template (in the same or another domain file) and verify it has the corresponding flag set to `true`:
+
+    | Node override field | Required JT flag |
+    |---------------------|-------------------|
+    | `credentials` | `ask_credential_on_launch` |
+    | `inventory` | `ask_inventory_on_launch` |
+    | `extra_data` | `ask_variables_on_launch` |
+    | `limit` | `ask_limit_on_launch` |
+    | `job_tags` | `ask_tags_on_launch` |
+    | `skip_tags` | `ask_skip_tags_on_launch` |
+    | `labels` | `ask_labels_on_launch` |
+    | `execution_environment` | `ask_execution_environment_on_launch` |
+
+    If the flag is missing or `false`, call it out (see step 7) rather than silently emitting a workflow node override that won't take effect.
 - **Secrets:** never copy live secret values into config; use existing `{{ controller_credential_* }}` / vault patterns or `REPLACE_ME` + note.
 
 Match field names already used in sibling entries in the target file (e.g. `controller_templates_*` not `job_templates`).
@@ -138,7 +152,7 @@ Output:
 1. **Placement** — domain, file path, variable name, one-line apply command matching the file’s header style.
 2. **Rationale** — one or two sentences (shared → common, name cues, etc.).
 3. **YAML entry** — a single list item (`- name: …`) ready to paste under the target variable (not a full file rewrite).
-4. **Follow-ups** — missing deps (project/credential/inventory/EE/domain label in `config/common/labels.yml`), vault vars.
+4. **Follow-ups** — missing deps (project/credential/inventory/EE/domain label in `config/common/labels.yml`), vault vars, and any target JT missing an `ask_*_on_launch` flag required by a workflow node override (see step 3).
 
 If the user asks to apply: append the entry to the correct list in the vars file; preserve the file one-liner and `---`; do not reorder unrelated entries unless asked; update the domain README file table only when adding a **new** YAML file.
 
