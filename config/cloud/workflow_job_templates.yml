@@ -310,6 +310,8 @@ controller_workflows_cloud:
           name: openflake.servicenow.itsm.now
           type: inventory_source
       - identifier: Patch VM(s)
+        credentials:
+          - name: OpenFlake
         unified_job_template:
           name: AWS // Patch VM
           organization:

@@ -226,6 +226,7 @@ controller_templates_cloud:
       - AWS (ec2-user)
       - West ServiceNow (ven07621)
     ask_inventory_on_launch: true
+    ask_credential_on_launch: true
     survey_enabled: true
     survey_spec:
       description: ""
