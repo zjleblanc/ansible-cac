@@ -68,6 +68,81 @@ controller_workflows_aiops:
             name: Autodotes
             type: organization
           type: job_template
+  - name: EDA // Remediation Workflow // Disk Space // OpenFlake
+    organization: Autodotes
+    labels:
+      - AIOps
+    ask_variables_on_launch: true
+    workflow_nodes:
+      - identifier: Sync Project
+        related:
+          success_nodes:
+            - identifier: Create Incident
+        unified_job_template:
+          name: Cloud Mgmt
+          organization:
+            name: Autodotes
+            type: organization
+          type: project
+      - identifier: Sync Inventory
+        related:
+          success_nodes:
+            - identifier: Create Incident
+        unified_job_template:
+          inventory:
+            name: Cloud Inventory
+            organization:
+              name: Autodotes
+              type: organization
+            type: inventory
+          name: AWS EC2 Instances
+          type: inventory_source
+      - identifier: Create Incident
+        all_parents_must_converge: true
+        credentials:
+          - OpenFlake
+        related:
+          success_nodes:
+            - identifier: AI RCA
+        unified_job_template:
+          name: Service Now // Create Incident
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: AI RCA
+        credentials:
+          - OpenFlake
+        related:
+          success_nodes:
+            - identifier: Resize EBS Volume
+        unified_job_template:
+          name: AIOps // Ticket Enrichment // RHEL
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Resize EBS Volume
+        credentials:
+          - OpenFlake
+        related:
+          always_nodes:
+            - identifier: Update Incident
+        unified_job_template:
+          name: EDA // Resize EBS Volume
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Update Incident
+        credentials:
+          - OpenFlake
+        unified_job_template:
+          name: Service Now // Update Incident
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
   - name: EDA // Remediation Workflow // High Memory Usage
     organization: Autodotes
     labels:

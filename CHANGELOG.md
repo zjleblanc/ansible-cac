@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-08-20 — Add OpenFlake variant of disk space remediation workflow
+
+Clones the EDA disk-space remediation workflow so its ServiceNow incident and enrichment steps run against the OpenFlake ServiceNow instance instead of West ServiceNow, letting either backend service the same remediation without duplicating the underlying job templates.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Workflow job template | EDA // Remediation Workflow // Disk Space // OpenFlake | Disk space remediation workflow using the OpenFlake credential for ServiceNow steps. | aiops | [🕵️](config/aiops/workflow_job_templates.yml#L71-L145) |
+
+### Changed
+- Enabled `ask_credential_on_launch` on `Service Now // Create Incident`, `Service Now // Update Incident`, `AIOps // Ticket Enrichment // RHEL`, and `EDA // Resize EBS Volume` so the new workflow's nodes can override their default `West ServiceNow (ven07621)` credential with `OpenFlake`.
+
 ## 2026-08-15 — Refactor domain selection to use extra-vars instead of tags
 
 Decouple domain loading from Ansible tags to ensure resource-type tags (like `job_templates` or `credentials`)

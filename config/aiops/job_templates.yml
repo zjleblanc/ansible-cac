@@ -161,6 +161,7 @@ controller_templates_aiops:
       - West ServiceNow (ven07621)
       - Ticket Enrichment API Key
     ask_variables_on_launch: true
+    ask_credential_on_launch: true
   - name: EDA // Resize EBS Volume
     labels:
       - AIOps
@@ -176,6 +177,7 @@ controller_templates_aiops:
     job_slice_count: 1
     ask_variables_on_launch: true
     ask_skip_tags_on_launch: true
+    ask_credential_on_launch: true
     survey_enabled: true
     survey_spec:
       description: ""
