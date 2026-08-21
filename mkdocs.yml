@@ -41,12 +41,23 @@ extra_javascript:
 hooks:
   - docs/mkdocs/hooks.py
 
+# MkDocs excludes dot-directories by default (`.*` in exclude_docs); un-exclude
+# only the agent skill/rule docs we intentionally publish, keeping everything
+# else under .cursor/ (plans, cache, other rules) hidden from the site.
+exclude_docs: |
+  !.cursor/skills/
+  !.cursor/skills/**
+  !.cursor/rules/
+  !.cursor/rules/agent/
+  !.cursor/rules/agent/**
+
 plugins:
   - same-dir
   - search
   - gen-files:
       scripts:
         - docs/mkdocs/gen_var_pages.py
+        - docs/mkdocs/gen_agent_pages.py
 
 markdown_extensions:
   - tables
@@ -77,8 +88,16 @@ nav:
       - AAP: config/aap/README.md
       - Hub: config/hub/README.md
   - Reference:
-      - Key Ordering: docs/key_ordering.md
       - LDAP: config/common/LDAP.md
+  - AI:
+      - Skills:
+          - CaC Parser:
+              - Overview: .cursor/skills/cac-parser/SKILL.md
+              - Key Ordering: .cursor/skills/cac-parser/key_ordering.md
+              - Resource Map: .cursor/skills/cac-parser/resource-map.md
+          - CaC Schedules: .cursor/skills/cac-schedules/SKILL.md
+          - Changelog: .cursor/skills/changelog/SKILL.md
+      - Rules: []
   - Contributing:
       - Changelog: CHANGELOG.md
 

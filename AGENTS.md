@@ -72,7 +72,7 @@ Do **not** define the unsuffixed base list (e.g. `controller_templates:`) in con
 ## Key ordering (required)
 
 Every list entry under a config variable must follow the canonical key order for its resource type.
-The full specification with per-type orderings is in [`docs/key_ordering.md`](./docs/key_ordering.md).
+The full specification with per-type orderings is in [`.cursor/skills/cac-parser/key_ordering.md`](./.cursor/skills/cac-parser/key_ordering.md).
 
 The general principle: **identity first** (`name`, `organization`, `description`), then type/classification,
 then behavioral config, then complex nested structures last (e.g. `survey_spec`, `workflow_nodes`, `inputs`, `injectors`).
@@ -234,5 +234,8 @@ sub-roles `dispatch` includes internally (one per resource type) that resource t
 - [`README.md`](./README.md) — repo overview
 - [`README_EXPORT.md`](./README_EXPORT.md) — export/normalize into CaC
 - [`.cursor/skills/cac-parser/SKILL.md`](./.cursor/skills/cac-parser/SKILL.md) — API payload → CaC conversion (includes domain labels)
+- [`.cursor/skills/cac-parser/key_ordering.md`](./.cursor/skills/cac-parser/key_ordering.md) — canonical key order per resource type
+- [`.cursor/skills/`](./.cursor/skills/) — agent skills (cac-parser, cac-schedules, changelog). Unlike `.mdc` rules, skill `.md` files are **not** auto-discovered by the docs site — when adding a new skill (or a new doc page inside an existing skill), manually add a nav entry under `AI > Skills` in [`mkdocs.yml`](./mkdocs.yml).
+- [`.cursor/rules/`](./.cursor/rules/) — always/auto-attached agent rules. New `.mdc` rules are auto-discovered into `AI > Rules` by [`docs/mkdocs/hooks.py`](./docs/mkdocs/hooks.py) — no manual nav edit needed.
 - [`scripts/migrate_to_wildcard_config.py`](./scripts/migrate_to_wildcard_config.py) — one-time migration reference (historical)
 - [redhat-cop/aap_configuration_template](https://github.com/redhat-cop/aap_configuration_template) — upstream pattern for wildcard vars + `dispatch_include_wildcard_vars`

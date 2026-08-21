@@ -1,6 +1,6 @@
 ---
 name: cac-parser
-description: Convert an AAP/Controller/EDA/Hub/Gateway API resource payload into ansible-cac domain YAML. Chooses domain and vars file, applies the single domain label on job templates/workflows/inventories, normalizes nested API objects to names, omits role/module defaults from infra.aap_configuration and ansible.* collections listed in collections/requirements.yml, and applies docs/key_ordering.md. Use when the user pastes an AAP API JSON/YAML object, export payload, or asks to add a Controller/EDA/Hub resource into config/.
+description: Convert an AAP/Controller/EDA/Hub/Gateway API resource payload into ansible-cac domain YAML. Chooses domain and vars file, applies the single domain label on job templates/workflows/inventories, normalizes nested API objects to names, omits role/module defaults from infra.aap_configuration and ansible.* collections listed in collections/requirements.yml, and applies key_ordering.md. Use when the user pastes an AAP API JSON/YAML object, export payload, or asks to add a Controller/EDA/Hub resource into config/.
 disable-model-invocation: true
 ---
 
@@ -11,7 +11,7 @@ Convert a single AAP API (or export) resource object into a list entry ready for
 ## Required reading (before converting)
 
 1. [AGENTS.md](../../../AGENTS.md) — domains, wildcard suffixes, placement rules (common vs domain).
-2. [docs/key_ordering.md](../../../docs/key_ordering.md) — canonical key order for the target variable type.
+2. [key_ordering.md](key_ordering.md) — canonical key order for the target variable type.
 3. [resource-map.md](resource-map.md) — API type → file / var name, nested-field unwrap, defaults to omit.
 
 Do not invent secrets. Credential `inputs` that contain secrets should use `{{ vault_var }}` placeholders and call out any new vars for `vars/*_secrets.redacted.yml`.
@@ -141,7 +141,7 @@ When unsure, open the matching role task and the matching `ansible.*` module doc
 
 ### 6. Apply canonical key order
 
-Reorder remaining keys to match [docs/key_ordering.md](../../../docs/key_ordering.md) for that variable family. Omit absent keys; do not add keys just to fill the template.
+Reorder remaining keys to match [key_ordering.md](key_ordering.md) for that variable family. Omit absent keys; do not add keys just to fill the template.
 
 ### 7. Emit result
 
@@ -188,7 +188,7 @@ If the user asks to apply: append the entry to the correct list in the vars file
 ## Additional resources
 
 - [resource-map.md](resource-map.md) — type map, unwrap rules, omit defaults
-- [docs/key_ordering.md](../../../docs/key_ordering.md) — per-type key order
+- [key_ordering.md](key_ordering.md) — per-type key order
 - [AGENTS.md](../../../AGENTS.md) — placement and naming
 - [collections/requirements.yml](../../../collections/requirements.yml) — collection set for this repo
 - `infra.aap_configuration` role tasks + `ansible.controller` / `ansible.platform` / `ansible.hub` / `ansible.eda` module docs for omit-able defaults
