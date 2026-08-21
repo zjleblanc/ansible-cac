@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-08-21 — Publish Cursor skills and rules in MkDocs
+
+Moves canonical key ordering into the cac-parser skill and adds an AI section to the docs site so skills and agent rules ship with GitHub Pages instead of living as a standalone `docs/` reference.
+
+### Changed
+- Moved `docs/key_ordering.md` into `.cursor/skills/cac-parser/` and updated skill / AGENTS.md references
+- Added MkDocs `AI` nav: nested CaC Parser skill pages, plus CaC Schedules and Changelog; Rules auto-discovered from `.cursor/rules/*.mdc`
+- Added `docs/mkdocs/gen_agent_pages.py` to render rule pages from `.mdc` frontmatter; hooks populate the Rules nav
+- Noted in AGENTS.md that new skills need a manual `mkdocs.yml` nav entry (rules do not)
+
 ## 2026-08-20 — Add OpenFlake variant of disk space remediation workflow
 
 Clones the EDA disk-space remediation workflow so its ServiceNow incident and enrichment steps run against the OpenFlake ServiceNow instance instead of West ServiceNow, letting either backend service the same remediation without duplicating the underlying job templates.
