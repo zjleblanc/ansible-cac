@@ -12,7 +12,7 @@ The `aap-job-mgmt` MCP server (and its siblings) do not expose a schedules tool.
 
 1. [cac-parser/SKILL.md](../cac-parser/SKILL.md) — conversion workflow this skill feeds into.
 2. [cac-parser/resource-map.md](../cac-parser/resource-map.md) — schedule omit-defaults table, nested-unwrap cheat sheet.
-3. [docs/key_ordering.md](../../../docs/key_ordering.md) — Schedules key order: `name`, `description`, `unified_job_template`, `rrule`, `disabled`, `extra_data`.
+3. [cac-parser/key_ordering.md](../cac-parser/key_ordering.md) — Schedules key order: `name`, `description`, `unified_job_template`, `rrule`, `disabled`, `extra_data`.
 
 ## Authentication
 
@@ -136,5 +136,5 @@ Pass the normalized object to the [cac-parser](../cac-parser/SKILL.md) workflow 
 
 - [cac-parser/SKILL.md](../cac-parser/SKILL.md) — full conversion workflow, domain placement rules, output template
 - [cac-parser/resource-map.md](../cac-parser/resource-map.md) — schedule omit-defaults table (`controller_schedules` section)
-- [docs/key_ordering.md](../../../docs/key_ordering.md) — Schedules key order
+- [cac-parser/key_ordering.md](../cac-parser/key_ordering.md) — Schedules key order
 - [AGENTS.md](../../../AGENTS.md) — "Schedules are not global" placement rule

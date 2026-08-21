@@ -131,7 +131,7 @@ Use these strings in the Type column (and for sort). Map from the CaC variable /
 | `hub_ee_registries` | Hub EE registry |
 | `hub_ee_repositories` | Hub EE repository |
 
-If a new variable family appears, use the singular title from `docs/key_ordering.md`.
+If a new variable family appears, use the singular title from `.cursor/skills/cac-parser/key_ordering.md`.
 
 ## Resources table rules
 

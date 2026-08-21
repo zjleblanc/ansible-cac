@@ -14,6 +14,7 @@ from domains import discover_domains, domain_label
 
 ROOT = _HOOKS_DIR.parents[1]
 CONFIG = ROOT / "config"
+RULES = ROOT / ".cursor" / "rules"
 
 _DOMAIN_README = re.compile(r"^config/([^/]+)/README\.md$")
 _FILE_CELL = re.compile(r"^\| `([^`]+\.yml)` \|", re.M)
@@ -23,8 +24,23 @@ def _title_from_stem(stem: str) -> str:
     return stem.replace("_", " ").title()
 
 
+def _rule_title(stem: str) -> str:
+    return stem.replace("-", " ").replace("_", " ").title()
+
+
+def _discover_rules(rules_dir: Path) -> list[dict[str, str]]:
+    """Return nav entries for generated agent-rule pages, one per .mdc file."""
+    entries = []
+    if not rules_dir.is_dir():
+        return entries
+    for mdc_path in sorted(rules_dir.glob("*.mdc")):
+        stem = mdc_path.stem
+        entries.append({_rule_title(stem): f".cursor/rules/agent/{stem}.md"})
+    return entries
+
+
 def on_config(config):
-    """Expand Configuration nav from config/ domains and their var files."""
+    """Expand Configuration nav from config/ domains, and AI > Rules from .cursor/rules/."""
     domain_entries = [{"Overview": "config/README.md"}]
     for folder in discover_domains(CONFIG):
         domain_dir = CONFIG / folder
@@ -42,7 +58,12 @@ def on_config(config):
     for i, item in enumerate(nav):
         if isinstance(item, dict) and "Configuration" in item:
             nav[i] = {"Configuration": domain_entries}
-            break
+        elif isinstance(item, dict) and "AI" in item:
+            ai_entries = item["AI"]
+            for j, sub in enumerate(ai_entries):
+                if isinstance(sub, dict) and "Rules" in sub:
+                    ai_entries[j] = {"Rules": _discover_rules(RULES)}
+            nav[i] = {"AI": ai_entries}
     return config
 
 

@@ -4,8 +4,8 @@ Paths are under `config/<domain>/`. Variable suffix is always `_<domain>` (`_com
 
 ## Type → file → variable prefix
 
-| API / export type (hints) | File | Variable prefix | Key-order section in docs/key_ordering.md |
-|---------------------------|------|-----------------|-------------------------------------------|
+| API / export type (hints) | File | Variable prefix | Key-order section in key_ordering.md |
+|---------------------------|------|-----------------|---------------------------------------|
 | `job_template` | `job_templates.yml` | `controller_templates` | Job Templates |
 | `workflow_job_template` | `workflow_job_templates.yml` | `controller_workflows` | Workflow Job Templates |
 | `project` (Controller) | `projects.yml` | `controller_projects` | Projects |
