@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-08-21 — Fix OpenFlake workflow node credential overrides
+
+The OpenFlake disk-space remediation workflow was applying successfully but never attaching the OpenFlake ServiceNow credential to its nodes, because `ansible.controller.workflow_job_template` only honors node-level credential/label/instance-group associations under `related` as `- name: X` dicts.
+
+### Fixed
+- Nested OpenFlake credential overrides under each ServiceNow-related node’s `related.credentials` (dict form) on [EDA // Remediation Workflow // Disk Space // OpenFlake](config/aiops/workflow_job_templates.yml#L71-L146)
+
+### Changed
+- Documented the workflow-node `related.credentials` / `labels` / `instance_groups` shape (and the silent top-level bare-string no-op) in the cac-parser skill and resource map
+
 ## 2026-08-21 — Publish Cursor skills and rules in MkDocs
 
 Moves canonical key ordering into the cac-parser skill and adds an AI section to the docs site so skills and agent rules ship with GitHub Pages instead of living as a standalone `docs/` reference.

@@ -91,6 +91,21 @@ Transform Controller/Gateway/EDA/Hub API objects into the flat dict shape used i
     | `execution_environment` | `ask_execution_environment_on_launch` |
 
     If the flag is missing or `false`, call it out (see step 7) rather than silently emitting a workflow node override that won't take effect.
+  - **Node-level `credentials`/`labels`/`instance_groups` MUST live under the node's `related` key, as a list of dicts (`- name: X`), not as a top-level list of bare strings.** The `ansible.controller.workflow_job_template` module (`plugins/modules/workflow_job_template.py`) only resolves these three associations when it finds them inside `workflow_node['related']`, and it reads each entry via `sub_name['name']` (dict access) — a bare string or a top-level `credentials:` sibling to `related:` is silently ignored (no error, no `changed`, playbook reports success). This contradicts the general "lists of named refs → list of name strings" rule in this step, which applies to job-template-level fields (e.g. `controller_templates_*.credentials`) but **not** to workflow node overrides. Correct shape:
+
+    ```yaml
+    - identifier: Create Incident
+      related:
+        success_nodes:
+          - identifier: AI RCA
+        credentials:
+          - name: OpenFlake
+      unified_job_template:
+        name: Service Now // Create Incident
+        ...
+    ```
+
+    Wrong (silently no-ops): `credentials:` as a sibling of `related:` on the node, and/or bare strings (`- OpenFlake`) instead of `- name: OpenFlake`.
 - **Secrets:** never copy live secret values into config; use existing `{{ controller_credential_* }}` / vault patterns or `REPLACE_ME` + note.
 
 Match field names already used in sibling entries in the target file (e.g. `controller_templates_*` not `job_templates`).

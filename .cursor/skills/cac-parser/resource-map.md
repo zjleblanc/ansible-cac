@@ -135,6 +135,8 @@ Prefer matching the **lean** style of nearby domain entries (hashi sources are n
 
 Keep `workflow_nodes` (required for a useful workflow entry).
 
+**Node-level `credentials` / `labels` / `instance_groups` overrides must be nested under each node's `related` key as `- name: X` dicts, not as a top-level list of bare strings on the node.** The module only reads these three associations from `workflow_node['related']`; a top-level `credentials:` sibling to `related:` (or bare-string entries) is silently ignored — no error, playbook still reports success. See [SKILL.md](SKILL.md) step 3 for the correct shape.
+
 ### `controller_schedules` → `controller_schedules_*` (`ansible.controller.schedule`)
 
 | Key | Omit when |
