@@ -99,11 +99,11 @@ controller_workflows_aiops:
           type: inventory_source
       - identifier: Create Incident
         all_parents_must_converge: true
-        credentials:
-          - OpenFlake
         related:
           success_nodes:
             - identifier: AI RCA
+          credentials:
+            - name: OpenFlake
         unified_job_template:
           name: Service Now // Create Incident
           organization:
@@ -111,11 +111,11 @@ controller_workflows_aiops:
             type: organization
           type: job_template
       - identifier: AI RCA
-        credentials:
-          - OpenFlake
         related:
           success_nodes:
             - identifier: Resize EBS Volume
+          credentials:
+            - name: OpenFlake
         unified_job_template:
           name: AIOps // Ticket Enrichment // RHEL
           organization:
@@ -123,11 +123,11 @@ controller_workflows_aiops:
             type: organization
           type: job_template
       - identifier: Resize EBS Volume
-        credentials:
-          - OpenFlake
         related:
           always_nodes:
             - identifier: Update Incident
+          credentials:
+            - name: OpenFlake
         unified_job_template:
           name: EDA // Resize EBS Volume
           organization:
@@ -135,8 +135,9 @@ controller_workflows_aiops:
             type: organization
           type: job_template
       - identifier: Update Incident
-        credentials:
-          - OpenFlake
+        related:
+          credentials:
+            - name: OpenFlake
         unified_job_template:
           name: Service Now // Update Incident
           organization:
