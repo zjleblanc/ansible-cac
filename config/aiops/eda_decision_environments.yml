@@ -1,0 +1,11 @@
+# ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags decision_environment
+---
+eda_decision_environments_aiops:
+  - name: Default Decision Environment
+    organization: Default
+    image_url: registry.redhat.io/ansible-automation-platform-27/de-supported-rhel9:latest
+    credential: Decision Environment Container Registry
+  - name: Hub Default Decision Environment
+    organization: Default
+    image_url: ansible.autodotes.com/de-supported-rhel9:latest
+    credential: Hub Decision Environment Container Registry
