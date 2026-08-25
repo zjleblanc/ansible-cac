@@ -18,3 +18,49 @@ controller_templates_business:
       gsheet_account_range: "A2:A14"
       gsheet_total_opps_cell: D17
       gsheet_total_tasks_cell: E17
+  - name: BPA // Support Case Analyzer
+    organization: Autodotes
+    labels:
+      - Business
+    project: Support Analyzer
+    playbook: analyze_support_cases.yml
+    inventory: Demo Inventory
+    execution_environment: ee-default
+    credentials:
+      - Support Analyzer (zleblanc)
+    skip_tags: pdf
+    extra_vars:
+      support_case_accounts:
+        - name: ConocoPhillips
+          ids:
+            - 411405
+        - name: EPP
+          ids:
+            - 5209985
+        - name: ExxonMobil
+          ids:
+            - 1024286
+        - name: Uniti
+          ids:
+            - 1135878
+        - name: CenterPoint
+          ids:
+            - 1363853
+        - name: Frost
+          ids:
+            - 1144269
+        - name: ERCOT
+          ids:
+            - 604812
+        - name: Entergy
+          ids:
+            - 1025972
+        - name: PepsiCo
+          ids:
+            - 519348
+        - name: Southwest
+          ids:
+            - 647971
+        - name: Toyota
+          ids:
+            - 1040295

@@ -5,3 +5,7 @@ controller_schedules_business:
     description: This schedule is used to process RHSC report email and update account dashbord.
     unified_job_template: BPA // Account Task Updater
     rrule: "DTSTART;TZID=America/Chicago:20260813T100000 RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR;BYHOUR=23;BYMINUTE=45"
+  - name: BPA // Support Case Analyzer // Weekly
+    description: This schedule runs the support case analyzer weekly to summarize open cases per account.
+    unified_job_template: BPA // Support Case Analyzer
+    rrule: "DTSTART;TZID=America/Chicago:20260530T233000 RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=FR"
