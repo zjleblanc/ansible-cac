@@ -1,5 +1,25 @@
 # Changelog
 
+## 2026-08-25 — Move Support Analyzer to business domain
+
+Moves existing Support Analyzer credential resources from the `aap` domain to `business` and codifies the project, job template, and schedule from the platform.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Credential type | Ansible Support Analyzer | LLM endpoint, Google Sheets, and Red Hat API settings | business | [🕵️](config/business/credential_types.yml#L33-L110) |
+| Credential | Support Analyzer (zleblanc) | Staged vault secrets for LLM and Google integration | business | [🕵️](config/business/credentials.yml#L22-L37) |
+| Project | Support Analyzer | SCM sync for the support case analyzer playbooks | business | [🕵️](config/business/projects.yml#L9-L14) |
+| Job template | BPA // Support Case Analyzer | Automated summarization of open support cases | business | [🕵️](config/business/job_templates.yml#L21-L66) |
+| Schedule | BPA // Support Case Analyzer // Weekly | Weekly Friday night run of the analyzer | business | [🕵️](config/business/schedules.yml#L8-L12) |
+
+### Changed
+- Updated `config/business/README.md` to include Support Analyzer resources in the domain summary.
+
+### Removed
+- `Ansible Support Analyzer` credential type and `Support Analyzer (zleblanc)` credential from the `aap` domain.
+
 ## 2026-08-21 — Fix OpenFlake workflow node credential overrides
 
 The OpenFlake disk-space remediation workflow was applying successfully but never attaching the OpenFlake ServiceNow credential to its nodes, because `ansible.controller.workflow_job_template` only honors node-level credential/label/instance-group associations under `related` as `- name: X` dicts.

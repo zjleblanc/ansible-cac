@@ -6,3 +6,8 @@ controller_projects_business:
     scm_type: git
     scm_url: https://github.com/zjleblanc/ansible-business-process.git
     default_environment: ee-default
+  - name: Support Analyzer
+    organization: Autodotes
+    scm_type: git
+    scm_url: https://github.com/zjleblanc/ansible-support-analyzer.git
+    default_environment: ee-default
