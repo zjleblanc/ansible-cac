@@ -12,12 +12,6 @@ exclude_paths:
   # decrypted here; exclude matches .gitignore and still lints *.redacted.yml.
   - "**/*secrets.yml"
 
-mock_modules:
-  - ansible.controller.export
-
-mock_roles:
-  - infra.aap_configuration.dispatch
-
 kinds:
   - playbook: "pb_*.yml"
   - vars: "config/**/*.yml"
