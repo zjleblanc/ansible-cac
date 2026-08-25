@@ -15,7 +15,7 @@ ansible-playbook pb_aap_config.yml -e "domains=aiops"
 ## What lives here
 
 - Event-Driven Demos project and AIOps-labeled job templates / workflows
-- EDA projects, credentials, event streams, and rulebook activations
+- EDA projects, credentials, decision environments, event streams, and rulebook activations
 - Ticket enrichment credential using the shared `OpenAI Config` credential type (`config/common/credential_types.yml`)
 
 ## Scope to a single resource file
@@ -28,6 +28,7 @@ Each YAML file has a one-liner comment at the top. The `domains` extra-var (plus
 |------|--------------|--------|
 | `credentials.yml` | `credentials` | `ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags credentials` |
 | `eda_credentials.yml` | `credential` | `ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags credential` |
+| `eda_decision_environments.yml` | `decision_environment` | `ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags decision_environment` |
 | `eda_event_streams.yml` | `event_stream` | `ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags event_stream` |
 | `eda_projects.yml` | `project` | `ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags project` |
 | `eda_rulebook_activations.yml` | `rulebook_activation` | `ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags rulebook_activation` |

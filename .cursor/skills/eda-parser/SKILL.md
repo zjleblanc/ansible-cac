@@ -16,6 +16,8 @@ Convert a single Event-Driven Ansible API (or export) resource object into a lis
 
 Do not invent secrets. Credential `inputs` that contain secrets should use `{{ eda_credential_* }}` vault placeholders and call out any new vars for [`vars/eda_secrets.redacted.yml`](../../../vars/eda_secrets.redacted.yml).
 
+**The EDA API never exposes real secret values** — credential `inputs` fields marked `secret: true` in the credential type schema always come back as the literal string `$encrypted$`, whether from a create/update payload or a read response. This is true for discovery/reconciliation flows just as much as one-off conversions: there is no way to recover a live secret value from the API. See "Secrets standards" under step 3 for the full handling rule.
+
 ## Workflow
 
 Copy this checklist and track it:
@@ -101,7 +103,12 @@ eda_credentials:
   - Autodotes Controller
 ```
 
-**Secrets:** never copy live secret values (`inputs` on credentials, `test_headers`/`test_content` on event streams) into config; use `{{ eda_credential_* }}` vault vars and note new ones needed in `vars/eda_secrets.redacted.yml`.
+**Secrets standards:** never copy live secret values (`inputs` on credentials, `test_headers`/`test_content` on event streams) into config — the API returns `$encrypted$` for these fields anyway, so there is nothing to copy.
+
+- For every credential `inputs` field marked `secret: true` in the credential type's schema, emit a `{{ eda_credential_<descriptive_name> }}` vault placeholder (e.g. `{{ eda_credential_dynatrace_token }}`), never a literal value.
+- Add every new vault var to [`vars/eda_secrets.redacted.yml`](../../../vars/eda_secrets.redacted.yml) with the placeholder value `"secret"` — this file is committed and documents the expected shape of `vars/eda_secrets.yml`.
+- Never write to or infer real values for `vars/eda_secrets.yml` — that file is vaulted, gitignored, and the user populates it themselves with real values before applying.
+- Non-secret input fields (URLs, usernames, `auth_type`, `http_header_key`, `verify_ssl`, `audience`, `jwks_url`, and similar) are written as literal values, not vault refs — only fields the credential type schema marks `secret: true` need a placeholder.
 
 ### 4. Resolve relationships
 
@@ -140,6 +147,15 @@ Use the `ansible.eda` module argument defaults in [resource-map.md](resource-map
 
 Always drop pure API noise regardless of resource type: `id`, `url` (unless it's the actual `project.url` git repo, which is required), `created_at`, `modified_at`, `created_by`, `modified_by`, `edited_at`, `edited_by`, `managed`, `git_hash`, `import_state`, `import_error`, `status`, `status_message`, `restart_count`, `current_job_id`, `rules_count`, `rules_fired_count`, `ruleset_stats`, `restarted_at`, `owner`, `test_content*`, `test_error_message`, `test_headers`, `events_received`, `last_event_received_at`, `log_tracking_id`, `awx_token_id`, `scm_type` (read-only, always `git`), `references`, `namespace`/`kind` (managed credential-type metadata), `proxy` (unless explicitly set).
 
+### Rulebook activation CaC conventions
+
+This repo's `eda_rulebook_activations_aiops` entries follow two deliberate conventions that **always override the live platform value**, regardless of what a discovery/reconciliation pass finds running:
+
+- **`enabled: false`** — every activation ships disabled by default; a human enables it on the platform after verifying the configuration. Set this explicitly even though the running platform activation is `is_enabled: true` and even though the module default is `true`.
+- **`restart_policy: never`** — CaC activations use `never` so an initial apply never triggers an automatic restart loop. Set this explicitly even if the platform shows `restart_policy: on-failure` (the module default).
+
+When reconciling CaC against a live platform (discovery mode), do **not** update `enabled` or `restart_policy` to match the running platform's current values — keep the repo convention. All other behavioral/relationship fields (`log_level`, `extra_vars`, `event_streams`, `eda_credentials`, `rulebook`, `decision_environment`) should be updated to match what's actually configured on the platform.
+
 ### 6. Apply canonical key order
 
 Reorder remaining keys to match [key_ordering.md](../cac-parser/key_ordering.md) — "EDA (Event-Driven Ansible)" section — for the target variable family. Omit absent keys; do not add keys just to fill the template.
@@ -156,6 +172,8 @@ Output:
 4. **Follow-ups** — missing deps (project/credential/credential type/decision environment/event stream), vault vars needed in `vars/eda_secrets.redacted.yml`, and any ambiguous type/domain decisions.
 
 If the user asks to apply: append the entry to the correct list in the vars file; preserve the file one-liner and `---`; do not reorder unrelated entries unless asked; update [config/aiops/README.md](../../../config/aiops/README.md)'s file table only when adding a **new** YAML file.
+
+**Orphaned entries policy:** when performing API-driven discovery/reconciliation across an entire `config/aiops/` file (rather than converting a single pasted object) and a CaC entry is found that no longer exists on the platform, **never remove it automatically**. Always list orphaned entries as a follow-up with context (what it was, what may have replaced it, e.g. a similarly-purposed new resource) and explicitly ask the user whether to remove or keep each one before touching the file.
 
 ## Output template
 

@@ -5,13 +5,13 @@ eda_event_streams_aiops:
     organization: Autodotes
     credential_name: DataDog Credential
     forward_events: true
+  - name: DataDog OAuth Event Stream
+    organization: Autodotes
+    credential_name: Okta JWT Validator
+    forward_events: true
   - name: Dynatrace Event Stream
     organization: Autodotes
     credential_name: Dynatrace Credential
-    forward_events: true
-  - name: Demo OAuth2 Event Stream
-    organization: Autodotes
-    credential_name: OAuth2 Event Stream Client
     forward_events: true
   - name: ServiceNow Event Stream
     organization: Autodotes
