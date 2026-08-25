@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-08-25 — Add EDA parser skill
+
+Adds a `.cursor/skills/eda-parser/` skill that mirrors cac-parser but is scoped to Event-Driven Ansible API resources, since no EDA MCP server is available in this workspace. Heuristics (ref-object/`_id` unwrap rules, `ansible.eda` module defaults, `source_mappings` decoding) were derived from the EDA OpenAPI spec before deleting it.
+
+### Changed
+- Added `.cursor/skills/eda-parser/SKILL.md` and `resource-map.md`, covering EDA projects, credentials, credential types, credential input sources, decision environments, event streams, and rulebook activations
+- Added `eda_credential_types_*`, `eda_credential_input_sources_*`, and `eda_decision_environments_*` sections to `.cursor/skills/cac-parser/key_ordering.md`
+- Added an "EDA Parser" nav entry under AI > Skills in `mkdocs.yml`
+
+### Removed
+- Deleted `.cursor/skills/eda-parser/openapi.spec.json` now that its heuristics are captured in the skill files
+
 ## 2026-08-25 — Move Support Analyzer to business domain
 
 Moves existing Support Analyzer credential resources from the `aap` domain to `business` and codifies the project, job template, and schedule from the platform.

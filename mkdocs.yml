@@ -95,6 +95,9 @@ nav:
               - Overview: .cursor/skills/cac-parser/SKILL.md
               - Key Ordering: .cursor/skills/cac-parser/key_ordering.md
               - Resource Map: .cursor/skills/cac-parser/resource-map.md
+          - EDA Parser:
+              - Overview: .cursor/skills/eda-parser/SKILL.md
+              - Resource Map: .cursor/skills/eda-parser/resource-map.md
           - CaC Schedules: .cursor/skills/cac-schedules/SKILL.md
           - Changelog: .cursor/skills/changelog/SKILL.md
       - Rules: []

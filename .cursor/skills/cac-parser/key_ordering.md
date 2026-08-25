@@ -291,6 +291,37 @@ Keys that are absent from an entry are simply omitted; the remaining keys keep t
   inputs:
 ```
 
+### Credential Types (`eda_credential_types_*`)
+
+```yaml
+- name:
+  description:
+  inputs:
+  injectors:
+```
+
+### Credential Input Sources (`eda_credential_input_sources_*`)
+
+```yaml
+- target_credential:
+  source_credential:
+  input_field_name:
+  organization:
+  description:
+  metadata:
+```
+
+### Decision Environments (`eda_decision_environments_*`)
+
+```yaml
+- name:
+  organization:
+  description:
+  image_url:
+  credential:
+  pull_policy:
+```
+
 ### Event Streams (`eda_event_streams_*`)
 
 ```yaml
