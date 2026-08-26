@@ -1,0 +1,29 @@
+---
+description: Prevent agents from making write operations against AAP via API calls, MCP tools, or playbook execution.
+alwaysApply: true
+---
+
+# AAP Read-Only — No Agent Write Operations
+
+Agents must **never** perform write operations against the Ansible Automation Platform API.
+
+## Prohibited actions
+
+- **No raw API writes** — do not use `curl`, `httpie`, or any HTTP client to POST/PUT/PATCH/DELETE against the AAP (Controller, EDA, Hub, Gateway) API.
+- **No MCP write calls** — the MCP servers (`user-aap-*`) are for **read/list/retrieve only**. Never invoke them to create, update, or delete resources.
+- **No playbook execution** — never run `ansible-playbook pb_aap_config.yml` or any other playbook that applies configuration to AAP.
+
+## How changes are applied
+
+All AAP configuration changes are applied by a **human** running `pb_aap_config.yml` with the appropriate domain selection and resource tags. The agent's role is to edit config files under `config/` and then **suggest** the one-liner the user should run.
+
+### What agents should do instead
+
+1. Edit the YAML config files under `config/`.
+2. Suggest the exact `ansible-playbook` command for the user to run, e.g.:
+
+```bash
+ansible-playbook pb_aap_config.yml -e "domains=cloud" -e "skip_common=true" --tags job_templates
+```
+
+3. **Do not execute the command.** Present it to the user and let them run it.
