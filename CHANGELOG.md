@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-08-26 — Expand and refactor eda-parser skill
+
+Adds a dedicated `key_ordering.md` and `api-reference.md` to the `eda-parser` skill, moves EDA key ordering out of the shared `cac-parser` doc, and extends `SKILL.md` with direct API export patterns so the agent can pull EDA resources itself rather than waiting for a pasted payload.
+
+### Added
+- `.cursor/skills/eda-parser/key_ordering.md`: EDA-only canonical key ordering (all seven resource types), extracted from `cac-parser/key_ordering.md` so the eda-parser skill is self-contained.
+- `.cursor/skills/eda-parser/api-reference.md`: EDA API endpoint catalog — export patterns, auth, pagination, list vs retrieve, and dependency-first export order.
+
+### Changed
+- `.cursor/skills/eda-parser/SKILL.md`: updated all `key_ordering.md` references to point to the local copy; added "Exporting from the EDA API" section with quick export patterns and env-var prerequisites; added `api-reference.md` as required reading and an additional resource.
+- `.cursor/skills/cac-parser/key_ordering.md`: removed EDA section (now lives in `eda-parser/key_ordering.md`).
+
 ## 2026-08-26 — Prevent agent write operations against AAP
 
 Adds a project rule that prohibits agents from performing write operations against the Ansible Automation Platform API via raw curl, MCP tools, or playbook execution, ensuring all changes are applied by humans via the configuration-as-code playbook.

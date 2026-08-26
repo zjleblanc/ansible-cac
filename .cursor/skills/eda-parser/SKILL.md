@@ -1,22 +1,65 @@
 ---
 name: eda-parser
-description: Convert an Event-Driven Ansible (EDA) API resource payload into ansible-cac `config/aiops/` YAML. Resolves EDA API ref objects / `_id` fields to name strings, normalizes rulebook-activation event stream mappings, omits `ansible.eda` module defaults, and applies key_ordering.md. Use when the user pastes an EDA API JSON/YAML object (project, credential, credential type, credential input source, decision environment, event stream, rulebook activation) or asks to add an EDA resource into config/.
+description: Export and convert an Event-Driven Ansible (EDA) API resource into ansible-cac `config/aiops/` YAML. Hits the EDA API directly (auth via AAP_HOSTNAME/AAP_USERNAME/AAP_TOKEN) or accepts a pasted payload, resolves EDA API ref objects / `_id` fields to name strings, normalizes rulebook-activation event stream mappings, omits `ansible.eda` module defaults, and applies key_ordering.md. Use when the user asks to export/pull/discover an EDA resource, pastes an EDA API JSON/YAML object (project, credential, credential type, credential input source, decision environment, event stream, rulebook activation), or asks to add an EDA resource into config/.
 disable-model-invocation: true
 ---
 
 # eda-parser — EDA API payload → ansible-cac
 
-Convert a single Event-Driven Ansible API (or export) resource object into a list entry ready for this repo's `config/aiops/` layout. There is no EDA MCP server in this workspace — this skill works purely from pasted API JSON/YAML.
+Export and convert a single Event-Driven Ansible API resource object into a list entry ready for this repo's `config/aiops/` layout. There is no EDA MCP server in this workspace — exporting happens via direct API calls (see below), and conversion works from that JSON/YAML.
 
 ## Required reading (before converting)
 
 1. [AGENTS.md](../../../AGENTS.md) — domains, wildcard suffixes, placement rules.
-2. [key_ordering.md](../cac-parser/key_ordering.md) — canonical key order, section "EDA (Event-Driven Ansible)".
+2. [key_ordering.md](key_ordering.md) — canonical key order for EDA resource types.
 3. [resource-map.md](resource-map.md) — API type → file / var name, ref-object unwrap, defaults to omit.
+4. [api-reference.md](api-reference.md) — export endpoints, auth, pagination, list vs retrieve, recommended export order.
 
 Do not invent secrets. Credential `inputs` that contain secrets should use `{{ eda_credential_* }}` vault placeholders and call out any new vars for [`vars/eda_secrets.redacted.yml`](../../../vars/eda_secrets.redacted.yml).
 
 **The EDA API never exposes real secret values** — credential `inputs` fields marked `secret: true` in the credential type schema always come back as the literal string `$encrypted$`, whether from a create/update payload or a read response. This is true for discovery/reconciliation flows just as much as one-off conversions: there is no way to recover a live secret value from the API. See "Secrets standards" under step 3 for the full handling rule.
+
+## Exporting from the EDA API
+
+When the user asks to export/pull/discover an EDA resource (rather than pasting one directly), hit the
+API yourself instead of asking them to paste JSON.
+
+**Prerequisites** — assume these environment variables are already set in the shell:
+
+| Var | Meaning |
+|---|---|
+| `AAP_HOSTNAME` | Gateway hostname (no scheme), e.g. `aap.example.com` |
+| `AAP_USERNAME` | Platform username (reference only) |
+| `AAP_TOKEN` | Bearer token for the Gateway/EDA API |
+
+If any are unset, ask the user to set them rather than requesting credentials directly.
+
+**Quick export patterns:**
+
+```bash
+# List (discovery / find an ID) — add filters like ?name=... to narrow results
+curl -sk "https://${AAP_HOSTNAME}/api/eda/v1/activations/?page_size=100" \
+  -H "Authorization: Bearer ${AAP_TOKEN}" | python3 -m json.tool
+
+# Retrieve by ID (prefer this for conversion — embeds ref objects as names)
+curl -sk "https://${AAP_HOSTNAME}/api/eda/v1/activations/42/" \
+  -H "Authorization: Bearer ${AAP_TOKEN}" | python3 -m json.tool
+```
+
+Swap `activations` for `projects`, `eda-credentials`, `credential-types`, `credential-input-sources`,
+`decision-environments`, `event-streams`, or `rulebooks` as needed — see
+[api-reference.md](api-reference.md) for the full endpoint catalog per resource type.
+
+**List vs retrieve:** list endpoints return `_id` integers; retrieve-by-ID endpoints embed full ref
+objects with names. Always retrieve by ID for the object(s) you're actually converting — only use list
+for discovery or bulk reconciliation across a whole file.
+
+**Export order (dependency-first)**, so every referenced name is already known: credential types → EDA
+credentials (+ input sources) → projects → decision environments → event streams → rulebooks (for
+source names) → rulebook activations. Full detail in [api-reference.md](api-reference.md).
+
+Never print, log, or write `AAP_TOKEN` into any file — treat it as a live secret for whatever platform
+is being exported from.
 
 ## Workflow
 
@@ -158,7 +201,7 @@ When reconciling CaC against a live platform (discovery mode), do **not** update
 
 ### 6. Apply canonical key order
 
-Reorder remaining keys to match [key_ordering.md](../cac-parser/key_ordering.md) — "EDA (Event-Driven Ansible)" section — for the target variable family. Omit absent keys; do not add keys just to fill the template.
+Reorder remaining keys to match [key_ordering.md](key_ordering.md) for the target variable family. Omit absent keys; do not add keys just to fill the template.
 
 ### 7. Emit result
 
@@ -205,8 +248,9 @@ If the user asks to apply: append the entry to the correct list in the vars file
 
 ## Additional resources
 
+- [api-reference.md](api-reference.md) — export endpoints, auth, pagination, list vs retrieve, recommended export order
 - [resource-map.md](resource-map.md) — type map, ref-object unwrap rules, `ansible.eda` module defaults
-- [key_ordering.md](../cac-parser/key_ordering.md) — per-type key order (EDA section)
+- [key_ordering.md](key_ordering.md) — per-type key order for EDA resources
 - [AGENTS.md](../../../AGENTS.md) — placement and naming
 - [config/aiops/README.md](../../../config/aiops/README.md) — file table and apply one-liners
 - `ansible.eda` module docs (`plugins/modules/*.py` under the installed collection) for omit-able defaults
