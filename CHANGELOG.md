@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-26 — Prevent agent write operations against AAP
+
+Adds a project rule that prohibits agents from performing write operations against the Ansible Automation Platform API via raw curl, MCP tools, or playbook execution, ensuring all changes are applied by humans via the configuration-as-code playbook.
+
+### Added
+- `.cursor/rules/aap-read-only.mdc`: Global rule enforcing read-only status for agents when interacting with AAP.
+
 ## 2026-08-25 — Add EDA parser skill
 
 Adds a `.cursor/skills/eda-parser/` skill that mirrors cac-parser but is scoped to Event-Driven Ansible API resources, since no EDA MCP server is available in this workspace. Heuristics (ref-object/`_id` unwrap rules, `ansible.eda` module defaults, `source_mappings` decoding) were derived from the EDA OpenAPI spec before deleting it.
