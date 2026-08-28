@@ -89,4 +89,5 @@ Keys that are absent from an entry are simply omitted; the remaining keys keep t
   enabled:
   log_level:
   restart_policy:
+  restart_on_project_update:
 ```

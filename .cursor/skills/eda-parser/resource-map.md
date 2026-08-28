@@ -115,14 +115,20 @@ Keep `name`, `organization`, `credential_name` (this repo's convention — match
 | `state` | `present` (this repo uses `enabled`/`disabled` via the `enabled` key instead — see note below) |
 | `restart_policy` | `on-failure` |
 | `log_level` | `error` |
-| `restart_on_project_update` | `false` |
 | `enable_persistence` | `false` |
 | `skip_audit_events` | `false` |
 | `k8s_service_name` | absent |
 | `description`, `extra_vars` | `""` / `{}` / absent |
 | `rule_engine_credential_id` | absent (optional — only set when a non-default rule engine credential is required) |
 
-**Do not omit `enabled` reflexively.** Every existing `eda_rulebook_activations_aiops` entry sets `enabled: false` explicitly (demo activations ship disabled) — match that convention for new entries in the same file rather than dropping it because `true` is the module default. Only omit `enabled` when the payload's value truly is the intended default AND no sibling entries in the target file set it explicitly.
+**Never omit `enabled` or `restart_on_project_update`** — both are always written explicitly on every `eda_rulebook_activations_aiops` entry, but their value comes from different sources depending on scenario, not a fixed override:
+
+- **New entry, no live activation to reference:** default both to `true` (matches the `enabled` module default; `restart_on_project_update` module default is actually `false`, but this repo's convention defaults new entries to `true` so activations auto-restart with fresh rulebook logic after a project sync).
+- **Converting/reconciling an existing activation from an API payload:** set both to that payload's actual `is_enabled` / `restart_on_project_update` values — respect whatever is live on the platform rather than forcing the `true` default.
+
+`restart_policy: never` is the one behavioral field that **always** overrides the live value regardless of scenario — never sync it from the platform.
+
+Note `restart_on_project_update: true` only reloads rulebook logic on sync — it does **not** rebind event streams. See [`utils/refresh_eda_activation.py`](../../../utils/refresh_eda_activation.py) for that separate concern.
 
 Keep `name`, `organization`, `project`, `rulebook`, `decision_environment`, `event_streams`, `eda_credentials` — these are the identity/relationship fields.
 

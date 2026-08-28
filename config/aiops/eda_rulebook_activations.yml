@@ -15,6 +15,7 @@ eda_rulebook_activations_aiops:
     enabled: false
     log_level: debug
     restart_policy: never
+    restart_on_project_update: true
   - name: Dynatrace Events
     description: Rulebook that processes various events sourced from Dynatrace problems
     organization: Autodotes
@@ -31,6 +32,7 @@ eda_rulebook_activations_aiops:
     enabled: false
     log_level: error
     restart_policy: never
+    restart_on_project_update: true
   - name: Service Now Requested Items
     description: Rulebook that ingests Service Now Requested Items based on Business Rules
     organization: Autodotes
@@ -48,3 +50,4 @@ eda_rulebook_activations_aiops:
     enabled: false
     log_level: debug
     restart_policy: never
+    restart_on_project_update: true
