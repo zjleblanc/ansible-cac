@@ -180,24 +180,32 @@ Use the `ansible.eda` module argument defaults in [resource-map.md](resource-map
 
 - Empty `description`, `""` string fields that restate "unset"
 - `state: present` (module default)
-- Rulebook activation: `restart_policy: on-failure`, `log_level: error`, `enabled: true`, `restart_on_project_update: false`, `enable_persistence: false`, `skip_audit_events: false` when `false`/default
+- Rulebook activation: `restart_policy: on-failure`, `log_level: error`, `enable_persistence: false`, `skip_audit_events: false` when `false`/default (see the `enabled` / `restart_on_project_update` convention below — this repo keeps both explicit rather than omitting them)
 - Event stream: `forward_events: false`, `headers: ""`
 - Decision environment: `pull_policy: always`
 - Project: `update_revision_on_launch: false`, `scm_update_cache_timeout: 0`
 - Credential type: empty `inputs: {}` / `injectors: {}`
 
-**Note:** this repo's existing `eda_rulebook_activations_aiops` entries **keep** `enabled: false` explicitly (all current demo activations are disabled by default) — match that convention when converting new activations rather than omitting `enabled` just because a value is "default-like"; only omit when the value truly matches the module default (`true`) or the peer entries in the target file omit it.
+**Note:** this repo's existing `eda_rulebook_activations_aiops` entries **keep** `enabled` and `restart_on_project_update` explicit on every entry (never omitted) — see the conventions below for how to pick their values.
 
 Always drop pure API noise regardless of resource type: `id`, `url` (unless it's the actual `project.url` git repo, which is required), `created_at`, `modified_at`, `created_by`, `modified_by`, `edited_at`, `edited_by`, `managed`, `git_hash`, `import_state`, `import_error`, `status`, `status_message`, `restart_count`, `current_job_id`, `rules_count`, `rules_fired_count`, `ruleset_stats`, `restarted_at`, `owner`, `test_content*`, `test_error_message`, `test_headers`, `events_received`, `last_event_received_at`, `log_tracking_id`, `awx_token_id`, `scm_type` (read-only, always `git`), `references`, `namespace`/`kind` (managed credential-type metadata), `proxy` (unless explicitly set).
 
 ### Rulebook activation CaC conventions
 
-This repo's `eda_rulebook_activations_aiops` entries follow two deliberate conventions that **always override the live platform value**, regardless of what a discovery/reconciliation pass finds running:
+This repo's `eda_rulebook_activations_aiops` entries follow deliberate conventions for three behavioral fields — `enabled`, `restart_policy`, and `restart_on_project_update` — but only `restart_policy` is a fixed override; `enabled` and `restart_on_project_update` track the live platform when one is available:
 
-- **`enabled: false`** — every activation ships disabled by default; a human enables it on the platform after verifying the configuration. Set this explicitly even though the running platform activation is `is_enabled: true` and even though the module default is `true`.
-- **`restart_policy: never`** — CaC activations use `never` so an initial apply never triggers an automatic restart loop. Set this explicitly even if the platform shows `restart_policy: on-failure` (the module default).
+- **`enabled`** — defaults to `true` for a brand-new entry with no live activation to reference (matching the module default: a newly created activation is enabled unless told otherwise). When converting/reconciling an **existing** activation from an API payload, set `enabled` to that payload's actual `is_enabled` value instead of forcing `true` — respect whatever a human has set on the platform (enabled or disabled).
+- **`restart_policy: never`** — CaC activations always use `never` so an apply never triggers an automatic restart loop. Set this explicitly even if the platform shows `restart_policy: on-failure` (the module default). This one **always overrides** the live value — do not sync it from the platform.
+- **`restart_on_project_update`** — defaults to `true` for a brand-new entry (so activations auto-restart with fresh rulebook logic after a project sync, even though the module default is `false`). When converting/reconciling an existing activation, set it to match the payload's actual live value instead of forcing `true`. Note that even when `true`, this only reloads rulebook logic — it does **not** detach/reattach event stream bindings; use [`utils/refresh_eda_activation.py`](../../../utils/refresh_eda_activation.py) for that.
 
-When reconciling CaC against a live platform (discovery mode), do **not** update `enabled` or `restart_policy` to match the running platform's current values — keep the repo convention. All other behavioral/relationship fields (`log_level`, `extra_vars`, `event_streams`, `eda_credentials`, `rulebook`, `decision_environment`) should be updated to match what's actually configured on the platform.
+Both `enabled` and `restart_on_project_update` are always written explicitly (never omitted), but their **source of truth** differs by scenario:
+
+| Scenario | `enabled` | `restart_on_project_update` |
+|---|---|---|
+| New entry, no live reference | `true` (default) | `true` (default) |
+| Converting/reconciling a live payload | payload's `is_enabled` | payload's `restart_on_project_update` |
+
+When reconciling CaC against a live platform (discovery mode), do **not** override `restart_policy` — keep it `never` regardless of the platform's value. All other behavioral/relationship fields (`enabled`, `restart_on_project_update`, `log_level`, `extra_vars`, `event_streams`, `eda_credentials`, `rulebook`, `decision_environment`) should be updated to match what's actually configured on the platform.
 
 ### 6. Apply canonical key order
 
@@ -242,9 +250,11 @@ If the user asks to apply: append the entry to the correct list in the vars file
 
 ## Examples
 
-**Input (API rulebook activation read excerpt):** `decision_environment: {name: "Default Decision Environment"}`, `project: {name: "EDA Demos"}`, `rulebook: {name: "datadog_event_stream.yml"}`, `is_enabled: false`, `event_streams: [{name: "DataDog Event Stream", ...}]`, `source_mappings: "[{\"rulebook_source\": \"DataDog Event Source\", ...}]"`, `eda_credentials: [{name: "Autodotes Controller", ...}]`, `restart_policy: "never"`, `log_level: "debug"`.
+**Input (API rulebook activation read excerpt):** `decision_environment: {name: "Default Decision Environment"}`, `project: {name: "EDA Demos"}`, `rulebook: {name: "datadog_event_stream.yml"}`, `is_enabled: false`, `restart_on_project_update: false`, `event_streams: [{name: "DataDog Event Stream", ...}]`, `source_mappings: "[{\"rulebook_source\": \"DataDog Event Source\", ...}]"`, `eda_credentials: [{name: "Autodotes Controller", ...}]`, `restart_policy: "never"`, `log_level: "debug"`.
 
-**Output:** `name` / `description` / `organization` / `project: EDA Demos` / `rulebook: datadog_event_stream.yml` / `decision_environment: Default Decision Environment` / `event_streams: [{event_stream: DataDog Event Stream, source_name: DataDog Event Source}]` / `eda_credentials: [Autodotes Controller]` / `enabled: false` (kept — matches repo convention) / `log_level: debug` / `restart_policy: never` — no `is_enabled`, no ref-object dumps, no `source_mappings` raw string.
+**Output:** `name` / `description` / `organization` / `project: EDA Demos` / `rulebook: datadog_event_stream.yml` / `decision_environment: Default Decision Environment` / `event_streams: [{event_stream: DataDog Event Stream, source_name: DataDog Event Source}]` / `eda_credentials: [Autodotes Controller]` / `enabled: false` (matches this live payload's `is_enabled`, not forced to the `true` default since this is a reconciliation of an existing activation) / `log_level: debug` / `restart_policy: never` (always overridden, regardless of the payload) / `restart_on_project_update: false` (matches this live payload's value, not forced to the `true` default) — no `is_enabled`, no ref-object dumps, no `source_mappings` raw string.
+
+**Contrast — brand-new activation, no live reference:** if the user instead asks to add a new activation for a rulebook that has no existing platform object, default `enabled: true` and `restart_on_project_update: true` (still explicit, not omitted) since there is no live state to respect yet.
 
 ## Additional resources
 

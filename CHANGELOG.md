@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-08-28 — Add EDA rulebook activation refresh utility
+
+Adds a standalone script to fully refresh an EDA rulebook activation after its project is updated — syncing the project, disabling the activation, detaching and rebuilding event stream mappings against the freshly synced rulebook, re-enabling, and validating startup — since `restart_on_project_update` alone only reloads rulebook logic and does not rebind event streams.
+
+### Added
+- `utils/refresh_eda_activation.py`: Python (stdlib-only) CLI that resolves a rulebook activation by name and runs the full 10-step refresh flow, handling the EDA API's dedicated enable/disable action endpoints and recomputing `source_mappings` (including `rulebook_hash`) against the synced rulebook.
+
+### Changed
+- `config/aiops/eda_rulebook_activations.yml`: set `restart_on_project_update: true` on all three existing activations so they auto-restart with fresh rulebook logic after a project sync.
+- `.cursor/skills/eda-parser/SKILL.md`, `resource-map.md`, `key_ordering.md`: documented that `enabled` and `restart_on_project_update` are always explicit but track the live platform value when reconciling an existing activation (defaulting to `true` only for brand-new entries with no live reference); added `restart_on_project_update` to the canonical key order and cross-referenced `utils/refresh_eda_activation.py` for event stream rebinding.
+
 ## 2026-08-26 — Expand and refactor eda-parser skill
 
 Adds a dedicated `key_ordering.md` and `api-reference.md` to the `eda-parser` skill, moves EDA key ordering out of the shared `cac-parser` doc, and extends `SKILL.md` with direct API export patterns so the agent can pull EDA resources itself rather than waiting for a pasted payload.
