@@ -1,5 +1,26 @@
 # Changelog
 
+## 2026-09-09 — Add Lightwell demo app CaC resources and enforce extra_vars dict format
+
+Captures the Lightwell demo app CI/CD job templates and container registry credential in `config/aiops/`, and closes an apply-breaking bug where `extra_vars` was written as a block-scalar string rather than a YAML dict (the `ansible.controller.job_template` module requires a mapping).
+
+### Added
+- `config/aiops/credentials.yml`: `Lightwell Demo App Registry` — Container Registry Auth File credential for `quay.io`; injects auth for Lightwell app builds and deploys. New vault var `controller_credential_lightwell_registry_auth` required.
+- `config/aiops/job_templates.yml`: `Lightwell // Build & Test` — CI build/test JT against Cloud Inventory using the Lightwell Demo project; attaches registry credential, `GitHub Status Token`, and `Lightwell Network Service Account`.
+- `config/aiops/job_templates.yml`: `Lightwell // Deploy Prod` — production deploy JT targeting `env_prod` hosts; attaches registry credential and `GitHub Status Token`.
+- `.cursor/rules/extra-vars-dict.mdc`: new rule scoped to `job_templates*.yml` / `workflow_job_templates*.yml` requiring `extra_vars` to always be a YAML mapping, never a string or block scalar.
+
+### Fixed
+- `.cursor/skills/cac-parser/resource-map.md`: documented that `extra_vars` must be a YAML dict when converting API payloads; drop `#`-prefixed comment lines that cannot appear as dict keys.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Credential | Lightwell Demo App Registry | Container registry auth for quay.io Lightwell demo app via Container Registry Auth File type | aiops | [🕵️](config/aiops/credentials.yml#L4-L9) |
+| Job template | Lightwell // Build & Test | Build and test the Lightwell demo app on Cloud Inventory | aiops | [🕵️](config/aiops/job_templates.yml#L210-L226) |
+| Job template | Lightwell // Deploy Prod | Deploy the Lightwell demo app to production (limit: env_prod) | aiops | [🕵️](config/aiops/job_templates.yml#L227-L244) |
+
 ## 2026-09-09 — Add container registry auth file credential type for auth.json injection
 
 Adds a generic Container Registry Auth File credential type that materializes a standard `auth.json` (host + base64 `user:pass` auth token) and sets `REGISTRY_AUTH_FILE`, so any job template can authenticate to a container registry via Podman's `auth_file` param or other OCI-compliant tooling (Buildah, Skopeo, Docker) without registry-specific playbook logic. Named distinctly from AAP's built-in "Container Registry" credential type to avoid a naming collision. Takes a pre-encoded base64 auth token (rather than separate username/password) since AAP's credential injector renders templates in a sandboxed Jinja2 environment that has no `b64encode` filter.

@@ -207,3 +207,37 @@ controller_templates_aiops:
     job_type: run
     job_slice_count: 1
     ask_variables_on_launch: true
+  - name: Lightwell // Build & Test
+    organization: Autodotes
+    labels:
+      - AIOps
+    project: Lightwell Demo
+    playbook: playbooks/deploy.yml
+    inventory: Cloud Inventory
+    execution_environment: ee-default
+    credentials:
+      - AWS (ec2-user)
+      - GitHub Status Token
+      - Lightwell Demo App Registry
+      - Lightwell Network Service Account
+    ask_variables_on_launch: true
+    ask_scm_branch_on_launch: true
+    extra_vars:
+      app_environment: test
+  - name: Lightwell // Deploy Prod
+    organization: Autodotes
+    labels:
+      - AIOps
+    project: Lightwell Demo
+    playbook: playbooks/deploy.yml
+    inventory: Cloud Inventory
+    execution_environment: ee-default
+    credentials:
+      - AWS (ec2-user)
+      - GitHub Status Token
+      - Lightwell Demo App Registry
+    limit: env_prod
+    ask_variables_on_launch: true
+    ask_scm_branch_on_launch: true
+    extra_vars:
+      app_environment: prod
