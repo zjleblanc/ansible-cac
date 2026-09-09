@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-09 — Add rhlw group and environment keyed group to AWS EC2 inventory source
+
+Extends the AWS EC2 Instances inventory source with a static `rhlw` group for hosts whose `tags.Name` starts with `rhlw` and a new `env`-prefixed keyed group derived from `tags.environment`, improving host classification in Cloud Inventory.
+
+### Changed
+- `config/common/inventory_sources.yml`: added `rhlw` group filter and `tags.environment` keyed group to the AWS EC2 Instances source vars.
+
 ## 2026-08-28 — Add EDA rulebook activation refresh utility
 
 Adds a standalone script to fully refresh an EDA rulebook activation after its project is updated — syncing the project, disabling the activation, detaching and rebuilding event stream mappings against the freshly synced rulebook, re-enabling, and validating startup — since `restart_on_project_update` alone only reloads rulebook logic and does not rebind event streams.
