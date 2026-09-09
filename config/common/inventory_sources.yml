@@ -37,11 +37,14 @@ controller_inventory_sources_common:
       groups:
         linux: "'windows' not in platform_details.lower()"
         windows: "'windows' in platform_details.lower()"
+        rhlw: "tags.Name is defined and tags.Name.startswith('rhlw')"
       hostnames:
         - tag:Name
       keyed_groups:
         - key: platform
           prefix: platform
+        - key: tags.environment
+          prefix: env
     credential: AWS Sandbox Credential
     execution_environment: ee-default
     overwrite: true
