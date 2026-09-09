@@ -1,0 +1,38 @@
+---
+description: extra_vars in Controller job/workflow templates must be a YAML dict
+globs:
+  - config/**/job_templates*.yml
+  - config/**/workflow_job_templates*.yml
+---
+# `extra_vars` must be a YAML dict — never a string
+
+The `ansible.controller.job_template` and `ansible.controller.workflow_job_template`
+modules require `extra_vars` to be a **dict**. Passing a string (including block
+scalars written with `|` or `>`) causes an immediate apply failure:
+
+> error: argument 'extra_vars' is of type str and we were unable to convert to dict:
+> dictionary requested, could not parse JSON or key=value
+
+## Rules
+
+- **Always** write `extra_vars` as a YAML mapping, never as a quoted string or block scalar.
+- When converting from an API export (which returns `extra_vars` as a string), parse the
+  string into key-value pairs.
+- Drop comment-only lines (lines starting with `#`) — they cannot appear as dict keys.
+- If the remaining value would be an empty dict, omit `extra_vars` entirely (default is `{}`).
+
+## Correct
+
+```yaml
+extra_vars:
+  app_environment: test
+  threshold: 70
+```
+
+## Wrong — causes apply failure
+
+```yaml
+extra_vars: "app_environment: test"   # string → rejected
+extra_vars: |                          # block scalar → still a string → rejected
+  app_environment: test
+```

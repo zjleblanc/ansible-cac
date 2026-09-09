@@ -88,6 +88,8 @@ Map resource → module roughly as: Controller JT → `ansible.controller.job_te
 
 Always keep meaningful identity/refs: `name`, `project`, `playbook`, `inventory`, non-empty `credentials` / `labels`, non-default ask flags, real surveys.
 
+**`extra_vars` must be a YAML dict — never a string or block scalar.** The `ansible.controller.job_template` module rejects string values with "dictionary requested, could not parse JSON or key=value". Convert the API's string value to a dict; drop YAML comment lines (lines starting with `#`) since they cannot be dict keys. If the entire `extra_vars` value is comments only, omit the key entirely.
+
 ### `controller_projects` → `controller_projects_*` (`ansible.controller.project`)
 
 | Key | Omit when |
