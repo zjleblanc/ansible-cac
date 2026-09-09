@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-09-09 — Add container registry auth file credential type for auth.json injection
+
+Adds a generic Container Registry Auth File credential type that materializes a standard `auth.json` (host + base64 `user:pass` auth token) and sets `REGISTRY_AUTH_FILE`, so any job template can authenticate to a container registry via Podman's `auth_file` param or other OCI-compliant tooling (Buildah, Skopeo, Docker) without registry-specific playbook logic. Named distinctly from AAP's built-in "Container Registry" credential type to avoid a naming collision. Takes a pre-encoded base64 auth token (rather than separate username/password) since AAP's credential injector renders templates in a sandboxed Jinja2 environment that has no `b64encode` filter.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Credential type | Container Registry Auth File | Injects auth.json for container registry authentication compatible with Podman, Buildah, Skopeo, and Docker. Sets REGISTRY_AUTH_FILE so tools discover the credentials automatically. | common | [🕵️](config/common/credential_types.yml#L247-L285) |
+
 ## 2026-09-09 — Add rhlw group and environment keyed group to AWS EC2 inventory source
 
 Extends the AWS EC2 Instances inventory source with a static `rhlw` group for hosts whose `tags.Name` starts with `rhlw` and a new `env`-prefixed keyed group derived from `tags.environment`, improving host classification in Cloud Inventory.
