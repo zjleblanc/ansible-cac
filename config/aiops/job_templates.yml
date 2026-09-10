@@ -223,7 +223,7 @@ controller_templates_aiops:
     ask_variables_on_launch: true
     ask_scm_branch_on_launch: true
     extra_vars:
-      app_environment: test
+      app_environment: dev
   - name: Lightwell // Deploy Prod
     organization: Autodotes
     labels:
