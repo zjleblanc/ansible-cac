@@ -10,6 +10,6 @@ controller_projects_aiops:
     scm_type: git
     scm_url: https://github.com/zjleblanc/ansible-lightwell.git
     scm_refspec: "+refs/pull/*:refs/remotes/origin/pull/*"
-    scm_update_on_launch: true
+    scm_update_on_launch: false # explicitly passed from EDA rulebook action
     allow_override: true
     default_environment: ee-default
