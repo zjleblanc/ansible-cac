@@ -14,7 +14,7 @@ controller_projects_common:
     organization: Autodotes
     scm_type: git
     scm_url: https://github.com/zjleblanc/ansible-cloud-mgmt.git
-    scm_branch: master
+    scm_branch: main
     scm_clean: "no"
     scm_delete_on_update: "no"
     scm_update_on_launch: "no"
