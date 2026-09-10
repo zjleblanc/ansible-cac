@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-09-10 — Add Lightwell Demo project and wire AAP URL to templates
+
+Adds the missing SCM project for the Lightwell demo app and injects the AAP controller URL into the build and deploy job templates so they can report status back to the platform.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Project | Lightwell Demo | SCM sync for the Lightwell demo app playbooks | aiops | [🕵️](config/aiops/projects.yml#L7-L16) |
+
+### Changed
+- `config/aiops/job_templates.yml`: added `aap_controller_url` to `Lightwell // Build & Test` and `Lightwell // Deploy Prod` extra_vars.
+
 ## 2026-09-09 — Add Lightwell demo app CaC resources and enforce extra_vars dict format
 
 Captures the Lightwell demo app CI/CD job templates and container registry credential in `config/aiops/`, and closes an apply-breaking bug where `extra_vars` was written as a block-scalar string rather than a YAML dict (the `ansible.controller.job_template` module requires a mapping).

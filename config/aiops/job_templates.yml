@@ -224,6 +224,7 @@ controller_templates_aiops:
     ask_scm_branch_on_launch: true
     extra_vars:
       app_environment: dev
+      aap_controller_url: https://ansible.autodotes.com
   - name: Lightwell // Deploy Prod
     organization: Autodotes
     labels:
@@ -241,3 +242,4 @@ controller_templates_aiops:
     ask_scm_branch_on_launch: true
     extra_vars:
       app_environment: prod
+      aap_controller_url: https://ansible.autodotes.com
