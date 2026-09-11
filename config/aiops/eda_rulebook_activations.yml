@@ -51,3 +51,16 @@ eda_rulebook_activations_aiops:
     log_level: debug
     restart_policy: never
     restart_on_project_update: true
+  - name: Lightwell Patch Pipeline Router
+    organization: Autodotes
+    project: Lightwell Demo
+    rulebook: lightwell_webhook.yml
+    decision_environment: Default Decision Environment
+    event_streams:
+      - event_stream: GitHub Event Stream
+        source_name: github_webhook
+    eda_credentials:
+      - Autodotes Controller
+    enabled: true
+    restart_policy: never
+    restart_on_project_update: true

@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-09-11 — Add GitHub EDA webhook integration for Lightwell Demo
+
+Sets up an Event-Driven Ansible pipeline to receive and route GitHub webhooks for the Lightwell Demo application. This includes a new EDA project for the webhook rulebook, a GitHub HMAC credential for signature verification, an event stream to ingest the webhooks, and a rulebook activation to process them.
+
+### Added
+- `vars/eda_secrets.redacted.yml`: added `eda_credential_github_hmac_secret` placeholder.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Credential | GitHub HMAC Credential | HMAC-SHA256 signature verification for GitHub webhooks | aiops | [🕵️](config/aiops/eda_credentials.yml#L71-L81) |
+| Event stream | GitHub Event Stream | Ingests GitHub webhooks with header preservation | aiops | [🕵️](config/aiops/eda_event_streams.yml#L16-L19) |
+| Project | Lightwell Demo | SCM sync for Lightwell app webhook rulebooks | aiops | [🕵️](config/aiops/eda_projects.yml#L8-L10) |
+| Rulebook activation | Lightwell Patch Pipeline Router | Processes GitHub webhooks via the Lightwell webhook rulebook | aiops | [🕵️](config/aiops/eda_rulebook_activations.yml#L54-L68) |
+
 ## 2026-09-10 — Add Lightwell Demo project and wire AAP URL to templates
 
 Adds the missing SCM project for the Lightwell demo app and injects the AAP controller URL into the build and deploy job templates so they can report status back to the platform.
