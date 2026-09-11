@@ -13,6 +13,10 @@ eda_event_streams_aiops:
     organization: Autodotes
     credential_name: Dynatrace Credential
     forward_events: true
+  - name: GitHub Event Stream
+    organization: Autodotes
+    credential_name: GitHub HMAC Credential
+    additional_data_headers: "X-GitHub-Event,X-GitHub-Delivery"
   - name: ServiceNow Event Stream
     organization: Autodotes
     credential_name: ServiceNow Webhook Token

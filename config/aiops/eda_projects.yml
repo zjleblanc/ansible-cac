@@ -5,3 +5,6 @@ eda_projects_aiops:
     description: A collection of various Event-Driven Ansible demos
     url: https://github.com/zjleblanc/ansible-eda-demos.git
     organization: Autodotes
+  - name: Lightwell Demo
+    url: https://github.com/zjleblanc/ansible-lightwell-apps.git
+    organization: Autodotes
