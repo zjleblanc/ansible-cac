@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-09-28 — Add AO // Resize Disk job template to AIOps disk remediation set
+
+Codifies an AWS disk-resize job template already live in AAP so it's tracked as CaC alongside the existing EBS-resize remediation template, letting operators trigger AWS disk resizing via a survey-driven job in the AIOps domain.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Job template | AO // Resize Disk | Resizes an AWS disk via survey-driven job (credential override enabled) | aiops | [🕵️](config/aiops/job_templates.yml#L246-L260) |
+
 ## 2026-09-11 — Add GitHub EDA webhook integration for Lightwell Demo
 
 Sets up an Event-Driven Ansible pipeline to receive and route GitHub webhooks for the Lightwell Demo application. This includes a new EDA project for the webhook rulebook, a GitHub HMAC credential for signature verification, an event stream to ingest the webhooks, and a rulebook activation to process them.
