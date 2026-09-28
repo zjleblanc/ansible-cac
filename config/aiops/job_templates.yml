@@ -243,3 +243,18 @@ controller_templates_aiops:
     extra_vars:
       app_environment: prod
       aap_controller_url: https://ansible.autodotes.com
+  - name: AO // Resize Disk
+    labels:
+      - AIOps
+    project: Cloud Mgmt
+    playbook: playbooks/aws/resize_disk.yml
+    inventory: Cloud Inventory
+    execution_environment: ee-default
+    credentials:
+      - AWS (ec2-user)
+      - AWS Sandbox Credential
+      - OpenFlake
+    ask_variables_on_launch: true
+    ask_skip_tags_on_launch: true
+    ask_credential_on_launch: true
+    survey_enabled: true
