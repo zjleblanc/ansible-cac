@@ -83,7 +83,7 @@ nav:
       - Windows: config/windows/README.md
       - HashiCorp: config/hashi/README.md
       - AIOps: config/aiops/README.md
-      - ServiceNow: config/servicenow/README.md
+      - ITSM: config/itsm/README.md
       - Apps: config/apps/README.md
       - AAP: config/aap/README.md
       - Hub: config/hub/README.md

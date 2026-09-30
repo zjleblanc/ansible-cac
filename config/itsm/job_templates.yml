@@ -1,11 +1,11 @@
-# ansible-playbook pb_aap_config.yml -e "domains=servicenow" -e "skip_common=true" --tags job_templates
+# ansible-playbook pb_aap_config.yml -e "domains=itsm" -e "skip_common=true" --tags job_templates
 ---
-controller_templates_servicenow:
+controller_templates_itsm:
   - name: Selenium // Automation Dashboard
     organization: Autodotes
     description: Demonstrate using Selenium to create application screen captures
     labels:
-      - ServiceNow
+      - ITSM
     project: Cloud Mgmt
     playbook: demos/selenium_automation_dashboard.yml
     inventory: Autodotes Lab
@@ -31,7 +31,7 @@ controller_templates_servicenow:
     organization: Autodotes
     description: Demonstrate using Selenium to create application screen captures
     labels:
-      - ServiceNow
+      - ITSM
     project: Cloud Mgmt
     playbook: demos/selenium_screen_capture.yml
     inventory: Autodotes Lab
@@ -42,7 +42,7 @@ controller_templates_servicenow:
     organization: Autodotes
     description: Create cmdb_ci_vm_instance items
     labels:
-      - ServiceNow
+      - ITSM
     project: Cloud Mgmt
     playbook: playbooks/snow/manage_ci.yml
     inventory: Cloud Inventory
@@ -69,7 +69,7 @@ controller_templates_servicenow:
     organization: Autodotes
     description: Create cmdb_ci_vm_instance items in OpenFlake
     labels:
-      - ServiceNow
+      - OpenFlake
     project: Cloud Mgmt
     playbook: playbooks/snow/manage_ci.yml
     inventory: Cloud Inventory
@@ -96,7 +96,7 @@ controller_templates_servicenow:
     organization: Autodotes
     description: Delete cmdb_ci_vm_instance items
     labels:
-      - ServiceNow
+      - ITSM
     project: Cloud Mgmt
     playbook: playbooks/snow/manage_ci.yml
     inventory: Cloud Inventory
@@ -122,7 +122,7 @@ controller_templates_servicenow:
     organization: Autodotes
     description: Delete cmdb_ci_vm_instance items in OpenFlake
     labels:
-      - ServiceNow
+      - OpenFlake
     project: Cloud Mgmt
     playbook: playbooks/snow/manage_ci.yml
     inventory: Cloud Inventory
@@ -146,7 +146,7 @@ controller_templates_servicenow:
           question_description: pattern for the playbook hosts key
   - name: Service Now // Create Incident
     labels:
-      - ServiceNow
+      - ITSM
     project: Cloud Mgmt
     playbook: playbooks/snow/create_incident.yml
     inventory: Autodotes Lab
@@ -158,7 +158,7 @@ controller_templates_servicenow:
     ask_credential_on_launch: true
   - name: Service Now // Mock Decomm VM
     labels:
-      - ServiceNow
+      - ITSM
     project: Windows Mgmt
     playbook: demos/snow_no_op.yml
     inventory: Autodotes Lab
@@ -170,7 +170,7 @@ controller_templates_servicenow:
     ask_variables_on_launch: true
   - name: Service Now // Update Incident
     labels:
-      - ServiceNow
+      - ITSM
     project: Cloud Mgmt
     playbook: playbooks/snow/update_incident.yml
     inventory: Autodotes Lab
@@ -183,7 +183,7 @@ controller_templates_servicenow:
     organization: Autodotes
     description: Generic template to interface with supported ServiceNow Table API operations
     labels:
-      - ServiceNow
+      - ITSM
     project: Cloud Mgmt
     playbook: playbooks/snow/manage_resource.yml
     execution_environment: ee-default

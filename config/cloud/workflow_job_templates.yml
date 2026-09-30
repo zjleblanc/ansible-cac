@@ -5,6 +5,7 @@ controller_workflows_cloud:
     organization: Autodotes
     labels:
       - Cloud
+      - ITSM
     allow_simultaneous: true
     ask_variables_on_launch: true
     survey_enabled: true
@@ -53,6 +54,7 @@ controller_workflows_cloud:
     description: AWS decommission using the OpenFlake ServiceNow credential
     labels:
       - Cloud
+      - OpenFlake
     allow_simultaneous: true
     ask_variables_on_launch: true
     survey_enabled: true
@@ -100,6 +102,7 @@ controller_workflows_cloud:
     organization: Autodotes
     labels:
       - Cloud
+      - ITSM
     allow_simultaneous: true
     ask_variables_on_launch: true
     survey_enabled: true
@@ -214,6 +217,7 @@ controller_workflows_cloud:
     description: AWS provisioning using the OpenFlake ServiceNow credential
     labels:
       - Cloud
+      - OpenFlake
     allow_simultaneous: true
     ask_variables_on_launch: true
     survey_enabled: true
@@ -237,6 +241,8 @@ controller_workflows_cloud:
           choices:
             - rhel8
             - rhel9
+            - rhel9_apps
+            - rhel_apps
             - rhel_dev
             - rhel_dynatrace
             - rhel_datadog
@@ -289,6 +295,7 @@ controller_workflows_cloud:
         related:
           success_nodes:
             - identifier: Sync ServiceNow Inventory
+            - identifier: Patch VM(s)
         unified_job_template:
           name: OpenFlake // Create CIs
           organization:
@@ -296,10 +303,6 @@ controller_workflows_cloud:
             type: organization
           type: job_template
       - identifier: Sync ServiceNow Inventory
-        related:
-          success_nodes:
-            - identifier: Patch VM(s)
-            - identifier: Install Agent(s)
         unified_job_template:
           inventory:
             name: OpenFlake Inventory
@@ -310,8 +313,12 @@ controller_workflows_cloud:
           name: openflake.servicenow.itsm.now
           type: inventory_source
       - identifier: Patch VM(s)
-        credentials:
-          - name: OpenFlake
+        related:
+          always_nodes:
+            - identifier: Install Agent(s)
+            - identifier: Install App(s)
+          credentials:
+            - name: OpenFlake
         unified_job_template:
           name: AWS // Patch VM
           organization:
@@ -321,6 +328,13 @@ controller_workflows_cloud:
       - identifier: Install Agent(s)
         unified_job_template:
           name: AWS // Install Agents
+          organization:
+            name: Autodotes
+            type: organization
+          type: job_template
+      - identifier: Install App(s)
+        unified_job_template:
+          name: AWS // Install Applications
           organization:
             name: Autodotes
             type: organization

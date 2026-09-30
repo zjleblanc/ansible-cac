@@ -165,7 +165,7 @@ Use `ansible.eda.*`, `ansible.hub.*`, and `ansible.platform.*` module docs (plus
 | Windows, Proxmox, AD, SQL | `windows` |
 | Terraform, HCP, Vault, Hashi | `hashi` |
 | EDA, AIOps, Dynatrace remediation workflows | `aiops` |
-| ServiceNow, Selenium (SNOW demos) | `servicenow` |
+| ServiceNow, OpenFlake, Selenium (SNOW demos) | `itsm` |
 | SSL/ACME, Kasa, CyberArk, OPA, Lab DNS | `apps` |
 | PAH, EE build, AAP backup, Support Analyzer | `aap` |
 | Hub registries/remotes/AH users | `hub` |

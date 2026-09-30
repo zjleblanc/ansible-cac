@@ -10,7 +10,7 @@ _LABEL_OVERRIDES = {
     "aap": "AAP",
     "aiops": "AIOps",
     "hashi": "HashiCorp",
-    "servicenow": "ServiceNow",
+    "itsm": "ITSM",
 }
 
 

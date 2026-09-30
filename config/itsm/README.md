@@ -1,21 +1,21 @@
-# servicenow
+# itsm
 
-ServiceNow ITSM and related Selenium demo job templates.
+ServiceNow ITSM, OpenFlake CMDB, and related Selenium demo job templates.
 
 ## Apply this domain
 
 Add `--ask-vault-pass` or `--vault-password-file <path>` when vaulted secrets in `vars/` are required for the resources you are applying.
 
-Set `servicenow` in the `domains` extra-var to load this folder. `common` still loads unless you set `skip_common=true`.
+Set `itsm` in the `domains` extra-var to load this folder. `common` still loads unless you set `skip_common=true`.
 
 ```bash
-ansible-playbook pb_aap_config.yml -e "domains=servicenow"
+ansible-playbook pb_aap_config.yml -e "domains=itsm"
 ```
 
 ## What lives here
 
-- ServiceNow and Selenium job templates
-- Shared dependencies (ServiceNow credential, inventories, Cloud Mgmt project) live in common/
+- ServiceNow, OpenFlake, and Selenium job templates
+- Shared dependencies (ServiceNow/OpenFlake credentials, inventories, Cloud Mgmt project) live in common/
 
 ## Scope to a single resource file
 
@@ -25,6 +25,6 @@ Each YAML file has a one-liner comment at the top. The `domains` extra-var (plus
 
 | File | Resource tag | Example |
 |------|--------------|--------|
-| `job_templates.yml` | `job_templates` | `ansible-playbook pb_aap_config.yml -e "domains=servicenow" -e "skip_common=true" --tags job_templates` |
+| `job_templates.yml` | `job_templates` | `ansible-playbook pb_aap_config.yml -e "domains=itsm" -e "skip_common=true" --tags job_templates` |
 
 See also [config/README.md](../README.md).

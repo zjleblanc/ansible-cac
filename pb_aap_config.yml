@@ -80,12 +80,12 @@
       when: "'aiops' in selected_domains"
       tags: always
 
-    - name: Include servicenow configuration
+    - name: Include itsm configuration
       ansible.builtin.include_vars:
-        dir: config/servicenow
+        dir: config/itsm
         extensions: [yml, yaml]
         ignore_files: [README.md]
-      when: "'servicenow' in selected_domains"
+      when: "'itsm' in selected_domains"
       tags: always
 
     - name: Include apps configuration

@@ -17,7 +17,9 @@ controller_labels_common:
     organization: Autodotes
   - name: Apps
     organization: Autodotes
-  - name: ServiceNow
+  - name: ITSM
+    organization: Autodotes
+  - name: OpenFlake
     organization: Autodotes
   - name: OOTB
     organization: Default

@@ -16,7 +16,7 @@ Apply with [`pb_aap_config.yml`](../pb_aap_config.yml) from the repository root.
 | [hashi](./hashi/README.md) | `hashi` | HashiCorp Terraform/HCP and Vault |
 | [aiops](./aiops/README.md) | `aiops` | AIOps + Event-Driven Ansible |
 | [business](./business/README.md) | `business` | Business process automation (BPA) |
-| [servicenow](./servicenow/README.md) | `servicenow` | ServiceNow ITSM and Selenium demos |
+| [itsm](./itsm/README.md) | `itsm` | ServiceNow ITSM, OpenFlake CMDB, and Selenium demos |
 | [apps](./apps/README.md) | `apps` | SSL/ACME, Kasa, CyberArk, policy demos |
 | [aap](./aap/README.md) | `aap` | AAP self-management and EE builds |
 | [hub](./hub/README.md) | `hub` | Private Automation Hub |
@@ -37,7 +37,7 @@ ansible-playbook pb_aap_config.yml -e "domains=networking" --tags job_templates
 
 # everything
 ansible-playbook pb_aap_config.yml \
-  -e "domains=cloud,networking,linux,windows,hashi,aiops,business,servicenow,apps,aap,hub"
+  -e "domains=cloud,networking,linux,windows,hashi,aiops,business,itsm,apps,aap,hub"
 ```
 
 Each domain README lists the files in that folder and the exact commands to scope to a single file. Each YAML var file also has a matching one-liner comment at the top.

@@ -139,7 +139,7 @@ If a new variable family appears, use the singular title from `.cursor/skills/ca
 - **Sort:** type display name A–Z (case-insensitive), then `name` A–Z (case-insensitive), so each type is one contiguous block.
 - **Type cell:** write the display name on the **first** row of a type group; leave the Type cell **empty** on the 2nd+ consecutive row of the same type. Do not use HTML `rowspan` / `colspan` (GitHub ignores them).
 - **Description:** prefer YAML `description`. Else infer one line from name/playbook/conversation. If longer than 100 characters, keep 99 characters and append `…`.
-- **Domain:** the `config/<domain>/` folder that owns the definition (e.g. `cloud`, `common`, `servicenow`). Do **not** use Controller `labels` — not all resources are labeled.
+- **Domain:** the `config/<domain>/` folder that owns the definition (e.g. `cloud`, `common`, `itsm`). Do **not** use Controller `labels` — not all resources are labeled.
 - **Definition link:** relative from repo root; fragment is the list item's line range. Link text is exactly `🕵️` (e.g. `[🕵️](config/cloud/job_templates.yml#L42-L71)`).
 - **Markdown tables only** — GitHub Flavored Markdown pipe tables.
 

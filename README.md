@@ -17,7 +17,7 @@ Configuration is organized by **domain** under `config/`. Shared fundamentals li
 │   ├── hashi/        # HashiCorp Terraform/HCP + Vault
 │   ├── aiops/        # EDA + AIOps (controller JTs + EDA component)
 │   ├── business/     # Business process automation (BPA)
-│   ├── servicenow/   # ServiceNow ITSM
+│   ├── itsm/         # ServiceNow ITSM + OpenFlake CMDB
 │   ├── apps/         # SSL/ACME, Kasa, CyberArk, Vault, security demos
 │   ├── aap/          # AAP self-management (EE builds, backups, PAH)
 │   └── hub/          # Private Automation Hub
@@ -103,7 +103,7 @@ ansible-playbook pb_aap_config.yml -e "domains=networking" --tags projects,crede
 
 # Apply everything
 ansible-playbook pb_aap_config.yml \
-  -e "domains=cloud,networking,linux,windows,hashi,aiops,business,servicenow,apps,aap,hub"
+  -e "domains=cloud,networking,linux,windows,hashi,aiops,business,itsm,apps,aap,hub"
 ```
 
 If `ANSIBLE_VAULT_PASSWORD_FILE` (or another vault config) is not set, add `--ask-vault-pass` or `--vault-password-file <path>` when encrypted `vars/` files are required.
