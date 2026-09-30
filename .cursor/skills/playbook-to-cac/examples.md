@@ -158,3 +158,97 @@ Both playbooks target `cisco.ios.*` devices; domain and project were already spe
 - Resolve the Cisco device credential: none found by name under `config/common/credentials.yml` or `config/networking/credentials.yml`. Provide an existing name or approve a new stub (credential_type + vault var) before applying.
 - Both entries use the single `Network` domain label already defined in `config/common/labels.yml` — no label changes needed.
 ```
+
+---
+
+## Example 3 — GitHub, name and project collisions detected
+
+**User input:** "Template `playbooks/resize_disk.yml` from `https://github.com/acme-corp/ansible-aws-ops` into the `cloud` domain."
+
+**Fetched playbook (`playbooks/resize_disk.yml`):**
+
+```yaml
+---
+- name: Resize Disk
+  hosts: all
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Grow the root EBS volume
+      amazon.aws.ec2_vol:
+        state: present
+        resize: true
+```
+
+**Step 4 — resolve dependencies:** derived project name `AWS Ops` (from `ansible-aws-ops`); derived JT name `AWS // Resize Disk` (matching sibling `AWS //` naming in `config/aiops/job_templates.yml` / `config/cloud/job_templates.yml`).
+
+**Step 5 — scan for collisions:**
+
+```bash
+$ rg -n "name: AWS // Resize Disk$" config/*/job_templates.yml
+config/aiops/job_templates.yml:246:  - name: AO // Resize Disk
+# (no exact match on "AWS // Resize Disk" itself, but a near-duplicate exists)
+
+$ rg -n "name: AWS Ops$" config/*/projects.yml
+# no match
+
+$ rg -n "ansible-aws-ops" config/*/projects.yml
+# no match — this is a genuinely new project
+```
+
+A closer look shows `config/aiops/job_templates.yml` already has `AO // Resize Disk` pointed at `playbooks/aws/resize_disk.yml` in the `Cloud Mgmt` project — functionally the same operation, different repo/project, different domain, similar-but-not-identical name.
+
+**Agent asks the user (structured question, not a guess):**
+
+> Found an existing job template that looks like the same operation: `AO // Resize Disk` in `config/aiops/job_templates.yml` (project `Cloud Mgmt`, playbook `playbooks/aws/resize_disk.yml`). Your new source is a different repo (`ansible-aws-ops`) and domain (`cloud`). How do you want to resolve this?
+> 1. **Keep both** — proceed with a new `AWS // Resize Disk` entry in `cloud`, treating these as intentionally separate job templates (recommended if `ansible-aws-ops` is meant to replace/supersede the `aiops` one over time).
+> 2. **Consolidate** — don't create a new entry; instead point the existing `AO // Resize Disk` at the new repo/playbook (tell me if `Cloud Mgmt` project's `scm_url` should change, or if a new project stub should replace it).
+> 3. **Rename** — create the new entry under a different name so there's no ambiguity with the existing one.
+
+**User selects option 1 (keep both).** No project-name collision exists (`AWS Ops` is new), so the project stub proceeds normally.
+
+**Output:**
+
+```markdown
+## Placement
+- Domain: `cloud`
+- Files: `config/cloud/job_templates.yml`, `config/cloud/projects.yml`
+- Variables: `controller_templates_cloud`, `controller_projects_cloud`
+- Apply: `ansible-playbook pb_aap_config.yml -e "domains=cloud" -e "skip_common=true" --tags job_templates,projects`
+
+## Rationale
+No `scm_url` match for `ansible-aws-ops` in any domain, so a new project stub is required. `AWS // Resize Disk` is a distinct name from the existing `AO // Resize Disk` (different repo/project/domain) — user confirmed both should coexist.
+
+## Collisions
+- Job template: existing `AO // Resize Disk` in `config/aiops/job_templates.yml` (similar operation, different repo) — asked user; resolution: keep both as separate entries.
+
+## Entries
+\`\`\`yaml
+# config/cloud/projects.yml — controller_projects_cloud
+- name: AWS Ops
+  organization: Autodotes
+  scm_type: git
+  scm_url: https://github.com/acme-corp/ansible-aws-ops.git
+  scm_branch: main
+  scm_clean: "no"
+  scm_delete_on_update: "no"
+  scm_update_on_launch: "no"
+\`\`\`
+
+\`\`\`yaml
+# config/cloud/job_templates.yml — controller_templates_cloud
+- name: AWS // Resize Disk
+  labels:
+    - Cloud
+  project: AWS Ops
+  playbook: playbooks/resize_disk.yml
+  inventory: Cloud Inventory
+  execution_environment: ee-cloud
+  credentials:
+    - # TODO: no matching AWS credential confirmed for this project — verify AWS Sandbox Credential applies
+\`\`\`
+
+## Follow-ups
+- Confirm the AWS credential to attach (defaulted to a `# TODO:` rather than assuming `AWS Sandbox Credential` fits this new repo's account).
+- No further collisions outstanding — both `AO // Resize Disk` and `AWS // Resize Disk` will coexist per user decision.
+```
