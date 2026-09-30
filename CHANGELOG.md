@@ -1,5 +1,32 @@
 # Changelog
 
+## 2026-09-30 — Extend OpenFlake provisioning workflow and fix silently-dropped node credential overrides
+
+Adds an `Install App(s)` step to `AWS // Provisioning Workflow // OpenFlake` (running in parallel with `Install Agent(s)` after patching) and fixes a workflow-node authoring bug where `credentials` placed as a sibling of `related:` instead of nested inside it caused the override to be silently ignored by the `ansible.controller.workflow_job_template` module.
+
+### Changed
+- `config/cloud/workflow_job_templates.yml`: added an `Install App(s)` node (running `AWS // Install Applications`) alongside `Install Agent(s)` after `Patch VM(s)` in `AWS // Provisioning Workflow // OpenFlake`, and added `rhel9_apps`/`rhel_apps` choices to its `Target Platform` survey question.
+
+### Fixed
+- `config/cloud/workflow_job_templates.yml`: nested `credentials` under `related:` for the `Patch VM(s)` node so the `OpenFlake` credential override actually applies (previously silently dropped).
+- `config/hashi/workflow_job_templates.yml`: same fix for the `Create CIs`, `Create Web Task`, `Update Web Task (Happy)`, and `Update Web Task (Sad)` nodes in `Terraform // HCP // Azure Deploy and Configure Workflow`.
+
+## 2026-09-30 — Introduce ITSM/OpenFlake labels and rename servicenow domain to itsm
+
+Replaces the single `ServiceNow` label with a clearer `ITSM` / `OpenFlake` taxonomy so OpenFlake-specific resources are distinguishable from generic ServiceNow ITSM ones, and renames the `servicenow` config domain to `itsm` to match.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Label | ITSM | Domain label for generic ServiceNow ITSM resources | common | [🕵️](config/common/labels.yml#L20-L21) |
+| | OpenFlake | Domain label for OpenFlake-specific resources | common | [🕵️](config/common/labels.yml#L22-L23) |
+
+### Changed
+- Relabeled all `config/itsm/job_templates.yml` entries from `ServiceNow` to `ITSM` (or `OpenFlake` for the `OpenFlake // Create CIs` and `OpenFlake // Delete CIs` templates).
+- Added `ITSM`/`OpenFlake` as a secondary label (alongside `Cloud`) on the four cloud workflows that integrate with ServiceNow or OpenFlake: `AWS // Decommission Workflow`, `AWS // Decommission Workflow // OpenFlake`, `AWS // Provisioning Workflow`, `AWS // Provisioning Workflow // OpenFlake`.
+- Renamed the `servicenow` domain folder to `itsm` (`config/servicenow/` → `config/itsm/`, wildcard var `controller_templates_servicenow` → `controller_templates_itsm`) and updated `pb_aap_config.yml`, `AGENTS.md`, `config/README.md`, `README.md`, `mkdocs.yml`, `docs/mkdocs/domains.py`, and the `cac-parser`/`changelog` skills accordingly.
+
 ## 2026-09-28 — Add AO // Resize Disk job template to AIOps disk remediation set
 
 Codifies an AWS disk-resize job template already live in AAP so it's tracked as CaC alongside the existing EBS-resize remediation template, letting operators trigger AWS disk resizing via a survey-driven job in the AIOps domain.
@@ -194,8 +221,8 @@ AWS lifecycle demos that create or tear down EC2 instances and register or remov
 | Credential | OpenFlake | for integrating with ServiceNow using servicenow.itsm collection | common | [🕵️](config/common/credentials.yml#L174-L181) |
 | Inventory | OpenFlake Inventory | OpenFlake CMDB via servicenow.itsm.now inventory plugin | cloud | [🕵️](config/cloud/inventories.yml#L9-L13) |
 | Inventory source | openflake.servicenow.itsm.now | SCM sync of OpenFlake CMDB hosts via servicenow.itsm.now | cloud | [🕵️](config/cloud/inventory_sources.yml#L24-L32) |
-| Job template | OpenFlake // Create CIs | Create cmdb_ci_vm_instance items in OpenFlake | servicenow | [🕵️](config/servicenow/job_templates.yml#L68-L94) |
-| | OpenFlake // Delete CIs | Delete cmdb_ci_vm_instance items in OpenFlake | servicenow | [🕵️](config/servicenow/job_templates.yml#L121-L146) |
+| Job template | OpenFlake // Create CIs | Create cmdb_ci_vm_instance items in OpenFlake | itsm | [🕵️](config/itsm/job_templates.yml#L68-L94) |
+| | OpenFlake // Delete CIs | Delete cmdb_ci_vm_instance items in OpenFlake | itsm | [🕵️](config/itsm/job_templates.yml#L121-L146) |
 | Workflow job template | AWS // Decommission Workflow // OpenFlake | AWS decommission using the OpenFlake ServiceNow credential | cloud | [🕵️](config/cloud/workflow_job_templates.yml#L51-L98) |
 | | AWS // Provisioning Workflow // OpenFlake | AWS provisioning using the OpenFlake ServiceNow credential | cloud | [🕵️](config/cloud/workflow_job_templates.yml#L212-L325) |
 
@@ -315,7 +342,7 @@ Restructures Configuration as Code from flat `controller/`, `eda/`, `hub/`, and 
 - [windows](config/windows/README.md) — Windows, AD, Proxmox.
 - [hashi](config/hashi/README.md) — HashiCorp Terraform/HCP and Vault.
 - [aiops](config/aiops/README.md) — AIOps + Event-Driven Ansible.
-- [servicenow](config/servicenow/README.md) — ServiceNow ITSM and Selenium demos.
+- [itsm](config/itsm/README.md) — ServiceNow ITSM, OpenFlake CMDB, and Selenium demos.
 - [apps](config/apps/README.md) — SSL/ACME, Kasa, CyberArk, policy demos.
 - [aap](config/aap/README.md) — AAP self-management and EE builds.
 - [hub](config/hub/README.md) — Private Automation Hub.

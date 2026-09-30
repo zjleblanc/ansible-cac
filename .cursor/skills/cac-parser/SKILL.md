@@ -44,7 +44,7 @@ Map to the CaC variable family via [resource-map.md](resource-map.md). If ambigu
 
 ### 2. Choose domain and vars file
 
-Domains: `common`, `cloud`, `networking`, `linux`, `windows`, `hashi`, `aiops`, `servicenow`, `apps`, `aap`, `hub`.
+Domains: `common`, `cloud`, `networking`, `linux`, `windows`, `hashi`, `aiops`, `itsm`, `apps`, `aap`, `hub`.
 
 Placement rules (from AGENTS.md):
 
@@ -122,7 +122,7 @@ For **job templates**, **workflow job templates**, and **inventories** placed ou
 | `windows` | `Windows` |
 | `hashi` | `Hashi` |
 | `aiops` | `AIOps` |
-| `servicenow` | `ServiceNow` |
+| `itsm` | `ITSM` (OpenFlake-named resources use `OpenFlake` instead) |
 | `apps` | `Apps` |
 | `aap` | `AAP` |
 

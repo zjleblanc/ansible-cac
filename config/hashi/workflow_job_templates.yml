@@ -211,12 +211,12 @@ controller_workflows_hashi:
         related:
           success_nodes:
             - identifier: Create Web Task
+          credentials:
+            - name: AAP (id_rsa)
         extra_data:
           sn_manage_action: create
           sn_resource: ci
           sn_manage_multiple: true
-        credentials:
-          - name: AAP (id_rsa)
         inventory: Ansible-HCP Inventory
         unified_job_template:
           name: ServiceNow // Manage Resources
@@ -229,8 +229,8 @@ controller_workflows_hashi:
         related:
           success_nodes:
             - identifier: Configure Web Servers
-        credentials:
-          - name: AAP (id_rsa)
+          credentials:
+            - name: AAP (id_rsa)
         extra_data:
           _hosts: tag_demo_web
           sn_manage_action: create
@@ -257,12 +257,13 @@ controller_workflows_hashi:
             type: organization
           type: job_template
       - identifier: Update Web Task (Happy)
+        related:
+          credentials:
+            - name: AAP (id_rsa)
         extra_data:
           _hosts: tag_demo_web
           sn_manage_action: update
           sn_resource: sc_task
-        credentials:
-          - name: AAP (id_rsa)
         inventory: Ansible-HCP Inventory
         unified_job_template:
           name: ServiceNow // Manage Resources
@@ -283,12 +284,13 @@ controller_workflows_hashi:
             type: organization
           type: job_template
       - identifier: Update Web Task (Sad)
+        related:
+          credentials:
+            - name: AAP (id_rsa)
         extra_data:
           _hosts: tag_demo_web
           sn_manage_action: update
           sn_resource: sc_task
-        credentials:
-          - name: AAP (id_rsa)
         inventory: Ansible-HCP Inventory
         unified_job_template:
           name: ServiceNow // Manage Resources

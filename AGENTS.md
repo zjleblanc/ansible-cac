@@ -29,7 +29,7 @@ config/<domain>/*.yml  →  include_vars (when domain in `domains` list)  →  d
 | `hashi` | `hashi` | HashiCorp Terraform / HCP / Vault |
 | `aiops` | `aiops` | EDA controller JTs/workflows + EDA component vars (`eda_*_aiops`) |
 | `business` | `business` | Business process automation (BPA) |
-| `servicenow` | `servicenow` | ServiceNow / Selenium JTs (deps usually in common) |
+| `itsm` | `itsm` | ServiceNow / OpenFlake ITSM + Selenium JTs (deps usually in common) |
 | `apps` | `apps` | SSL/ACME, Kasa, CyberArk, policy demos |
 | `aap` | `aap` | AAP self-mgmt, EE builds, PAH sync templates |
 | `hub` | `hub` | Private Automation Hub (`hub_*` / `ah_*` vars) |
@@ -91,7 +91,7 @@ exactly **one** domain label matching their `config/<domain>/` folder. Definitio
 | `windows` | `Windows` |
 | `hashi` | `Hashi` |
 | `aiops` | `AIOps` |
-| `servicenow` | `ServiceNow` |
+| `itsm` | `ITSM` (OpenFlake-named resources use `OpenFlake` instead) |
 | `apps` | `Apps` |
 | `aap` | `AAP` |
 
@@ -102,6 +102,7 @@ Rules:
 - **`hub`** has no Controller JT/workflow/inventory vars; skip domain labels there.
 - When adding a **new** domain, add its label to `config/common/labels.yml` (Autodotes org unless another org is required) before referencing it.
 - If the domain label is missing from `labels.yml`, add it there (merge with existing entries; do not duplicate).
+- **Exception — cross-domain integration labels:** `ITSM` and `OpenFlake` may additionally be applied *alongside* another domain's label (e.g. `Cloud`) on job templates/workflows in other domains that directly integrate with ServiceNow/OpenFlake (such as the `cloud` provisioning/decommission workflows). Use `ITSM` for generic ServiceNow integration and `OpenFlake` for OpenFlake-specific variants.
 
 Example:
 

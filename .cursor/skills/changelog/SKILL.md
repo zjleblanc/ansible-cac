@@ -64,7 +64,7 @@ Include under `### Resources` only for **created** resources (new `- name:` list
 | Type | Human-readable type on the first row of a group; leave empty for the 2nd+ row of the same type. Display names: [format.md](format.md). |
 | Name | YAML `name` (or `username` for users). |
 | Description | YAML `description`. If missing, one-line purpose from name/playbook/conversation. Max 100 characters; if longer, truncate and append `…`. |
-| Domain | Config domain folder for the YAML file (`cloud`, `common`, `servicenow`, …) — not the Controller `labels` list. |
+| Domain | Config domain folder for the YAML file (`cloud`, `common`, `itsm`, …) — not the Controller `labels` list. |
 | Definition | Permalink to the list entry. Link text: `🕵️`. |
 
 ### Sort
