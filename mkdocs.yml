@@ -99,6 +99,9 @@ nav:
               - Overview: .cursor/skills/eda-parser/SKILL.md
               - Resource Map: .cursor/skills/eda-parser/resource-map.md
           - CaC Schedules: .cursor/skills/cac-schedules/SKILL.md
+          - Playbook to CaC:
+              - Overview: .cursor/skills/playbook-to-cac/SKILL.md
+              - Examples: .cursor/skills/playbook-to-cac/examples.md
           - Changelog: .cursor/skills/changelog/SKILL.md
       - Rules: []
   - Contributing:
