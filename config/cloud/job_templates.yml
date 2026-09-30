@@ -240,6 +240,61 @@ controller_templates_cloud:
           variable: _hosts
           question_name: Specify target host(s)
           question_description: pattern for the playbook hosts key
+  - name: AWS // Restart Service
+    organization: Autodotes
+    description: Restart a service on an EC2 instance with optional ITSM tracking
+    labels:
+      - Cloud
+      - OpenFlake
+    project: Cloud Mgmt
+    playbook: playbooks/aws/restart_service.yml
+    inventory: Cloud Inventory
+    execution_environment: ee-default
+    credentials:
+      - AWS Sandbox Credential
+      - AWS (ec2-user)
+      - OpenFlake
+    ask_variables_on_launch: true
+    survey_enabled: true
+    survey_spec:
+      name: ""
+      description: ""
+      spec:
+        - question_name: Specify target host
+          question_description: EC2 instance name tag
+          type: text
+          variable: _host
+          required: true
+        - question_name: Service name
+          question_description: name of the service to restart
+          type: text
+          variable: service_name
+          required: true
+  - name: AWS // Reboot Machine
+    organization: Autodotes
+    description: Reboot an EC2 instance with optional ITSM tracking
+    labels:
+      - Cloud
+      - OpenFlake
+    project: Cloud Mgmt
+    playbook: playbooks/aws/reboot_machine.yml
+    inventory: Cloud Inventory
+    execution_environment: ee-default
+    credentials:
+      - AWS Sandbox Credential
+      - AWS (ec2-user)
+      - OpenFlake
+    ask_variables_on_launch: true
+    survey_enabled: true
+    survey_spec:
+      name: ""
+      description: ""
+      spec:
+        - question_name: Specify target host
+          question_description: EC2 instance name tag
+          type: text
+          variable: _host
+          required: true
   - name: Azure // Create Disks
     labels:
       - Cloud

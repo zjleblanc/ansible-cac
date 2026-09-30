@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-09-30 — Add AWS service/reboot job templates and update playbook-to-cac ITSM logic
+
+Adds job templates for restarting services and rebooting EC2 instances with OpenFlake tracking, and updates the playbook-to-cac skill to enforce a manual choice between OpenFlake and ServiceNow when ITSM integration is detected in source playbooks.
+
+### Added
+- `config/cloud/job_templates.yml`: `AWS // Restart Service` — restarts a target service on an EC2 instance with optional OpenFlake SC Task tracking.
+- `config/cloud/job_templates.yml`: `AWS // Reboot Machine` — reboots an EC2 instance and confirms reconnection with optional OpenFlake SC Task tracking.
+
+### Changed
+- `.cursor/skills/playbook-to-cac/SKILL.md`: updated the credential hint table and added a required interaction step for ITSM integration so agents ask the user to choose between OpenFlake (Recommended) and generic ServiceNow rather than guessing.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Job template | AWS // Restart Service | Restart a service on an EC2 instance with optional ITSM tracking | cloud | [🕵️](config/cloud/job_templates.yml#L243-L272) |
+| Job template | AWS // Reboot Machine | Reboot an EC2 instance with optional ITSM tracking | cloud | [🕵️](config/cloud/job_templates.yml#L273-L295) |
+
 ## 2026-09-30 — Extend OpenFlake provisioning workflow and fix silently-dropped node credential overrides
 
 Adds an `Install App(s)` step to `AWS // Provisioning Workflow // OpenFlake` (running in parallel with `Install Agent(s)` after patching) and fixes a workflow-node authoring bug where `credentials` placed as a sibling of `related:` instead of nested inside it caused the override to be silently ignored by the `ansible.controller.workflow_job_template` module.

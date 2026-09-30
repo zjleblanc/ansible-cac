@@ -111,11 +111,18 @@ Module-family → credential/EE hint table:
 | `community.vmware.*`, `vmware.vmware_rest.*` | an existing `VMWare *` credential | `ee-cloud` or `ee-default` |
 | `cisco.*`, `ansible.netcommon.*` | network device credential | `ee-networking` |
 | `ansible.windows.*`, `community.windows.*` | a `Windows *` / AD credential | `ee-windows` |
-| `servicenow.itsm.*` | `West ServiceNow (...)` / OpenFlake credential | `ee-default` |
+| `servicenow.itsm.*` | `OpenFlake` / `West ServiceNow (...)` credential — **ask the user**, see below | `ee-default` |
 | `community.hashi_vault.*` | Vault credential | `ee-default` or domain-specific |
 | plain `ansible.builtin.*` + `become: true` over SSH | `Machine` / `AAP (...)` SSH credential | `ee-default` |
 
 Cross-check hint candidates against what's actually defined in `config/common/credentials.yml`, `config/common/execution_environments.yml`, and the target domain's own files before assuming a name — prefer an **exact existing name** over inventing one.
+
+**ITSM credential choice (required when `servicenow.itsm.*` modules are detected):** this repo has two ServiceNow-family credentials in `config/common/credentials.yml` — `OpenFlake` and `West ServiceNow (ven07621)`. Do not silently pick one. Ask the user with a structured question, e.g.:
+
+- **OpenFlake (Recommended)** — pairs with the `OpenFlake` label alongside the domain label (see sibling example: `AWS // Decommission Workflow // OpenFlake` in `config/cloud/workflow_job_templates.yml`).
+- **ServiceNow** — uses `West ServiceNow (ven07621)`; pairs with the `ITSM` label alongside the domain label instead (per [AGENTS.md domain labels](../../../AGENTS.md#domain-labels-required)).
+
+Apply the chosen credential + matching label consistently across every playbook in the batch that needs ITSM integration, unless the user asks for a per-playbook mix.
 
 ### 4. Resolve dependencies
 
