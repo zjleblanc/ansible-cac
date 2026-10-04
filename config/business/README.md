@@ -14,10 +14,11 @@ ansible-playbook pb_aap_config.yml -e "domains=business"
 
 ## What lives here
 
-- Business Process and Support Analyzer projects, and Business-labeled job templates
+- Business Process project (now hosts the support case analyzer/tracker playbooks too), and Business-labeled job templates
 - Google OAuth Client credential type + credential for Google Sheets/Gmail automation
 - Account Task Summarizer credential using the shared `OpenAI Config` credential type (`config/common/credential_types.yml`)
 - Ansible Support Analyzer credential type + credential for the support case analyzer playbook (LLM + Google Sheets settings)
+- Support Tracker credential (Ansible Support Analyzer type, values populated manually in the AAP UI) + BPA // Support Case Tracker job template, which also uses the shared `Gmail SMTP` credential (`config/common/credentials.yml`)
 - Nightly schedule for the account task update job template, weekly schedule for the support case analyzer job template
 
 ## Scope to a single resource file
