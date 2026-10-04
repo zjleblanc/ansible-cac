@@ -1,5 +1,27 @@
 # Changelog
 
+## 2026-10-04 — Consolidate Support Analyzer into Business Process project and add Support Case Tracker
+
+Merges the standalone Support Analyzer project into the Business Process repository, updates the analyzer/tracker job templates to point to the new project and playbooks, and adds the Support Case Tracker automation.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Credential | Gmail SMTP | SMTP credential for sending notification emails via Gmail | common | [🕵️](config/common/credentials.yml#L139-L147) |
+| | Support Tracker | API token and Google Sheets settings for BPA // Support Case Tracker | business | [🕵️](config/business/credentials.yml#L38-L47) |
+| Credential type | Ansible Support Tracker | Support Case API token and Google Sheets credentials for support tracker | business | [🕵️](config/business/credential_types.yml#L111-L154) |
+| Job template | BPA // Support Case Tracker | Track active Red Hat support cases and email change summaries | business | [🕵️](config/business/job_templates.yml#L67-L114) |
+
+### Changed
+- `config/business/job_templates.yml`: updated `BPA // Support Case Analyzer` and `BPA // Support Case Tracker` to use the `Business Process` project and their respective playbooks under the `playbooks/` directory.
+- `config/business/README.md`: updated the domain summary to reflect the project consolidation.
+- `config/common/credentials.yml`: moved `Gmail SMTP` from the `cloud` domain to `common` as it is now shared by the support tracker.
+
+### Removed
+- `config/business/projects.yml`: removed the `Support Analyzer` project as its repository was merged into `Business Process`.
+- `config/cloud/credentials.yml`: removed `Gmail SMTP` (moved to `common`).
+
 ## 2026-09-30 — Add AWS service/reboot job templates and update playbook-to-cac ITSM logic
 
 Adds job templates for restarting services and rebooting EC2 instances with OpenFlake tracking, and updates the playbook-to-cac skill to enforce a manual choice between OpenFlake and ServiceNow when ITSM integration is detected in source playbooks.
