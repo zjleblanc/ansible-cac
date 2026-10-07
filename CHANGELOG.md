@@ -1,5 +1,29 @@
 # Changelog
 
+## 2026-10-07 — Add Policy as Code settings and improve cac-parser live fetching
+
+Manages the Controller's Policy as Code global settings (OPA integration) in the common domain using patch-safe semantics, and updates the cac-parser skill to prioritize live MCP fetching for resource payloads.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Controller Setting | policyascode | Managed OPA integration settings (host, port, SSL, auth token) using patch-only semantics | common | [🕵️](config/common/settings.yml#L5-L12) |
+
+### Secrets
+
+| Component | Variable | Description |
+|-----------|----------|-------------|
+| Controller | `controller_settings_opa_auth_token` | Auth token for the native Controller Policy as Code (OPA) integration |
+
+### Changed
+- `config/common/README.md`: added `settings.yml` to the common resource table.
+- `vars/controller_secrets.redacted.yml`: renamed `controller_credential_opa_token` to `controller_credential_opa_auth_token` and added the new `controller_settings_opa_auth_token` placeholder.
+- `config/apps/credentials.yml`: updated `OPA (local)` to use the renamed token variable and enabled cert validation.
+- `.cursor/skills/cac-parser/SKILL.md`: updated workflow to prefer live MCP fetching for resource payloads.
+- `.cursor/skills/cac-parser/resource-map.md`: added `controller_settings` family and OPA placement guidance.
+- `.cursor/skills/cac-parser/key_ordering.md`: added canonical key order for `controller_settings`.
+
 ## 2026-10-04 — Consolidate Support Analyzer into Business Process project and add Support Case Tracker
 
 Merges the standalone Support Analyzer project into the Business Process repository, updates the analyzer/tracker job templates to point to the new project and playbooks, and adds the Support Case Tracker automation.

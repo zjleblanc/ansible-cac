@@ -1,0 +1,11 @@
+# ansible-playbook pb_aap_config.yml --tags settings
+---
+controller_settings_common:
+  - settings:
+      OPA_HOST: opa.autodotes.com
+      OPA_PORT: 443
+      OPA_SSL: true
+      OPA_AUTH_TYPE: Token
+      OPA_AUTH_TOKEN: "{{ controller_credential_opa_auth_token }}"
+      OPA_REQUEST_TIMEOUT: 1.5
+      OPA_REQUEST_RETRIES: 2

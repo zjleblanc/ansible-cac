@@ -196,6 +196,16 @@ Keys that are absent from an entry are simply omitted; the remaining keys keep t
   organization:
 ```
 
+### Controller Settings (`controller_settings_*`)
+
+```yaml
+- name:
+  value:
+  settings:
+```
+
+Only the key(s) actually used on a given entry are present — `name`+`value` (single key/value pair) and `settings` (whole-category dict) are mutually exclusive.
+
 ### Notification Templates (`controller_notifications_*`)
 
 ```yaml

@@ -17,6 +17,7 @@ Paths are under `config/<domain>/`. Variable suffix is always `_<domain>` (`_com
 | `group` | `inventory_groups.yml` | `controller_groups` | Groups |
 | `schedule` | `schedules.yml` | `controller_schedules` | Schedules |
 | `execution_environment` | `execution_environments.yml` | `controller_execution_environments` | Execution Environments |
+| Controller global settings category (`/api/controller/v2/settings/<slug>/`) | `settings.yml` | `controller_settings` | Controller Settings |
 | `label` | `labels.yml` | `controller_labels` | Labels |
 | `notification_template` | `notifications.yml` | `controller_notifications` | Notification Templates |
 | `organization` | `organizations.yml` | `aap_organizations` | Organizations |
@@ -146,6 +147,32 @@ Keep `workflow_nodes` (required for a useful workflow entry).
 | `disabled` | `false` |
 | `extra_data` | `{}` / absent |
 | `description` | `""` |
+
+### `controller_settings` → `controller_settings_*` (`ansible.controller.settings`)
+
+Dispatched by the `controller_settings` role, tag `settings`. Unlike other resources, this role **patches** `settings/all` with only the keys you give it — an omitted key is left untouched on the server, it is **not** reset to a module/role default. So "omit-able defaults" doesn't apply the same way here: decide per-key whether this repo should **own/enforce** that setting, not whether the value matches a default.
+
+Each list entry is one of:
+
+```yaml
+- settings:            # preferred for a whole category fetched via settings_retrieve
+    SOME_KEY: value
+    ANOTHER_KEY: value
+```
+
+or a single key/value pair:
+
+```yaml
+- name: SOME_KEY
+  value: value
+```
+
+Guidance:
+
+- Prefer `settings:` (whole dict) when converting an entire category (e.g. `policyascode`, `jobs`, `ui`) fetched from `settings_retrieve`.
+- Drop keys that are blank/empty (`""`, `{}`, `null`) **and** not something this repo intends to enforce — leaving them out means "don't manage this key," which is safe for untouched defaults.
+- Never copy a live secret value (`$encrypted$` or plaintext) for a token/password-shaped key — replace with a `{{ controller_settings_<name> }}` (or reuse an existing matching `controller_credential_*`) vault var and flag it as a follow-up for `vars/controller_secrets.redacted.yml`.
+- Settings are global (not org-scoped) and are **not** labelable, so the domain-label step does not apply. Placement still follows the normal common-vs-domain rule: if the setting only matters to one domain's job templates/credentials, put it in that domain; if it's a platform-wide Controller setting (e.g. the `policyascode` / OPA integration category — a global Controller feature, even though the `apps` domain happens to have an unrelated OPA demo credential), prefer `common` (`controller_settings_common`).
 
 ### `controller_inventories` / groups / labels / EEs
 
