@@ -34,6 +34,18 @@ Copy this checklist and track it:
 
 Accept JSON or YAML for one object (or a one-item `results` list — unwrap to the object).
 
+**If the user names a resource (e.g. a settings category, job template, credential) but does not paste a payload, prefer fetching it live via the read-only `user-aap-*` MCP tools over asking the user to paste JSON.** These MCP servers are list/retrieve-only (see the AAP read-only rule — never write), so fetching is always safe:
+
+- Controller global settings categories → `user-aap-platform-configuration`: `controller-settings_list` (find the `category_slug`), then `settings_retrieve` with that slug.
+- Gateway settings → `gateway-settings_list` / `settings_getter`.
+- Job templates / workflows / projects → `user-aap-job-mgmt`.
+- Credentials / credential types → `user-aap-security-compliance`.
+- Inventories / inventory sources → `user-aap-inventory-mgmt`.
+- Users / orgs / teams → `user-aap-user-mgmt`.
+- Execution environments / notification templates → `user-aap-platform-configuration`.
+
+Only fall back to asking the user to paste a payload if no matching read-only MCP tool exists, the lookup is ambiguous (multiple candidates with similar names), or the fetch fails.
+
 Detect type from, in order:
 
 1. User statement (“this is a job template”).

@@ -23,6 +23,7 @@ ansible-playbook pb_aap_config.yml -e "domains=cloud" -e "skip_common=true"
 - Organizations, users, teams, authenticators, and authenticator maps
 - Execution environments, labels, and notification templates
 - Projects, credentials, inventories, and inventory sources used by multiple domains
+- Global Controller settings (e.g. Policy as Code / OPA integration)
 
 ## Scope to a single resource file
 
@@ -41,6 +42,7 @@ Each YAML file has a one-liner comment at the top. Resource tags (`--tags`) cont
 | `notifications.yml` | `notification_templates` | `ansible-playbook pb_aap_config.yml --tags notification_templates` |
 | `organizations.yml` | `organizations` | `ansible-playbook pb_aap_config.yml --tags organizations` |
 | `projects.yml` | `projects` | `ansible-playbook pb_aap_config.yml --tags projects` |
+| `settings.yml` | `settings` | `ansible-playbook pb_aap_config.yml --tags settings` |
 | `teams.yml` | `teams` | `ansible-playbook pb_aap_config.yml --tags teams` |
 | `users.yml` | `users` | `ansible-playbook pb_aap_config.yml --tags users` |
 
