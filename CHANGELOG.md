@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-10-12 — Update Support Analyzer LLM endpoint URL
+
+Updates the `llm_api_base_url` for the `Support Analyzer (zleblanc)` credential to point to the new MAAS RHDP production endpoint.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Credential | Support Analyzer (zleblanc) | API tokens, LLM endpoint, and Google Sheets settings for ansible-support-analyzer | business | [🕵️](config/business/credentials.yml#L22-L37) |
+
+### Changed
+- `config/business/credentials.yml`: updated `llm_api_base_url` for `Support Analyzer (zleblanc)` to the new production endpoint.
+
 ## 2026-10-07 — Add Policy as Code settings and improve cac-parser live fetching
 
 Manages the Controller's Policy as Code global settings (OPA integration) in the common domain using patch-safe semantics, and updates the cac-parser skill to prioritize live MCP fetching for resource payloads.
