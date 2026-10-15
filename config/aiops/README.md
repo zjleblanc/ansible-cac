@@ -27,6 +27,7 @@ Each YAML file has a one-liner comment at the top. The `domains` extra-var (plus
 | File | Resource tag | Example |
 |------|--------------|--------|
 | `credentials.yml` | `credentials` | `ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags credentials` |
+| `eda_credential_types.yml` | `credential_type` | `ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags credential_type` |
 | `eda_credentials.yml` | `credential` | `ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags credential` |
 | `eda_decision_environments.yml` | `decision_environment` | `ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags decision_environment` |
 | `eda_event_streams.yml` | `event_stream` | `ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags event_stream` |

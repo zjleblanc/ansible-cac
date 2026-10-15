@@ -9,3 +9,9 @@ eda_decision_environments_aiops:
     organization: Default
     image_url: ansible.autodotes.com/de-supported-rhel9:latest
     credential: Hub Decision Environment Container Registry
+  - name: Autodotes Decision Environment
+    organization: Default
+    description: "View builder configuration: https://gitlab.com/zjleblanc/ansible-ee-builder/-/blob/master/definitions/de-default.yml?ref_type=heads"
+    image_url: quay.io/zleblanc/de-default:9668b7bc
+    credential: Quay (zleblanc) Container Registry
+    pull_policy: missing
