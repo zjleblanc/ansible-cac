@@ -64,3 +64,18 @@ eda_rulebook_activations_aiops:
     enabled: true
     restart_policy: never
     restart_on_project_update: true
+  - name: DataDog Events (pull)
+    description: Demonstrate pulling events from DataDog to satisfy outbound-only connection requirements.
+    organization: Autodotes
+    project: EDA Demos
+    rulebook: datadog_event_poll.yml
+    decision_environment: Autodotes Decision Environment
+    eda_credentials:
+      - Autodotes Controller
+      - eda-dd-poll-token
+    extra_vars:
+      datadog_site: https://us5.datadoghq.com
+    enabled: false
+    log_level: error
+    restart_policy: never
+    restart_on_project_update: false

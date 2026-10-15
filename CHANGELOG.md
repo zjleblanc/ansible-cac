@@ -1,5 +1,28 @@
 # Changelog
 
+## 2026-10-15 — Add new Datadog EDA resources from platform discovery
+
+Discovers and codifies three new Datadog-related EDA resources from the live platform (`ansible.autodotes.com`) along with a missing decision environment dependency, enabling pull-based event ingestion for environments with outbound-only connectivity.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Credential type | DataDog Service Access Token | Custom EDA credential type for Datadog service account tokens | aiops | [🕵️](config/aiops/eda_credential_types.yml#L4-L16) |
+| Credential | eda-dd-poll-token | DataDog service account token using the new custom type | aiops | [🕵️](config/aiops/eda_credentials.yml#L89-L94) |
+| Decision Environment | Autodotes Decision Environment | Decision environment for Datadog polling activations | aiops | [🕵️](config/aiops/eda_decision_environments.yml#L12-L18) |
+| Rulebook activation | DataDog Events (pull) | Pull-based Datadog events processing via datadog_event_poll.yml | aiops | [🕵️](config/aiops/eda_rulebook_activations.yml#L67-L82) |
+
+### Added
+- `config/aiops/eda_credential_types.yml`: new file containing the `DataDog Service Access Token` custom EDA credential type.
+- `vars/eda_secrets.redacted.yml`: added `eda_credential_dd_poll_token` placeholder.
+
+### Changed
+- `config/aiops/eda_credentials.yml`: added `eda-dd-poll-token` credential using the new custom type.
+- `config/aiops/eda_decision_environments.yml`: added `Autodotes Decision Environment` pointing to `quay.io/zleblanc/de-default:9668b7bc`.
+- `config/aiops/eda_rulebook_activations.yml`: added `DataDog Events (pull)` activation targeting the polling rulebook and the new DE/credential.
+- `config/aiops/README.md`: updated the domain resource table to include the new credential types file.
+
 ## 2026-10-12 — Update Support Analyzer LLM endpoint URL
 
 Updates the `llm_api_base_url` for the `Support Analyzer (zleblanc)` credential to point to the new MAAS RHDP production endpoint.
