@@ -9,3 +9,17 @@ controller_settings_common:
       OPA_AUTH_TOKEN: "{{ controller_credential_opa_auth_token }}"
       OPA_REQUEST_TIMEOUT: 1.5
       OPA_REQUEST_RETRIES: 2
+  - settings:
+      LOG_AGGREGATOR_ENABLED: true
+      LOG_AGGREGATOR_HOST: https://splunk.autodotes.com:8088/services/collector/event
+      LOG_AGGREGATOR_TYPE: splunk
+      LOG_AGGREGATOR_PASSWORD: "{{ controller_settings_log_aggregator_password }}"
+      LOG_AGGREGATOR_PROTOCOL: https
+      LOG_AGGREGATOR_VERIFY_CERT: false
+      LOG_AGGREGATOR_LEVEL: INFO
+      LOG_AGGREGATOR_LOGGERS:
+        - awx
+        - activity_stream
+        - job_events
+        - system_tracking
+        - job_lifecycle

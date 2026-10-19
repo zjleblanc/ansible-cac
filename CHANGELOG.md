@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-10-19 — Add Splunk logging settings to Controller
+
+Configure Controller to forward system and job logs to Splunk via HEC integration.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Controller settings | logging | Splunk HEC logging configuration for system, activity, and job events. | common | [🕵️](config/common/settings.yml#L12-L26) |
+
+### Secrets
+
+| Component | Variable | Credential |
+|-----------|----------|------------|
+| Controller | controller_settings_log_aggregator_password | [logging settings](config/common/settings.yml#L12-L26) |
+
 ## 2026-10-15 — Add new Datadog EDA resources from platform discovery
 
 Discovers and codifies three new Datadog-related EDA resources from the live platform (`ansible.autodotes.com`) along with a missing decision environment dependency, enabling pull-based event ingestion for environments with outbound-only connectivity.
