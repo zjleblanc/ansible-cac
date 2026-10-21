@@ -1,5 +1,26 @@
 # Changelog
 
+## 2026-10-21 — Add AIOps failure demos and fix secret variable collision
+
+Add two new AIOps job templates for simulating and notifying on random failures, intended for EDA remediation demos. Also fixes a platform-level bug where secrets starting with `controller_settings_` collided with the wildcard variable merger.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Job template | AO // Failure Notification | Simulate and notify on random failures for EDA remediation demos. | aiops | [🕵️](config/aiops/job_templates.yml#L165-L175) |
+| | AO // Random Failure | Simulate a random job failure to trigger remediation workflows. | aiops | [🕵️](config/aiops/job_templates.yml#L176-L188) |
+
+### Secrets
+
+| Component | Variable | Description |
+|-----------|----------|-------------|
+| Controller | `controller_setting_log_aggregator_password` | Renamed singular prefix to avoid collision with settings wildcard merger. |
+| Controller | `controller_setting_opa_auth_token` | Renamed singular prefix to avoid collision with settings wildcard merger. |
+
+### Fixed
+- `config/aiops/eda_credential_types.yml`: wrapped the DataDog Service Access Token injector in `!unsafe` to prevent early evaluation by Ansible during CaC apply.
+
 ## 2026-10-19 — Add Splunk logging settings to Controller
 
 Configure Controller to forward system and job logs to Splunk via HEC integration.

@@ -13,7 +13,7 @@ controller_settings_common:
       LOG_AGGREGATOR_ENABLED: true
       LOG_AGGREGATOR_HOST: https://splunk.autodotes.com:8088/services/collector/event
       LOG_AGGREGATOR_TYPE: splunk
-      LOG_AGGREGATOR_PASSWORD: "{{ controller_settings_log_aggregator_password }}"
+      LOG_AGGREGATOR_PASSWORD: "{{ controller_setting_log_aggregator_password }}"
       LOG_AGGREGATOR_PROTOCOL: https
       LOG_AGGREGATOR_VERIFY_CERT: false
       LOG_AGGREGATOR_LEVEL: INFO

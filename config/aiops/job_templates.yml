@@ -162,6 +162,30 @@ controller_templates_aiops:
       - Ticket Enrichment API Key
     ask_variables_on_launch: true
     ask_credential_on_launch: true
+  - name: AO // Failure Notification
+    labels:
+      - AIOps
+    project: Event-Driven Demos
+    playbook: playbooks/jt_failure_notification.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
+      - Gmail SMTP
+    ask_variables_on_launch: true
+    opa_query_path: autodotes_policy/job_failure_notification
+  - name: AO // Random Failure
+    labels:
+      - AIOps
+    project: Event-Driven Demos
+    playbook: playbooks/jt_failure_random.yml
+    inventory: Autodotes Lab
+    execution_environment: ee-default
+    credentials:
+      - AAP (id_rsa)
+      - AWS Sandbox Credential
+      - West ServiceNow (ven07621)
+    extra_vars:
+      _target_host: vault
   - name: EDA // Resize EBS Volume
     labels:
       - AIOps
