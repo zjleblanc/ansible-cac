@@ -1,5 +1,25 @@
 # Changelog
 
+## 2026-10-28 — Add weekly schedules for Support Case Tracker
+
+Adds two new weekly schedules for the Support Case Tracker automation in the business domain—one for the current user with secure logging enabled, and another for Territory 5 (aseifert@redhat.com) with a filtered account list.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Schedule | BPA // Support Case Tracker // Weekly (me) | Weekly tracker run for me (secure logging enabled). | business | [🕵️](config/business/schedules.yml#L13-L19) |
+| Schedule | BPA // Support Case Tracker // Weekly (TERR5) | Weekly tracker run for TERR5 (Seifert accounts). | business | [🕵️](config/business/schedules.yml#L20-L37) |
+
+### Secrets
+
+| Component | Variable | Description |
+|-----------|----------|-------------|
+| Controller | `controller_credential_terr05_email_to` | Recipient email for the Territory 5 Support Case Tracker schedule. |
+
+### Changed
+- `config/business/job_templates.yml`: enabled `ask_variables_on_launch` for `BPA // Support Case Tracker` so schedule `extra_data` overrides are honored by Controller.
+
 ## 2026-10-21 — Add AIOps failure demos and fix secret variable collision
 
 Add two new AIOps job templates for simulating and notifying on random failures, intended for EDA remediation demos. Also fixes a platform-level bug where secrets starting with `controller_settings_` collided with the wildcard variable merger.
