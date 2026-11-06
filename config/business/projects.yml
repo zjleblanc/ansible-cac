@@ -4,5 +4,5 @@ controller_projects_business:
   - name: Business Process
     organization: Autodotes
     scm_type: git
-    scm_url: https://github.com/zjleblanc/ansible-business-process.git
+    scm_url: https://github.com/autodotes/ansible-business-process.git
     default_environment: ee-default
