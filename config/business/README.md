@@ -4,9 +4,9 @@ Business process automation (BPA) resources.
 
 ## Apply this domain
 
-Add `--ask-vault-pass` or `--vault-password-file <path>` when vaulted secrets in `vars/` are required for the resources you are applying.
+Add `--ask-vault-pass` or `--vault-password-file <path>` when vaulted secrets in `vars/` or `config/business/vault.yml` are required for the resources you are applying.
 
-Set `business` in the `domains` extra-var to load this folder. `common` still loads unless you set `skip_common=true`.
+Set `business` in the `domains` extra-var to load this folder. `common` still loads unless you set `skip_common=true`. Selecting `business` also loads `config/business/vault.yml` when that file exists.
 
 ```bash
 ansible-playbook pb_aap_config.yml -e "domains=business"
@@ -19,7 +19,8 @@ ansible-playbook pb_aap_config.yml -e "domains=business"
 - Account Task Summarizer credential using the shared `OpenAI Config` credential type (`config/common/credential_types.yml`)
 - Ansible Support Analyzer credential type + credential for the support case analyzer playbook (LLM + Google Sheets settings)
 - Support Tracker credential (Ansible Support Analyzer type, values populated manually in the AAP UI) + BPA // Support Case Tracker job template, which also uses the shared `Gmail SMTP` credential (`config/common/credentials.yml`)
-- Nightly schedule for the account task update job template, weekly schedule for the support case analyzer job template
+- Nightly schedule for the account task update job template, weekly schedules for the support case analyzer and tracker job templates
+- Domain vault vars (`business_var_*`) in `vault.redacted.yml` (copy to `vault.yml`, encrypt locally)
 
 ## Scope to a single resource file
 
@@ -34,5 +35,6 @@ Each YAML file has a one-liner comment at the top. The `domains` extra-var (plus
 | `job_templates.yml` | `job_templates` | `ansible-playbook pb_aap_config.yml -e "domains=business" -e "skip_common=true" --tags job_templates` |
 | `projects.yml` | `projects` | `ansible-playbook pb_aap_config.yml -e "domains=business" -e "skip_common=true" --tags projects` |
 | `schedules.yml` | `schedules` | `ansible-playbook pb_aap_config.yml -e "domains=business" -e "skip_common=true" --tags schedules` |
+| `vault.redacted.yml` | n/a (docs) | Copy to `vault.yml`, replace mocks, `ansible-vault encrypt config/business/vault.yml` |
 
 See also [config/README.md](../README.md).

@@ -16,7 +16,7 @@ New entries follow the ansible-cac format in [format.md](format.md): dated summa
    - Skim `git log -8 --oneline` to match this repo's commit-message tone.
    - Use conversation context for intent the diff alone may not show.
    - From `config/` diffs, collect **new** list entries (created resources) for the resources table.
-   - From secrets diffs (`vars/*_secrets.redacted.yml`), collect new vault variable placeholders for the secrets table.
+   - From secrets diffs (`vars/*_secrets.redacted.yml`, `config/*/vault.redacted.yml`), collect new vault variable placeholders for the secrets table.
 
 2. **Find the changelog**
    - Use `CHANGELOG.md` at the repo root.

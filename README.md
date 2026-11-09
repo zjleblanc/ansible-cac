@@ -117,10 +117,14 @@ This repository includes a [pre-commit](https://pre-commit.com/) configuration w
 Sensitive values used to populate credentials and other configuration details are supplied from vaulted files.
 
 ```text
-vars
-├── controller_secrets.yml
+vars/
+├── controller_secrets.yml      # always loaded
 ├── eda_secrets.yml
 └── platform_secrets.yml
+
+config/<domain>/
+├── vault.yml                   # optional; loaded only when that domain is selected
+└── vault.redacted.yml          # committed shape/docs (mock values only)
 ```
 
-Each file is encrypted with `ansible-vault`. `pb_aap_config.yml` loads all three by default. Real secret files are not included in this public repository (they are ignored via `.gitignore` as `vars/*secrets.yml`). Redacted examples (`*_secrets.redacted.yml`) are included only as shape/documentation for the variables you need to define locally.
+Global `vars/*_secrets.yml` files are encrypted with `ansible-vault` and loaded on every apply. Optional `config/<domain>/vault.yml` (and `config/common/vault.yml`) are loaded only when that domain is selected (`common` unless `skip_common=true`). Domain vault keys use the `<domain>_var_<name>` convention (e.g. `business_var_support_case_accounts`). Real secret files are gitignored (`**/*secrets.yml`, `**/vault.yml`). Redacted counterparts (`*_secrets.redacted.yml`, `vault.redacted.yml`) document expected variable names with mock placeholders (`"secret"`, `["user@example.com"]`, …) — never production-looking secrets.

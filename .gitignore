@@ -3,6 +3,7 @@
 .ansible
 staging/
 **/*secrets.yml
+**/vault.yml
 scripts
 
 # Byte-compiled / optimized / DLL files

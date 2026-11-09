@@ -189,14 +189,19 @@ ansible-playbook pb_aap_config.yml -e "domains=networking" -e "skip_common=true"
 ansible-playbook pb_aap_config.yml -e "domains=networking" --tags projects,credentials
 ```
 
-Vault is optional at the CLI: add `--ask-vault-pass` or `--vault-password-file <path>` when secrets in `vars/` are required.
+Vault is optional at the CLI: add `--ask-vault-pass` or `--vault-password-file <path>` when vaulted files are required.
 
-Two independent layers:
+Secrets load in two layers (both optional at the domain layer):
 
-1. **Domain selection** (`domains` var + `skip_common`) — which folders’ vars are loaded.
+1. **Global** — `vars/controller_secrets.yml`, `vars/eda_secrets.yml`, `vars/platform_secrets.yml` (always attempted).
+2. **Domain** — `config/<domain>/vault.yml` when that domain is in `selected_domains`; `config/common/vault.yml` when common is not skipped. Missing files are skipped. Variable names use `<domain>_var_<name>` (e.g. `business_var_tracker_notifications`, `common_var_example`). Document placeholders in the matching `vault.redacted.yml` (committed; mock values only).
+
+Two independent apply layers:
+
+1. **Domain selection** (`domains` var + `skip_common`) — which folders’ vars (and optional `vault.yml`) are loaded.
 2. **Resource tags** (`--tags`) — which `infra.aap_configuration.dispatch` roles actually run (`projects`, `credentials`, `job_templates`, …). With no `--tags` passed, every dispatch role runs for whatever vars got loaded.
 
-Every `include_vars` task in `pb_aap_config.yml` (secrets, common, each domain) is tagged `always` so it is
+Every `include_vars` task in `pb_aap_config.yml` (secrets, domain vaults, common, each domain) is tagged `always` so it is
 unaffected by `--tags`/`--skip-tags` filtering; only the `when:` condition on `domains`/`skip_common` decides
 whether it runs. `dispatch` itself is also tagged `always` so it always executes after vars are loaded — it's the
 sub-roles `dispatch` includes internally (one per resource type) that resource tags filter.
@@ -209,7 +214,7 @@ sub-roles `dispatch` includes internally (one per resource type) that resource t
 4. Ensure any **referenced** project, credential, credential type, inventory, EE, and label already exist in that domain or in `common`.
 5. If a dependency is missing and would be used only here, add it in the same domain. If other domains already need it, put the definition in `common` instead of duplicating.
 6. For labelable resources (job templates, workflows, inventories) outside `common`, set `labels` to exactly the domain label (see **Domain labels**). Ensure that label exists in `config/common/labels.yml`.
-7. Do not put secrets in config YAML. Reference vaulted vars from `vars/*_secrets.yml` (see redacted examples). Never commit real `*secrets.yml` files.
+7. Do not put secrets in resource config YAML. Reference vaulted vars from `vars/*_secrets.yml` (shared; typically `controller_credential_*` / `eda_credential_*`) or `config/<domain>/vault.yml` (domain-local; always `<domain>_var_<name>`). Document new vars in the matching `*_secrets.redacted.yml` / `vault.redacted.yml` with mock placeholders only. Never commit real `*secrets.yml` or `vault.yml` files.
 8. If you add a **new domain folder**:
    - Add an `include_vars` task in `pb_aap_config.yml` with `when: "'<domain>' in selected_domains"` and `tags: always`
    - Add the domain label to `config/common/labels.yml`
@@ -221,7 +226,7 @@ sub-roles `dispatch` includes internally (one per resource type) that resource t
 
 - Do not reintroduce flat `controller/`, `eda/`, `hub/`, `platform/` layouts or component-specific apply playbooks as the primary path; use `config/` + `pb_aap_config.yml`.
 - Do not put a shared project/credential/inventory only in one domain if another domain’s templates reference it by name — that creates a silent apply-order / missing-object dependency. Move the definition to `common`.
-- Do not invent or hardcode secret values; use `{{ controller_credential_* }}` (or the appropriate vault var) and document new vars in the matching `*_secrets.redacted.yml`.
+- Do not invent or hardcode secret values; use `{{ controller_credential_* }}` / `{{ <domain>_var_* }}` (or the appropriate vault var) and document new vars in the matching `*_secrets.redacted.yml` or domain `vault.redacted.yml`.
 - Do not omit or drift var-file one-liners / domain README tables when changing config layout.
 - Do not leave labelable domain objects without their domain label, keep multi-label leftovers from exports, or invent a `Common` label.
 - Do not edit the plan file under `.cursor/plans/` unless the user asks.

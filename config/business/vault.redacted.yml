@@ -1,0 +1,14 @@
+---
+business_var_support_case_accounts:
+  - name: ExampleCorp
+    ids:
+      - 100001
+  - name: DemoOrg
+    ids:
+      - 100002
+business_var_tracker_notifications:
+  - to: ["user@example.com"]
+    accounts: all
+  - to: ["other@example.com"]
+    accounts:
+      - name: DemoOrg

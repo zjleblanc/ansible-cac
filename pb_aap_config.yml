@@ -10,6 +10,11 @@
       - vars/platform_secrets.yml
     domains: []
     skip_common: false
+    # Files under config/<domain>/ that are not CaC resource lists
+    domain_ignore_files:
+      - README.md
+      - vault.yml
+      - vault.redacted.yml
   pre_tasks:
     - name: Normalize domains into a list
       ansible.builtin.set_fact:
@@ -22,12 +27,28 @@
       loop: "{{ secrets_files }}"
       tags: always
 
+    - name: Discover optional domain vault files
+      ansible.builtin.stat:
+        path: "config/{{ item }}/vault.yml"
+      loop: "{{ (['common'] if not (skip_common | bool) else []) + selected_domains }}"
+      register: domain_vault_stats
+      tags: always
+
+    - name: Load optional domain vault files
+      ansible.builtin.include_vars:
+        file: "{{ item.stat.path }}"
+      loop: "{{ domain_vault_stats.results }}"
+      when: item.stat.exists
+      loop_control:
+        label: "{{ item.item }}"
+      tags: always
+
   tasks:
     - name: Include common configuration
       ansible.builtin.include_vars:
         dir: config/common
         extensions: [yml, yaml]
-        ignore_files: [README.md]
+        ignore_files: "{{ domain_ignore_files }}"
         ignore_unknown_extensions: true
       when: not (skip_common | bool)
       tags: always
@@ -36,7 +57,7 @@
       ansible.builtin.include_vars:
         dir: config/cloud
         extensions: [yml, yaml]
-        ignore_files: [README.md]
+        ignore_files: "{{ domain_ignore_files }}"
       when: "'cloud' in selected_domains"
       tags: always
 
@@ -44,7 +65,7 @@
       ansible.builtin.include_vars:
         dir: config/networking
         extensions: [yml, yaml]
-        ignore_files: [README.md]
+        ignore_files: "{{ domain_ignore_files }}"
       when: "'networking' in selected_domains"
       tags: always
 
@@ -52,7 +73,7 @@
       ansible.builtin.include_vars:
         dir: config/linux
         extensions: [yml, yaml]
-        ignore_files: [README.md]
+        ignore_files: "{{ domain_ignore_files }}"
       when: "'linux' in selected_domains"
       tags: always
 
@@ -60,7 +81,7 @@
       ansible.builtin.include_vars:
         dir: config/windows
         extensions: [yml, yaml]
-        ignore_files: [README.md]
+        ignore_files: "{{ domain_ignore_files }}"
       when: "'windows' in selected_domains"
       tags: always
 
@@ -68,7 +89,7 @@
       ansible.builtin.include_vars:
         dir: config/hashi
         extensions: [yml, yaml]
-        ignore_files: [README.md]
+        ignore_files: "{{ domain_ignore_files }}"
       when: "'hashi' in selected_domains"
       tags: always
 
@@ -76,7 +97,7 @@
       ansible.builtin.include_vars:
         dir: config/aiops
         extensions: [yml, yaml]
-        ignore_files: [README.md]
+        ignore_files: "{{ domain_ignore_files }}"
       when: "'aiops' in selected_domains"
       tags: always
 
@@ -84,7 +105,7 @@
       ansible.builtin.include_vars:
         dir: config/itsm
         extensions: [yml, yaml]
-        ignore_files: [README.md]
+        ignore_files: "{{ domain_ignore_files }}"
       when: "'itsm' in selected_domains"
       tags: always
 
@@ -92,7 +113,7 @@
       ansible.builtin.include_vars:
         dir: config/apps
         extensions: [yml, yaml]
-        ignore_files: [README.md]
+        ignore_files: "{{ domain_ignore_files }}"
       when: "'apps' in selected_domains"
       tags: always
 
@@ -100,7 +121,7 @@
       ansible.builtin.include_vars:
         dir: config/aap
         extensions: [yml, yaml]
-        ignore_files: [README.md]
+        ignore_files: "{{ domain_ignore_files }}"
       when: "'aap' in selected_domains"
       tags: always
 
@@ -108,7 +129,7 @@
       ansible.builtin.include_vars:
         dir: config/hub
         extensions: [yml, yaml]
-        ignore_files: [README.md]
+        ignore_files: "{{ domain_ignore_files }}"
       when: "'hub' in selected_domains"
       tags: always
 
@@ -116,7 +137,7 @@
       ansible.builtin.include_vars:
         dir: config/business
         extensions: [yml, yaml]
-        ignore_files: [README.md]
+        ignore_files: "{{ domain_ignore_files }}"
       when: "'business' in selected_domains"
       tags: always
 

@@ -23,7 +23,7 @@ Apply with [`pb_aap_config.yml`](../pb_aap_config.yml) from the repository root.
 
 ## Quick examples
 
-Add `--ask-vault-pass` or `--vault-password-file <path>` when vaulted secrets in `vars/` are required for the resources you are applying.
+Add `--ask-vault-pass` or `--vault-password-file <path>` when vaulted secrets in `vars/` or an optional `config/<domain>/vault.yml` are required for the resources you are applying.
 
 ```bash
 # common only

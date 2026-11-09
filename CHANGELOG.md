@@ -1,5 +1,31 @@
 # Changelog
 
+## 2026-11-09 — Add domain-scoped vault files and `<domain>_var_*` convention
+
+Lets each domain keep an optional ansible-vault encrypted `vault.yml` that the CaC playbook loads only when that domain is selected, using `<domain>_var_<name>` keys. Business Support Case Tracker/Analyzer now pull account lists and notification targets from those vars instead of hardcoding them in config.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Schedule | BPA // Support Case Tracker // Weekly | Weekly tracker run driven by domain vault notification and account vars. | business | [🕵️](config/business/schedules.yml#L12-L18) |
+
+### Secrets
+
+| Component | Variable | Description |
+|-----------|----------|-------------|
+| Business | `business_var_support_case_accounts` | Account name/id list for Support Case Tracker and Analyzer. |
+| | `business_var_tracker_notifications` | Per-recipient notification targets for Support Case Tracker. |
+
+### Changed
+- `pb_aap_config.yml`: discovers and loads optional `config/<domain>/vault.yml` (and `config/common/vault.yml`) after global secrets; ignores `vault.yml` / `vault.redacted.yml` in domain dir includes.
+- `config/business/job_templates.yml`: Support Case Analyzer and Tracker `extra_vars` reference `business_var_*` vault keys.
+- Documented domain vault loading, `<domain>_var_*` naming, and mock-only redacted placeholders in README, AGENTS.md, and ignore-secrets rule; gitignored `**/vault.yml`.
+
+### Removed
+- `BPA // Support Case Tracker // Weekly (me)` and `BPA // Support Case Tracker // Weekly (TERR5)` schedules (replaced by the single vault-driven weekly schedule).
+- `controller_credential_terr05_email_to` placeholder from `vars/controller_secrets.redacted.yml` (moved to domain vault vars).
+
 ## 2026-10-28 — Add weekly schedules for Support Case Tracker
 
 Adds two new weekly schedules for the Support Case Tracker automation in the business domain—one for the current user with secure logging enabled, and another for Territory 5 (aseifert@redhat.com) with a filtered account list.
