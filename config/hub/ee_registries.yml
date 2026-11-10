@@ -1,7 +1,7 @@
 # ansible-playbook pb_aap_config.yml -e "domains=hub" -e "skip_common=true" --tags registries
 ---
 hub_ee_registries_hub:
-  - name: quay_zleblanc
-    url: https://quay.io
-    username: zleblanc
-    password: "{{ quay_password }}"
+  - name: registry.redhat.io
+    url: https://registry.redhat.io/
+    username: "{{ hub_var_redhat_registry_username }}"
+    password: "{{ hub_var_redhat_registry_password }}"

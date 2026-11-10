@@ -306,10 +306,28 @@ Only the key(s) actually used on a given entry are present — `name`+`value` (s
 ```yaml
 - name:
   url:
+  auth_url:
+  token:
+  sync_dependencies:
   requirements:
 ```
 
+### Collection Repositories (`hub_collection_repositories_*`)
+
+```yaml
+- name:
+  description:
+  retain_repo_versions:
+  pulp_labels:
+  distribution:
+  private:
+  remote:
+  sync:
+```
+
 ### Groups (`ah_groups_*`)
+
+Not applied by `infra.aap_configuration.dispatch` (prefer `aap_teams` in common).
 
 ```yaml
 - name:
@@ -318,6 +336,8 @@ Only the key(s) actually used on a given entry are present — `name`+`value` (s
 
 ### Roles (`ah_roles_*`)
 
+Not applied by `infra.aap_configuration.dispatch`.
+
 ```yaml
 - name:
   description:
@@ -325,6 +345,8 @@ Only the key(s) actually used on a given entry are present — `name`+`value` (s
 ```
 
 ### Users (`ah_users_*`)
+
+Not applied by `infra.aap_configuration.dispatch` (prefer `aap_user_accounts` in common).
 
 ```yaml
 - username:

@@ -1,0 +1,34 @@
+# ansible-playbook pb_aap_config.yml -e "domains=hub" -e "skip_common=true" --tags collectionsrep
+---
+hub_collection_repositories_hub:
+  - name: community
+    description: Community content repository
+    retain_repo_versions: 1
+    remote: community
+    sync: false
+  - name: rh-certified
+    description: Red Hat certified content repository
+    retain_repo_versions: 1
+    remote: rh-certified
+    sync: false
+  - name: validated
+    description: Validated collections
+    retain_repo_versions: 1
+    remote: validated
+    sync: false
+  - name: published
+    description: Certified content repository
+    retain_repo_versions: 1
+    sync: false
+  - name: staging
+    retain_repo_versions: 1
+    pulp_labels:
+      pipeline: staging
+      hide_from_search: ""
+    sync: false
+  - name: rejected
+    retain_repo_versions: 1
+    pulp_labels:
+      pipeline: rejected
+      hide_from_search: ""
+    sync: false

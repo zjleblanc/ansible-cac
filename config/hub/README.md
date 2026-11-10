@@ -1,10 +1,10 @@
 # hub
 
-Private Automation Hub configuration (registries, repositories, collections, RBAC).
+Private Automation Hub configuration (collection remotes/repositories, EE registries).
 
 ## Apply this domain
 
-Add `--ask-vault-pass` or `--vault-password-file <path>` when vaulted secrets in `vars/` are required for the resources you are applying.
+Add `--ask-vault-pass` or `--vault-password-file <path>` when vaulted secrets in `config/hub/vault.yml` or `vars/` are required for the resources you are applying.
 
 Set `hub` in the `domains` extra-var to load this folder. `common` still loads unless you set `skip_common=true`.
 
@@ -14,9 +14,12 @@ ansible-playbook pb_aap_config.yml -e "domains=hub"
 
 ## What lives here
 
-- EE registries and repositories
-- Collection remotes / requirements
-- Hub groups, roles, and users
+- Collection remotes and repositories (sync left to `PAH // Sync Repositories`)
+- EE registries
+
+Collection namespaces are created by those syncs, so they are not defined here. Hub groups/roles/users (`ah_*`) are **not** applied by `infra.aap_configuration.dispatch`. Platform teams and users belong under `config/common/`. Live EE push repositories without a remote registry are not managed here (`ansible.hub.ah_ee_repository` cannot create them).
+
+Domain secrets are documented in `vault.redacted.yml` and loaded from gitignored `vault.yml` when this domain is selected.
 
 ## Scope to a single resource file
 
@@ -27,10 +30,7 @@ Each YAML file has a one-liner comment at the top. The `domains` extra-var (plus
 | File | Resource tag | Example |
 |------|--------------|--------|
 | `collection_remotes.yml` | `collectionremote` | `ansible-playbook pb_aap_config.yml -e "domains=hub" -e "skip_common=true" --tags collectionremote` |
+| `collection_repositories.yml` | `collectionsrep` | `ansible-playbook pb_aap_config.yml -e "domains=hub" -e "skip_common=true" --tags collectionsrep` |
 | `ee_registries.yml` | `registries` | `ansible-playbook pb_aap_config.yml -e "domains=hub" -e "skip_common=true" --tags registries` |
-| `ee_repositories.yml` | `repos` | `ansible-playbook pb_aap_config.yml -e "domains=hub" -e "skip_common=true" --tags repos` |
-| `groups.yml` | `groups` | `ansible-playbook pb_aap_config.yml -e "domains=hub" -e "skip_common=true" --tags groups` |
-| `roles.yml` | `roles` | `ansible-playbook pb_aap_config.yml -e "domains=hub" -e "skip_common=true" --tags roles` |
-| `users.yml` | `users` | `ansible-playbook pb_aap_config.yml -e "domains=hub" -e "skip_common=true" --tags users` |
 
 See also [config/README.md](../README.md).

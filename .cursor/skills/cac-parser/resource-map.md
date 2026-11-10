@@ -32,9 +32,10 @@ Paths are under `config/<domain>/`. Variable suffix is always `_<domain>` (`_com
 | Hub EE registry | `ee_registries.yml` | `hub_ee_registries` | Hub EE Registries |
 | Hub EE repository | `ee_repositories.yml` | `hub_ee_repositories` | Hub EE Repositories |
 | Hub collection remote | `collection_remotes.yml` | `hub_collection_remotes` | Hub Collection Remotes |
-| Hub / AH group | `groups.yml` | `ah_groups` | Hub Groups |
-| Hub / AH role | `roles.yml` | `ah_roles` | Hub Roles |
-| Hub / AH user | `users.yml` | `ah_users` | Hub Users |
+| Hub collection repository | `collection_repositories.yml` | `hub_collection_repositories` | Hub Collection Repositories |
+| Hub / AH group | `groups.yml` | `ah_groups` | Hub Groups (not dispatched; prefer `aap_teams` in common) |
+| Hub / AH role | `roles.yml` | `ah_roles` | Hub Roles (not dispatched) |
+| Hub / AH user | `users.yml` | `ah_users` | Hub Users (not dispatched; prefer `aap_user_accounts` in common) |
 
 Most platform/gateway fundamentals live only under `common` today. Hub resources live under `hub`. EDA resources live under `aiops` in this repo.
 

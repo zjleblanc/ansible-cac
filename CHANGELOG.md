@@ -1,5 +1,39 @@
 # Changelog
 
+## 2026-11-09 — Point Private Automation Hub at Galaxy and Red Hat content
+
+Defines collection remotes for Galaxy community content and Red Hat certified and validated content, plus the local repositories those remotes sync into. Repository sync stays with `PAH // Sync Repositories`. Collection namespaces are left to those syncs. The EE registry now points at registry.redhat.io, and the demo Hub users, groups, roles, and Quay EE repository are dropped.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Hub collection remote | rh-certified | Red Hat certified Automation Hub collection remote. | hub | [🕵️](config/hub/collection_remotes.yml#L53-L115) |
+| | validated | Red Hat validated Automation Hub collection remote. | hub | [🕵️](config/hub/collection_remotes.yml#L116-L129) |
+| Hub collection repository | community | Community content repository | hub | [🕵️](config/hub/collection_repositories.yml#L4-L8) |
+| | published | Certified content repository | hub | [🕵️](config/hub/collection_repositories.yml#L19-L22) |
+| | rejected | Rejected pipeline repository hidden from search. | hub | [🕵️](config/hub/collection_repositories.yml#L29-L34) |
+| | rh-certified | Red Hat certified content repository | hub | [🕵️](config/hub/collection_repositories.yml#L9-L13) |
+| | staging | Staging pipeline repository hidden from search. | hub | [🕵️](config/hub/collection_repositories.yml#L23-L28) |
+| | validated | Validated collections | hub | [🕵️](config/hub/collection_repositories.yml#L14-L18) |
+
+### Secrets
+
+| Component | Variable | Description |
+|-----------|----------|-------------|
+| Hub | `hub_var_redhat_automation_hub_token` | Offline token for the rh-certified and validated collection remotes. |
+| | `hub_var_redhat_registry_password` | registry.redhat.io password for the EE registry. |
+| | `hub_var_redhat_registry_username` | registry.redhat.io username for the EE registry. |
+
+### Changed
+- `config/hub/collection_remotes.yml`: renamed the Galaxy remote from `post_install` to `community` and expanded its requirements.
+- `config/hub/ee_registries.yml`: replaced `quay_zleblanc` with `registry.redhat.io`, using hub vault username and password.
+- Hub README and cac-parser docs: collection repositories are in scope; namespaces are not defined because sync creates them; `ah_*` groups, roles, and users are not dispatched.
+
+### Removed
+- Hub EE repository `ee-default` (`config/hub/ee_repositories.yml`).
+- Hub groups `astros` and `pitching_staff`, role `coach`, and users `altuve`, `biggio`, and `verlander`.
+
 ## 2026-11-09 — Add domain-scoped vault files and `<domain>_var_*` convention
 
 Lets each domain keep an optional ansible-vault encrypted `vault.yml` that the CaC playbook loads only when that domain is selected, using `<domain>_var_<name>` keys. Business Support Case Tracker/Analyzer now pull account lists and notification targets from those vars instead of hardcoding them in config.

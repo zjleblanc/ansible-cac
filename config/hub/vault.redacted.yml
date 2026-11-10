@@ -1,0 +1,4 @@
+---
+hub_var_redhat_automation_hub_token: "secret"
+hub_var_redhat_registry_username: "user"
+hub_var_redhat_registry_password: "secret"

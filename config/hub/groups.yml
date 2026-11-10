@@ -1,7 +1,0 @@
-# ansible-playbook pb_aap_config.yml -e "domains=hub" -e "skip_common=true" --tags groups
----
-ah_groups_hub:
-  - name: astros
-    state: present
-  - name: pitching_staff
-    state: present

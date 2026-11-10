@@ -128,6 +128,7 @@ Use these strings in the Type column (and for sort). Map from the CaC variable /
 | `gateway_authenticator_maps` | Authenticator map |
 | `gateway_authenticators` | Authenticator |
 | `hub_collection_remotes` | Hub collection remote |
+| `hub_collection_repositories` | Hub collection repository |
 | `hub_ee_registries` | Hub EE registry |
 | `hub_ee_repositories` | Hub EE repository |
 
