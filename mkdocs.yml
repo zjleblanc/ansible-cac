@@ -98,6 +98,11 @@ nav:
           - EDA Parser:
               - Overview: .cursor/skills/eda-parser/SKILL.md
               - Resource Map: .cursor/skills/eda-parser/resource-map.md
+          - Hub Parser:
+              - Overview: .cursor/skills/hub-parser/SKILL.md
+              - API Reference: .cursor/skills/hub-parser/api-reference.md
+              - Resource Map: .cursor/skills/hub-parser/resource-map.md
+              - Key Ordering: .cursor/skills/hub-parser/key_ordering.md
           - CaC Schedules: .cursor/skills/cac-schedules/SKILL.md
           - Playbook to CaC:
               - Overview: .cursor/skills/playbook-to-cac/SKILL.md

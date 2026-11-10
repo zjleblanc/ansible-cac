@@ -282,6 +282,8 @@ Only the key(s) actually used on a given entry are present — `name`+`value` (s
 
 ## Private Automation Hub
 
+Hub API export and conversion uses [hub-parser](../hub-parser/SKILL.md). Keep this section's key order aligned with [hub-parser/key_ordering.md](../hub-parser/key_ordering.md).
+
 ### EE Registries (`hub_ee_registries_*`)
 
 ```yaml

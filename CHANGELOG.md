@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-11-10 — Add a Hub API parser for Galaxy and Pulp exports
+
+Adds `hub-parser` so Hub collection remotes, collection repositories, and EE registries can be exported straight from the Galaxy and Pulp APIs. There is no Hub MCP server. Collection namespaces stay out of config because collection sync creates them, and Hub users, groups, roles, and local EE push repositories stay out because dispatch does not apply them.
+
+### Changed
+- `cac-parser` sends Hub/Galaxy/Pulp objects to `hub-parser` and EDA objects to `eda-parser`.
+- Docs nav and `AGENTS.md` link the new skill (overview, API reference, resource map, key order).
+
 ## 2026-11-09 — Point Private Automation Hub at Galaxy and Red Hat content
 
 Defines collection remotes for Galaxy community content and Red Hat certified and validated content, plus the local repositories those remotes sync into. Repository sync stays with `PAH // Sync Repositories`. Collection namespaces are left to those syncs. The EE registry now points at registry.redhat.io, and the demo Hub users, groups, roles, and Quay EE repository are dropped.

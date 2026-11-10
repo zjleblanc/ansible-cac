@@ -241,7 +241,8 @@ sub-roles `dispatch` includes internally (one per resource type) that resource t
 - [`README_EXPORT.md`](./README_EXPORT.md) — export/normalize into CaC
 - [`.cursor/skills/cac-parser/SKILL.md`](./.cursor/skills/cac-parser/SKILL.md) — API payload → CaC conversion (includes domain labels)
 - [`.cursor/skills/cac-parser/key_ordering.md`](./.cursor/skills/cac-parser/key_ordering.md) — canonical key order per resource type
-- [`.cursor/skills/`](./.cursor/skills/) — agent skills (cac-parser, cac-schedules, changelog). Unlike `.mdc` rules, skill `.md` files are **not** auto-discovered by the docs site — when adding a new skill (or a new doc page inside an existing skill), manually add a nav entry under `AI > Skills` in [`mkdocs.yml`](./mkdocs.yml).
+- [`.cursor/skills/`](./.cursor/skills/) — agent skills (cac-parser, eda-parser, hub-parser, cac-schedules, changelog). Unlike `.mdc` rules, skill `.md` files are **not** auto-discovered by the docs site — when adding a new skill (or a new doc page inside an existing skill), manually add a nav entry under `AI > Skills` in [`mkdocs.yml`](./mkdocs.yml).
+- [`.cursor/skills/hub-parser/SKILL.md`](./.cursor/skills/hub-parser/SKILL.md) — Hub/Galaxy/Pulp API → `config/hub/` (no Hub MCP; collection namespaces are not CaC)
 - [`.cursor/rules/`](./.cursor/rules/) — always/auto-attached agent rules. New `.mdc` rules are auto-discovered into `AI > Rules` by [`docs/mkdocs/hooks.py`](./docs/mkdocs/hooks.py) — no manual nav edit needed.
 - [`scripts/migrate_to_wildcard_config.py`](./scripts/migrate_to_wildcard_config.py) — one-time migration reference (historical)
 - [redhat-cop/aap_configuration_template](https://github.com/redhat-cop/aap_configuration_template) — upstream pattern for wildcard vars + `dispatch_include_wildcard_vars`

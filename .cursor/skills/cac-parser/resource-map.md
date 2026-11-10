@@ -37,7 +37,7 @@ Paths are under `config/<domain>/`. Variable suffix is always `_<domain>` (`_com
 | Hub / AH role | `roles.yml` | `ah_roles` | Hub Roles (not dispatched) |
 | Hub / AH user | `users.yml` | `ah_users` | Hub Users (not dispatched; prefer `aap_user_accounts` in common) |
 
-Most platform/gateway fundamentals live only under `common` today. Hub resources live under `hub`. EDA resources live under `aiops` in this repo.
+Most platform/gateway fundamentals live only under `common` today. Hub resources live under `hub`; export and convert them with [hub-parser](../hub-parser/SKILL.md) (Galaxy/Pulp API — there is no Hub MCP). EDA resources live under `aiops` and use [eda-parser](../eda-parser/SKILL.md).
 
 If the target file does not exist in that domain yet: create it with the correct one-liner comment (see AGENTS.md), add the suffixed list variable, and update that domain’s README file table.
 

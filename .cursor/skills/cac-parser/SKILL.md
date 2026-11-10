@@ -1,6 +1,6 @@
 ---
 name: cac-parser
-description: Convert an AAP/Controller/EDA/Hub/Gateway API resource payload into ansible-cac domain YAML. Chooses domain and vars file, applies the single domain label on job templates/workflows/inventories, normalizes nested API objects to names, omits role/module defaults from infra.aap_configuration and ansible.* collections listed in collections/requirements.yml, and applies key_ordering.md. Use when the user pastes an AAP API JSON/YAML object, export payload, or asks to add a Controller/EDA/Hub resource into config/.
+description: Convert an AAP/Controller/Gateway API resource payload into ansible-cac domain YAML. Chooses domain and vars file, applies the single domain label on job templates/workflows/inventories, normalizes nested API objects to names, omits role/module defaults from infra.aap_configuration and ansible.* collections listed in collections/requirements.yml, and applies key_ordering.md. Use when the user pastes an AAP API JSON/YAML object, export payload, or asks to add a Controller resource into config/. Hub/Galaxy/Pulp resources use hub-parser; EDA resources use eda-parser.
 disable-model-invocation: true
 ---
 
@@ -45,6 +45,8 @@ Accept JSON or YAML for one object (or a one-item `results` list — unwrap to t
 - Execution environments / notification templates → `user-aap-platform-configuration`.
 
 Only fall back to asking the user to paste a payload if no matching read-only MCP tool exists, the lookup is ambiguous (multiple candidates with similar names), or the fetch fails.
+
+**Hub and EDA are not on these MCP servers.** Collection remotes, collection repositories, EE registries, and other Galaxy/Pulp objects go through [hub-parser](../hub-parser/SKILL.md) (direct Hub API). EDA objects go through [eda-parser](../eda-parser/SKILL.md).
 
 Detect type from, in order:
 
