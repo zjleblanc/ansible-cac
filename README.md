@@ -30,6 +30,39 @@ Configuration is organized by **domain** under `config/`. Shared fundamentals li
 - **vars/** — Vaulted variables and in-repo `*_secrets.redacted.yml` examples (see [Secrets](#secrets)).
 - `pb_aap_config.yml` — Component-agnostic playbook; select domains via the `domains` extra-var.
 
+## AI-Powered Configuration-as-Code Lifecycle
+
+```mermaid
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'edgeLabelBackground': '#e0f0ff',
+    'lineColor': '#e0f0ff',
+    'tertiaryTextColor': '#151515'
+  },
+  'themeCSS': '.edgeLabel .labelBkg { background-color: #e0f0ff !important; border: 1px solid #0066cc; border-radius: 4px; padding: 4px 10px; } .edgeLabel span, .edgeLabel p { background-color: transparent !important; color: #003366 !important; margin: 0; }'
+}}%%
+flowchart TD
+    AAP[AAP Environment]:::aap
+    MCP:::ai@{ shape: console, label: "AAP MCP Server" }
+    Skills:::ai@{ shape: subproc, label: "Agent Skills" }
+    Git:::git@{ shape: docs, label: "Comprehensive AAP CaC"}
+    Collection:::collection@{ shape: subproc, label: "infra.aap_configuration --> apply" }
+
+    AAP -->|"&nbsp;1. Prototype in UI&nbsp;"| MCP
+    MCP <-->|"&nbsp;2. Extract & Format&nbsp;"| Skills
+    Skills -->|"&nbsp;3. Commit Changes&nbsp;"| Git
+    Git -->|"&nbsp;4. Trigger GitOps&nbsp;"| Collection
+    Collection -->|"&nbsp;5. Idempotent Push&nbsp;"| AAP
+
+    linkStyle default stroke:#e0f0ff,stroke-width:2px;
+
+    classDef aap fill:#5f0000,stroke:#f9a8a8,stroke-width:2px,color:#ffffff;
+    classDef ai fill:#21134d,stroke:#b6a6e9,stroke-width:2px,color:#ffffff;
+    classDef git fill:#732e00,stroke:#f8ae54,stroke-width:2px,color:#ffffff;
+    classDef collection fill:#004d4d,stroke:#9ad8d8,stroke-width:2px,color:#ffffff;
+```
+
 ## Usage
 
 ### Prerequisites
