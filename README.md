@@ -40,17 +40,19 @@ Configuration is organized by **domain** under `config/`. Shared fundamentals li
     'lineColor': '#e0f0ff',
     'tertiaryTextColor': '#151515'
   },
-  'themeCSS': '.edgeLabel .labelBkg { background-color: #e0f0ff !important; border: 1px solid #0066cc; border-radius: 4px; padding: 4px 10px; } .edgeLabel span, .edgeLabel p { background-color: transparent !important; color: #003366 !important; margin: 0; }'
+  'themeCSS': '.edgeLabel .labelBkg { background-color: #e0f0ff !important; border: 1px solid #0066cc; border-radius: 4px; padding: 4px 10px; } .edgeLabel span, .edgeLabel p { background-color: transparent !important; color: #003366 !important; margin: 0; } .div-tools {text-align: left; margin-top: -12px}'
 }}%%
 flowchart TD
     AAP[AAP Environment]:::aap
     MCP:::ai@{ shape: console, label: "AAP MCP Server" }
-    Skills:::ai@{ shape: subproc, label: "Agent Skills" }
-    Git:::git@{ shape: docs, label: "Comprehensive AAP CaC"}
+    Tools:::tools@{ shape: subproc, label: "<b>Tools</b><div class='div-tools'><br/>list_projects<br/>list_job_templates<br/>list_credentials<br/>...</div>" }
+    Skills:::ai@{ shape: console, label: "Agent Skills" }
+    Git:::git@{ shape: docs, label: "Comprehensive AAP CaC" }
     Collection:::collection@{ shape: subproc, label: "infra.aap_configuration --> apply" }
 
-    AAP -->|"&nbsp;1. Prototype in UI&nbsp;"| MCP
-    MCP <-->|"&nbsp;2. Extract & Format&nbsp;"| Skills
+    AAP -->|"&nbsp;1. Prototype in UI&nbsp;"| Skills
+    MCP <--> Tools
+    Skills <-->|"&nbsp;2. Extract & Format&nbsp;"| MCP
     Skills -->|"&nbsp;3. Commit Changes&nbsp;"| Git
     Git -->|"&nbsp;4. Trigger GitOps&nbsp;"| Collection
     Collection -->|"&nbsp;5. Idempotent Push&nbsp;"| AAP
@@ -59,6 +61,7 @@ flowchart TD
 
     classDef aap fill:#5f0000,stroke:#f9a8a8,stroke-width:2px,color:#ffffff;
     classDef ai fill:#21134d,stroke:#b6a6e9,stroke-width:2px,color:#ffffff;
+    classDef tools fill:#1b0d33,stroke:#876fd4,stroke-width:2px,color:#ffffff;
     classDef git fill:#732e00,stroke:#f8ae54,stroke-width:2px,color:#ffffff;
     classDef collection fill:#004d4d,stroke:#9ad8d8,stroke-width:2px,color:#ffffff;
 ```
