@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-13 — Hide empty Mermaid edge labels on the docs site
+
+Mermaid 11 draws an edge-label group for every edge and leaves unlabeled ones at the SVG origin. Theme CSS on the README lifecycle flowchart then paints that empty label as a box in the top-left corner. Docs init now drops those empty groups from the SVG Material inserts.
+
+### Fixed
+- `docs/mkdocs/assets/mermaid-init.js`: after `mermaid.render()`, remove edge-label groups whose text is empty so unlabeled edges such as `MCP <--> Tools` no longer show a stray box.
+
 ## 2026-11-13 — Render Mermaid diagrams on the docs site
 
 Enables Mermaid fences in MkDocs Material so diagrams in markdown (including the README lifecycle flowchart) render on GitHub Pages. The docs workflow downloads a pinned Mermaid 11 bundle at build time and serves it from the site origin instead of loading a CDN in the browser.
