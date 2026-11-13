@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-11-13 — Render Mermaid diagrams on the docs site
+
+Enables Mermaid fences in MkDocs Material so diagrams in markdown (including the README lifecycle flowchart) render on GitHub Pages. The docs workflow downloads a pinned Mermaid 11 bundle at build time and serves it from the site origin instead of loading a CDN in the browser.
+
+### Changed
+- `mkdocs.yml`: mermaid custom fence via `pymdownx.superfences`; loads local `mermaid.min.js` and `mermaid-init.js`.
+- `docs/mkdocs/assets/mermaid-init.js`: forces `securityLevel: "loose"` so HTML labels and theme CSS survive Material’s Mermaid init.
+- `.github/workflows/docs.yml`: fetches Mermaid 11.17.2 before `mkdocs build`; redeploys when the workflow file changes.
+- `.gitignore`: ignores the downloaded `docs/mkdocs/assets/mermaid.min.js`.
+- `.ansible-lint`: excludes `mkdocs.yml` so the Mermaid `!!python/name` fence tag does not fail lint.
+
 ## 2026-11-10 — Add a Hub API parser for Galaxy and Pulp exports
 
 Adds `hub-parser` so Hub collection remotes, collection repositories, and EE registries can be exported straight from the Galaxy and Pulp APIs. There is no Hub MCP server. Collection namespaces stay out of config because collection sync creates them, and Hub users, groups, roles, and local EE push repositories stay out because dispatch does not apply them.

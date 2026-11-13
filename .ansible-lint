@@ -11,6 +11,7 @@ exclude_paths:
   - .pre-commit-config.yaml
   - assets/
   - docs/
+  - mkdocs.yml
   - scripts/
   - staging/
   - utils/

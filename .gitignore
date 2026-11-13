@@ -5,6 +5,7 @@ staging/
 **/*secrets.yml
 **/vault.yml
 scripts
+docs/mkdocs/assets/mermaid.min.js
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
