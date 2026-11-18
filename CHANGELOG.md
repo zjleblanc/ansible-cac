@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-11-18 — Grant lab team use of the default decision environment
+
+Gives the lab team the Decision Environment Use role on the Default Decision Environment so AIOps rulebook activations can run there.
+
+### Resources
+
+| Type | Name | Description | Domain | |
+|------|------|-------------|--------|------------|
+| Role team assignment | Decision Environment Use | Grants the lab team use of the Default Decision Environment. | aiops | [🕵️](config/aiops/role_team_assignments.yml#L4-L9) |
+
+### Changed
+- `config/aiops/README.md`: document the role team assignment file and apply command.
+
 ## 2026-11-13 — Hide empty Mermaid edge labels on the docs site
 
 Mermaid 11 draws an edge-label group for every edge and leaves unlabeled ones at the SVG origin. Theme CSS on the README lifecycle flowchart then paints that empty label as a box in the top-left corner. Docs init now drops those empty groups from the SVG Material inserts.

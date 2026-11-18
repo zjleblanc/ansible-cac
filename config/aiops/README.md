@@ -16,6 +16,7 @@ ansible-playbook pb_aap_config.yml -e "domains=aiops"
 
 - Event-Driven Demos project and AIOps-labeled job templates / workflows
 - EDA projects, credentials, decision environments, event streams, and rulebook activations
+- Gateway role team assignments for EDA decision environment access
 - Ticket enrichment credential using the shared `OpenAI Config` credential type (`config/common/credential_types.yml`)
 
 ## Scope to a single resource file
@@ -35,6 +36,7 @@ Each YAML file has a one-liner comment at the top. The `domains` extra-var (plus
 | `eda_rulebook_activations.yml` | `rulebook_activation` | `ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags rulebook_activation` |
 | `job_templates.yml` | `job_templates` | `ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags job_templates` |
 | `projects.yml` | `projects` | `ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags projects` |
+| `role_team_assignments.yml` | `role_team_assignments` | `ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags role_team_assignments` |
 | `workflow_job_templates.yml` | `workflow_job_templates` | `ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags workflow_job_templates` |
 
 See also [config/README.md](../README.md).

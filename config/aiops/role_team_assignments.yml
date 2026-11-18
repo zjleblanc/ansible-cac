@@ -1,0 +1,9 @@
+# ansible-playbook pb_aap_config.yml -e "domains=aiops" -e "skip_common=true" --tags role_team_assignments
+---
+gateway_role_team_assignments_aiops:
+  - role_definition: Decision Environment Use
+    team: lab # Example assigning Use to a Team in different Organization (Autodotes)
+    assignment_objects:
+      - name: Default Decision Environment
+        type: eda.decisionenvironment
+        organization: Default
